@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>خطة التحول الاستراتيجية 90 يوماً | التميز في الفئة (ج) وبناء صندوق الترقية</title>
+<title>الخطة الاستراتيجية الدورية | النموذج الواقعي المتفائل 2026-2028</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,6 +16,7 @@
     --success: #10B981;
     --warning: #F59E0B;
     --danger: #EF4444;
+    --info: #3B82F6;
     --light: #F8FAFC;
     --gray: #64748B;
     --dark-gray: #334155;
@@ -61,7 +62,7 @@ body {
     letter-spacing: 1px;
 }
 .hero h1 {
-    font-size: 38px;
+    font-size: 36px;
     font-weight: 900;
     margin-bottom: 15px;
     position: relative;
@@ -77,7 +78,7 @@ body {
 }
 .hero-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 20px;
     margin-top: 35px;
     position: relative;
@@ -87,18 +88,18 @@ body {
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.15);
-    padding: 20px;
+    padding: 18px 12px;
     border-radius: 12px;
     text-align: center;
 }
 .hero-stat .number {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 900;
     color: var(--accent-light);
     display: block;
 }
 .hero-stat .label {
-    font-size: 13px;
+    font-size: 12px;
     opacity: 0.85;
     margin-top: 4px;
 }
@@ -159,6 +160,8 @@ body {
 }
 .bg-primary { background: var(--primary); }
 .bg-accent { background: var(--accent); color: var(--primary); }
+.bg-info { background: var(--info); }
+.bg-success { background: var(--success); }
 .card h3 { font-size: 19px; font-weight: 700; color: var(--primary); }
 .card p { color: var(--dark-gray); font-size: 14.5px; }
 .chart-container {
@@ -222,6 +225,7 @@ body {
 .phase-1 { border-right-color: #3B82F6; }
 .phase-2 { border-right-color: #F59E0B; }
 .phase-3 { border-right-color: #10B981; }
+.phase-4 { border-right-color: #8B5CF6; }
 .phase-header {
     display: flex;
     justify-content: space-between;
@@ -240,6 +244,7 @@ body {
 .phase-1 .phase-number { background: #3B82F6; }
 .phase-2 .phase-number { background: #F59E0B; }
 .phase-3 .phase-number { background: #10B981; }
+.phase-4 .phase-number { background: #8B5CF6; }
 .phase h3 { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
 .phase-objective {
     background: #fef9e7;
@@ -277,6 +282,7 @@ body {
 .badge-role { background: #dbeafe; color: #1e40af; }
 .badge-kpi { background: #dcfce7; color: #166534; }
 .badge-day { background: #fef3c7; color: #92400e; }
+.badge-budget { background: #ede9fe; color: #5b21b6; }
 .kpi-table {
     width: 100%;
     border-collapse: collapse;
@@ -291,6 +297,21 @@ body {
 .kpi-table td { padding: 13px 16px; border-bottom: 1px solid #e2e8f0; font-size: 13.5px; color: var(--dark-gray); }
 .kpi-table tbody tr:hover { background: #f8fafc; }
 .kpi-table tr:last-child td { border-bottom: none; }
+.budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+.budget-table thead { background: var(--secondary); color: white; }
+.budget-table th { padding: 14px 16px; text-align: right; font-weight: 700; font-size: 14px; }
+.budget-table td { padding: 13px 16px; border-bottom: 1px solid #e2e8f0; font-size: 13.5px; color: var(--dark-gray); }
+.budget-table tbody tr:hover { background: #f8fafc; }
+.budget-table .highlight { font-weight: 700; color: var(--accent); }
+.budget-table .positive { color: var(--success); font-weight: 600; }
 .compensate-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -393,16 +414,91 @@ body {
 }
 .roadmap-list li:last-child { border-bottom: none; }
 .roadmap-list i { color: var(--success); font-size: 12px; }
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-top: 20px;
+}
+.risk-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border-right: 5px solid;
+}
+.risk-card.danger { border-right-color: var(--danger); }
+.risk-card.success { border-right-color: var(--success); }
+.risk-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.risk-card ul { list-style: none; padding: 0; }
+.risk-card li {
+    padding: 10px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 14px;
+    color: var(--dark-gray);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.risk-card li:last-child { border-bottom: none; }
+.risk-card li i { color: var(--warning); margin-top: 3px; }
+.risk-card.success li i { color: var(--success); }
+.org-structure {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.org-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.org-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-right: 20px;
+    border-right: 3px dashed #e2e8f0;
+}
+.org-node {
+    background: #f8fafc;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border-right: 4px solid var(--accent);
+    font-size: 14px;
+}
+.org-node.main { background: var(--primary); color: white; border-right-color: var(--accent); font-weight: 700; }
+.org-node.level2 { background: #dbeafe; border-right-color: #3B82F6; }
+.org-node.level3 { background: #dcfce7; border-right-color: #10B981; }
+.org-meta {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 6px;
+}
 .footer { text-align: center; padding: 25px; color: var(--gray); font-size: 13px; margin-top: 30px; }
 @media (max-width: 900px) {
-    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .grid-2, .grid-3, .grid-4, .risk-grid { grid-template-columns: 1fr; }
     .hero h1 { font-size: 26px; }
     .hero { padding: 35px 20px; }
     .roadmap-grid { grid-template-columns: 1fr; }
 }
 @media print {
     body { background: white; padding: 0; }
-    .card, .phase, .chart-container, .roadmap-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    .card, .phase, .chart-container, .roadmap-card, .org-structure { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
 }
 </style>
 </head>
@@ -410,351 +506,350 @@ body {
 <div class="container">
 
 <div class="hero">
-    <span class="hero-badge"><i class="fas fa-chess-queen"></i> B2C EXCELLENCE • LONG-TERM STRATEGY</span>
-    <h1>التميز في خدمات الأفراد (فئة ج) وبناء صندوق الترقية الاستراتيجي</h1>
-    <p>خطة تحول استراتيجية لـ 90 يوماً تُركّز على تحقيق التميز المطلق في تشغيل الرخصة الحالية (فئة ج)، مع بناء "صندوق الترقية" عضوياً على مدى 3 سنوات للوصول إلى الضمان البنكي المطلوب للفئة (ب) بقيمة 20 مليون ريال.</p>
+    <span class="hero-badge"><i class="fas fa-chart-line"></i> REALISTIC OPTIMISM • 12-QUARTER MODEL</span>
+    <h1>الخطة الاستراتيجية الدورية: النموذج الواقعي المتفائل</h1>
+    <p>خطة تحول مؤسسي على مدى 3 سنوات (12 ربع سنوي) تُركّز على التميز في الفئة (ج) مع بناء صندوق الترقية عضوياً + رافعة مالية ذكية للوصول إلى 20 مليون ريال للفئة (ب).</p>
     <div class="hero-stats">
-        <div class="hero-stat"><span class="number">90</span><span class="label">يوم للتميز في الفئة (ج)</span></div>
-        <div class="hero-stat"><span class="number">4</span><span class="label">فريق القيادة</span></div>
-        <div class="hero-stat"><span class="number">20M</span><span class="label">ريال (هدف 3 سنوات)</span></div>
-        <div class="hero-stat"><span class="number">6</span><span class="label">ركائز استراتيجية</span></div>
+        <div class="hero-stat"><span class="number">12</span><span class="label">ربع سنوي</span></div>
+        <div class="hero-stat"><span class="number">3</span><span class="label">سنوات</span></div>
+        <div class="hero-stat"><span class="number">20M</span><span class="label">ريال (هدف)</span></div>
+        <div class="hero-stat"><span class="number">50</span><span class="label">فريق نهائي</span></div>
+        <div class="hero-stat"><span class="number">✓</span><span class="label">واقعي + متفائل</span></div>
     </div>
 </div>
 
-<h2 class="section-title"><i class="fas fa-bullseye"></i><span>التصحيح الاستراتيجي الجوهري</span></h2>
+<h2 class="section-title"><i class="fas fa-balance-scale"></i><span>الفلسفة: التفاؤل الواقعي (لا تشاؤم، لا أحلام)</span></h2>
 <div class="grid-2">
     <div class="card">
         <div class="card-header">
-            <div class="card-icon bg-primary"><i class="fas fa-exclamation-circle"></i></div>
-            <h3>الواقع التنظيمي الجديد</h3>
+            <div class="card-icon bg-primary"><i class="fas fa-check-circle"></i></div>
+            <h3>✅ ما نؤمن به (التفاؤل)</h3>
         </div>
-        <p>الضمان البنكي المطلوب للترقية إلى الفئة (ب) يبلغ <strong>20 مليون ريال</strong>، وليس 750 ألف ريال كما كان يُعتقد سابقاً. هذا يعني أن الترقية ليست هدفاً قريباً، بل <strong>مشروعاً استراتيجياً طويل الأمد</strong> (24-36 شهراً) يتطلب بناء رأس المال عضوياً وحكيمًا.</p>
+        <ul style="list-style: none; padding-right: 10px; color: var(--dark-gray);">
+            <li style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;"><i class="fas fa-check" style="color:var(--success); margin-left:8px;"></i> 20 مليون ريال هدف <strong>قابل للتحقيق</strong> بخطة ذكية</li>
+            <li style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;"><i class="fas fa-check" style="color:var(--success); margin-left:8px;"></i> النمو العضوي ممكن مع كفاءة تشغيلية عالية</li>
+            <li style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;"><i class="fas fa-check" style="color:var(--success); margin-left:8px;"></i> السوق السعودي يدعم التوسع في قطاع القوى العاملة</li>
+            <li style="padding: 8px 0;"><i class="fas fa-check" style="color:var(--success); margin-left:8px;"></i> الفريق الصغير يمكنه بناء مؤسسة إذا ركّز على "بناء النظام" لا "تنفيذ كل شيء"</li>
+        </ul>
     </div>
     <div class="card">
         <div class="card-header">
-            <div class="card-icon bg-accent"><i class="fas fa-lightbulb"></i></div>
-            <h3>المنطق الاستراتيجي الجديد</h3>
+            <div class="card-icon bg-accent"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3>⚠️ ما نقر به (الواقعية)</h3>
         </div>
-        <p>التركيز خلال الـ 90 يوماً القادمة سيكون على <strong>التميز المطلق في تشغيل الفئة (ج)</strong> وتحقيق أقصى عائد عضوي ممكن. نترك الأرقام تبني رأسمال الترقية، ونترك السوق يتحدث عنّا. الترقية ستأتي كنتيجة طبيعية، لا كهدف مُتعجَّل.</p>
+        <ul style="list-style: none; padding-right: 10px; color: var(--dark-gray);">
+            <li style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;"><i class="fas fa-times" style="color:var(--danger); margin-left:8px;"></i> 20 مليون ريال لا تُبنى في 90 يوماً</li>
+            <li style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;"><i class="fas fa-times" style="color:var(--danger); margin-left:8px;"></i> الفريق الرباعي لا يدير مؤسسة بمفرده</li>
+            <li style="padding: 8px 0; border-bottom: 1px dashed #e2e8f0;"><i class="fas fa-times" style="color:var(--danger); margin-left:8px;"></i> السوق يحتوي على منافسة وتقلبات</li>
+            <li style="padding: 8px 0;"><i class="fas fa-times" style="color:var(--danger); margin-left:8px;"></i> الخطط تحتاج مرونة للتعديل حسب الواقع</li>
+        </ul>
     </div>
 </div>
 
-<h2 class="section-title"><i class="fas fa-layer-group"></i><span>الركائز الاستراتيجية الست (المحدّثة)</span></h2>
-<div class="grid-3">
-    <div class="card">
-        <div class="card-header"><div class="card-icon bg-primary"><i class="fas fa-cogs"></i></div><h3>التميز التشغيلي B2C</h3></div>
-        <p>أن نصبح <strong>الأفضل تشغيلياً</strong> في نطاق الفئة (ج) من حيث السرعة، الجودة، والموثوقية.</p>
+<h2 class="section-title"><i class="fas fa-sitemap"></i><span>الهيكل التنظيمي التطوري (نمو تدريجي)</span></h2>
+
+<div class="grid-2">
+    <div class="org-structure">
+        <div class="org-title"><i class="fas fa-layer-group"></i> الربع 1-2 (الشهور 1-6): فريق النواة</div>
+        <div class="org-tree">
+            <div class="org-node main">المدير العام (GM)</div>
+            <div class="org-node level2">مدير التخطيط والعمليات (COO)</div>
+            <div class="org-node level3">• أخصائي الامتثال (مساند/قوى) <span class="org-meta">جديد</span></div>
+            <div class="org-node level3">• أخصائي العمليات والوكالات</div>
+            <div class="org-node level2">مدير تجربة العملاء والنمو (CXM)</div>
+            <div class="org-node level3">• أخصائي خدمة العملاء <span class="org-meta">جديد</span></div>
+            <div class="org-node level3">• أخصائي التسويق الرقمي <span class="org-meta">جديد</span></div>
+            <div class="org-node">محاسب/مالي خارجي <span class="org-meta">Retainer</span></div>
+        </div>
+        <p style="margin-top:15px; font-size:14px; color:var(--gray);"><strong>إجمالي الفريق:</strong> 6-7 أشخاص | <strong>التوظيف الجديد:</strong> +2-3 أشخاص</p>
     </div>
-    <div class="card">
-        <div class="card-header"><div class="card-icon bg-accent"><i class="fas fa-chart-line"></i></div><h3>تعظيم الإيرادات العضوية</h3></div>
-        <p>استخراج كل ريال ممكن من عملياتنا الحالية عبر خدمات عالية الهامش وعقود مكملة.</p>
-    </div>
-    <div class="card">
-        <div class="card-header"><div class="card-icon bg-primary"><i class="fas fa-piggy-bank"></i></div><h3>صندوق الترقية الاستراتيجي</h3></div>
-        <p>تراكم ثابت ومنضبط للوصول إلى <strong>20 مليون ريال</strong> خلال 24-36 شهراً (War Chest).</p>
-    </div>
-    <div class="card">
-        <div class="card-header"><div class="card-icon bg-accent"><i class="fas fa-heart"></i></div><h3>تجربة العملاء B2C</h3></div>
-        <p>بناء ولاء قوي وإحالات طبيعية من العملاء الأفراد عبر خدمة استثنائية.</p>
-    </div>
-    <div class="card">
-        <div class="card-header"><div class="card-icon bg-primary"><i class="fas fa-crown"></i></div><h3>العلامة التجارية</h3></div>
-        <p>التموضع كخيار أول للعمالة المنزلية في السوق السعودي بسمعة لا تُضاهى.</p>
-    </div>
-    <div class="card">
-        <div class="card-header"><div class="card-icon bg-accent"><i class="fas fa-chess-king"></i></div><h3>الاستعداد للفئة (ب)</h3></div>
-        <p>بناء الأسس اليوم للترقية غداً: علاقات، جاهزية تنظيمية، وخارطة طريق واضحة.</p>
+    
+    <div class="org-structure">
+        <div class="org-title"><i class="fas fa-building"></i> الربع 3-4 (الشهور 7-12): فريق التأسيس</div>
+        <div class="org-tree">
+            <div class="org-node main">المدير العام (GM)</div>
+            <div class="org-node level2">مدير العمليات</div>
+            <div class="org-node level3">• فريق الامتثال (2)</div>
+            <div class="org-node level3">• فريق العمليات (2)</div>
+            <div class="org-node level3">• منسق لوجستي <span class="org-meta">جديد</span></div>
+            <div class="org-node level2">مدير النمو وتجربة العملاء</div>
+            <div class="org-node level3">• فريق خدمة العملاء (2)</div>
+            <div class="org-node level3">• أخصائي تسويق + منسق ولاء</div>
+            <div class="org-node">مدير مالي داخلي <span class="org-meta">Part-time → Full</span></div>
+            <div class="org-node">مستشار قانوني خارجي</div>
+        </div>
+        <p style="margin-top:15px; font-size:14px; color:var(--gray);"><strong>إجمالي الفريق:</strong> 12-14 شخص | <strong>التوظيف الجديد:</strong> +6-7 أشخاص</p>
     </div>
 </div>
 
-<h2 class="section-title"><i class="fas fa-users-cog"></i><span>الفريق الرباعي: الأدوار المحدّثة</span></h2>
-<div class="grid-4">
-    <div class="team-card">
-        <div class="team-role">ROLE 01</div>
-        <div class="team-name">المدير العام (GM)</div>
-        <div class="team-focus"><i class="fas fa-crown"></i> الاستراتيجية طويلة الأمد، علاقات الوكالات الدولية، كبار عملاء VIP، التفاوض مع البنوك/المستثمرين، وقيادة صندوق الترقية.</div>
+<div class="grid-2">
+    <div class="org-structure">
+        <div class="org-title"><i class="fas fa-rocket"></i> السنة 2 (الأرباع 5-8): فريق التوسع</div>
+        <div class="org-tree">
+            <div class="org-node main">المدير العام (GM)</div>
+            <div class="org-node level2">نائب المدير العام للعمليات (COO)</div>
+            <div class="org-node level3">• مدير الامتثال والجودة</div>
+            <div class="org-node level3">• مدير سلسلة التوريد والوكالات</div>
+            <div class="org-node level3">• فريق تشغيلي موسع (6-8)</div>
+            <div class="org-node level2">نائب المدير العام للنمو (CGO)</div>
+            <div class="org-node level3">• مدير التسويق والعلامة التجارية</div>
+            <div class="org-node level3">• مدير المبيعات والشراكات B2B</div>
+            <div class="org-node level3">• فريق تجربة العملاء (4-5)</div>
+            <div class="org-node level2">المدير المالي (CFO)</div>
+            <div class="org-node level3">• محاسب + مسؤول خزينة + محلل مالي</div>
+            <div class="org-node">مدير الموارد البشرية والثقافة <span class="org-meta">جديد</span></div>
+        </div>
+        <p style="margin-top:15px; font-size:14px; color:var(--gray);"><strong>إجمالي الفريق:</strong> 25-30 شخص | <strong>التوظيف الجديد:</strong> +13-16 شخص</p>
     </div>
-    <div class="team-card">
-        <div class="team-role">ROLE 02</div>
-        <div class="team-name">مدير التخطيط والدعم</div>
-        <div class="team-focus"><i class="fas fa-cogs"></i> "COO خدمات الأفراد": تحسين العمليات، أتمتة دورة النشر، مؤشرات النمو العضوي، وإدارة صندوق الترقية.</div>
-    </div>
-    <div class="team-card">
-        <div class="team-role">ROLE 03</div>
-        <div class="team-name">أخصائي العمليات والوكالات</div>
-        <div class="team-focus"><i class="fas fa-globe"></i> تشغيل يومي متقن لمنصات (مساند/قوى)، إدارة الوكالات، تتبع الاستقطاب، وخفض معدل الاستبدال.</div>
-    </div>
-    <div class="team-card">
-        <div class="team-role">ROLE 04</div>
-        <div class="team-name">أخصائي تجربة العملاء</div>
-        <div class="team-focus"><i class="fas fa-handshake"></i> خدمة عملاء VIP، برنامج الإحالات، التسويق الرقمي للأفراد، حل النزاعات، وقياس NPS.</div>
+    
+    <div class="org-structure">
+        <div class="org-title"><i class="fas fa-crown"></i> السنة 3 (الأرباع 9-12): فريق الترقية</div>
+        <div class="org-tree">
+            <div class="org-node main">المدير العام (GM)</div>
+            <div class="org-node level2">نائب المدير العام للعمليات ← استقرار الفئة (ج)</div>
+            <div class="org-node level2">نائب المدير العام للتوسع ← إطلاق الفئة (ب)</div>
+            <div class="org-node level2">المدير المالي (CFO) ← إقفال الـ 20 مليون</div>
+            <div class="org-node level2">مدير الموارد البشرية والثقافة</div>
+            <div class="org-node level2">مدير التكنولوجيا والابتكار <span class="org-meta">جديد</span></div>
+            <div class="org-node level2">مدير الشؤون الحكومية <span class="org-meta">جديد</span></div>
+        </div>
+        <p style="margin-top:15px; font-size:14px; color:var(--gray);"><strong>إجمالي الفريق:</strong> 40-50 شخص | <strong>التوظيف الجديد:</strong> +15-20 شخص</p>
     </div>
 </div>
 
-<h2 class="section-title"><i class="fas fa-chart-line"></i><span>الرسوم البيانية: مؤشرات النمو العضوي</span></h2>
+<h2 class="section-title"><i class="fas fa-chart-line"></i><span>الرسوم البيانية: النمو الواقعي</span></h2>
 
 <div class="grid-2">
     <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-piggy-bank"></i> مسار بناء صندوق الترقية (3 سنوات → 20M ريال)</div>
+        <div class="chart-title"><i class="fas fa-piggy-bank"></i> صندوق الترقية: مزيج عضوي + تمويل ذكي</div>
         <canvas id="warChestChart"></canvas>
     </div>
     <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-chart-pie"></i> توزيع المهام على الركائز الست</div>
-        <canvas id="pillarChart"></canvas>
+        <div class="chart-title"><i class="fas fa-users"></i> نمو الفريق عبر 3 سنوات</div>
+        <canvas id="teamGrowthChart"></canvas>
     </div>
 </div>
 
 <div class="grid-2">
     <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-bullseye"></i> مؤشرات الأداء الرئيسية (KPIs) المستهدفة</div>
-        <canvas id="kpiChart"></canvas>
+        <div class="chart-title"><i class="fas fa-coins"></i> الإيرادات والمصروفات (مليون ريال)</div>
+        <canvas id="revenueChart"></canvas>
     </div>
     <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-project-diagram"></i> توزيع المهام على الفريق الرباعي</div>
-        <canvas id="teamChart"></canvas>
+        <div class="chart-title"><i class="fas fa-bullseye"></i> مؤشرات الأداء الرئيسية (تطور عبر السنوات)</div>
+        <canvas id="kpiEvolutionChart"></canvas>
     </div>
 </div>
 
-<div class="chart-container">
-    <div class="chart-title"><i class="fas fa-calendar-alt"></i> الجدول الزمني للمراحل الثلاث (Gantt)</div>
-    <canvas id="ganttChart" height="80"></canvas>
-</div>
-
-<h2 class="section-title"><i class="fas fa-flag-checkered"></i><span>المراحل التنفيذية التفصيلية</span></h2>
-
-<div class="phase phase-1">
-    <div class="phase-header">
-        <div>
-            <span class="phase-number">المرحلة الأولى</span>
-            <h3>التشخيص، التأسيس، وخطة التعظيم</h3>
-            <p style="color: var(--gray); font-size: 14px;">الأيام 1 - 30</p>
-        </div>
-    </div>
-    <div class="phase-objective"><strong>الهدف:</strong> فهم الوضع الحالي، إيقاف النزيف المالي، وتصميم خطة تعظيم الإيرادات من الفئة (ج).</div>
-    <div class="task-grid">
-        <div class="task">
-            <h4><i class="fas fa-search" style="color:#3B82F6;"></i> تحليل دورة الاستقطاب B2C</h4>
-            <p>رسم خريطة كاملة لدورة النشر (من العقد إلى التسليم)، تحديد الاختناقات، وتقييم الوكالات الدولية (A/B/C).</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي العمليات + مدير التخطيط</span><span class="badge badge-day">اليوم 10-25</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: خريطة دورة كاملة</span><span class="badge badge-kpi">KPI: تصنيف الوكالات</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-coins" style="color:#3B82F6;"></i> تحليل الإيرادات وهيكل الأسعار</h4>
-            <p>تحليل الإيرادات حسب الخدمة، تحديد الأعلى هامشاً، ومراجعة الأسعار مقابل المنافسين.</p>
-            <div class="task-meta"><span class="badge badge-role">GM + مدير التخطيط</span><span class="badge badge-day">اليوم 20-28</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: تقرير تحليل الإيرادات</span><span class="badge badge-kpi">KPI: هيكل أسعار محدث</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-vault" style="color:#3B82F6;"></i> تأسيس صندوق الترقية</h4>
-            <p>حساب معدل التراكم المطلوب لـ 20M، فتح حساب مُقيَّد، واعتماد سياسة تحويل شهري ثابت.</p>
-            <div class="task-meta"><span class="badge badge-role">GM + محاسب خارجي</span><span class="badge badge-day">اليوم 20-30</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: حساب War Chest مُفعَّل</span><span class="badge badge-kpi">KPI: سياسة معتمدة</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-heart" style="color:#3B82F6;"></i> تدقيق تجربة العملاء</h4>
-            <p>بناء قاعدة بيانات عملاء (CRM)، تحديد ICP، قياس معدل الإحالة الحالي (Baseline)، وتصميم استبيان NPS.</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي تجربة العملاء</span><span class="badge badge-day">اليوم 15-25</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: CRM مُفعَّل</span><span class="badge badge-kpi">KPI: ICP محدد</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-bullhorn" style="color:#3B82F6;"></i> التموضع والمنافسة</h4>
-            <p>تدقيق الحضور الرقمي، تحليل المنافسين، وتحديد القيمة المتفردة (USP).</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي تجربة العملاء + GM</span><span class="badge badge-day">اليوم 20-25</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: تقرير المنافسين</span><span class="badge badge-kpi">KPI: USP مكتوبة</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-chess-king" style="color:#3B82F6;"></i> ملف الجاهزية للفئة (ب)</h4>
-            <p>بناء "Readiness File" يحتوي جميع متطلبات الفئة (ب) الحالية، ومراقبة التحديثات التنظيمية.</p>
-            <div class="task-meta"><span class="badge badge-role">GM + مستشار قانوني</span><span class="badge badge-day">اليوم 30</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: ملف الجاهزية جاهز</span></div>
-        </div>
-    </div>
-</div>
-
-<div class="phase phase-2">
-    <div class="phase-header">
-        <div>
-            <span class="phase-number">المرحلة الثانية</span>
-            <h3>الأتمتة، التفعيل، وبناء الولاء</h3>
-            <p style="color: var(--gray); font-size: 14px;">الأيام 31 - 60</p>
-        </div>
-    </div>
-    <div class="phase-objective"><strong>الهدف:</strong> أتمتة العمليات لزيادة الكفاءة، إطلاق حملات تسويقية فعالة، وبناء ولاء العملاء.</div>
-    <div class="task-grid">
-        <div class="task">
-            <h4><i class="fas fa-laptop-code" style="color:#F59E0B;"></i> لوحة التحكم التشغيلية</h4>
-            <p>بناء Dashboard عبر Low-Code (Airtable/Zoho)، أتمتة تنبيهات حماية الأجور والإقامات، وتوثيق SOPs التشغيلية.</p>
-            <div class="task-meta"><span class="badge badge-role">مدير التخطيط + الأخصائيين</span><span class="badge badge-day">اليوم 45-55</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: Dashboard مُفعَّل</span><span class="badge badge-kpi">KPI: 100% SOPs موثقة</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-hand-holding-usd" style="color:#F59E0B;"></i> تفعيل الإيرادات والتحصيل</h4>
-            <p>تطبيق هيكل الأسعار الجديد، إطلاق حزمة Add-on Services، وتفعيل سياسة تحصيل صارمة.</p>
-            <div class="task-meta"><span class="badge badge-role">GM + محاسب خارجي</span><span class="badge badge-day">اليوم 35+</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: متوسط الإيراد/عقد +10%</span><span class="badge badge-kpi">KPI: DSO -20%</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-vault" style="color:#F59E0B;"></i> بناء صندوق الترقية</h4>
-            <p>التحويل الشهري الأول، بناء لوحة متابعة الصندوق، ودراسة استثمار جزء منه في أدوات مالية منخفضة المخاطر.</p>
-            <div class="task-meta"><span class="badge badge-role">GM</span><span class="badge badge-day">اليوم 55</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: تحويل 100%</span><span class="badge badge-kpi">KPI: خيارات استثمارية</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-heart" style="color:#F59E0B;"></i> برنامج الإحالات والولاء</h4>
-            <p>إطلاق Referral Program مع حوافز، استبيان NPS بعد كل عملية نشر، وإنشاء "نادي VIP".</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي تجربة العملاء</span><span class="badge badge-day">اليوم 40</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: NPS فوق 50</span><span class="badge badge-kpi">KPI: إحالة ≥ 20%</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-bullhorn" style="color:#F59E0B;"></i> إطلاق الهوية الجديدة</h4>
-            <p>تحديث الموقع والسوشال ميديا، إطلاق محتوى تعليمي، وتفعيل إعلانات (Snapchat, Instagram, TikTok).</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي تجربة العملاء + وكالة خارجية</span><span class="badge badge-day">اليوم 45-60</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: 100K مشاهدة</span><span class="badge badge-kpi">KPI: استفسارات +30%</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-handshake" style="color:#F59E0B;"></i> بناء الشراكات الاستراتيجية</h4>
-            <p>حضور فعاليات قطاعية (LEAP, Big 5)، بناء علاقات مع شركاء محتملين، ودراسة نماذج أعمال ناجحة للفئة (ب).</p>
-            <div class="task-meta"><span class="badge badge-role">GM</span><span class="badge badge-day">اليوم 60</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: فعالية واحدة</span><span class="badge badge-kpi">KPI: 10 شركاء محتملين</span></div>
-        </div>
-    </div>
-</div>
-
-<div class="phase phase-3">
-    <div class="phase-header">
-        <div>
-            <span class="phase-number">المرحلة الثالثة</span>
-            <h3>التعظيم، التأسيس، وخارطة الطريق</h3>
-            <p style="color: var(--gray); font-size: 14px;">الأيام 61 - 90</p>
-        </div>
-    </div>
-    <div class="phase-objective"><strong>الهدف:</strong> تعظيم الإيرادات العضوية، تثبيت نموذج عمل مستدام، ووضع خارطة طريق 24-36 شهراً للترقية.</div>
-    <div class="task-grid">
-        <div class="task">
-            <h4><i class="fas fa-check-double" style="color:#10B981;"></i> Mock Audit وتقليل الاستبدال</h4>
-            <p>تدقيق تمثيلي داخلي، تحسين فحص العمالة قبل الاستقدام، وقياس وقت الاستجابة.</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي العمليات + مدير التخطيط</span><span class="badge badge-day">اليوم 85</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: 100% Mock Audit</span><span class="badge badge-kpi">KPI: استبدال -20%</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-chart-line" style="color:#10B981;"></i> تعظيم الإيرادات</h4>
-            <p>إطلاق خدمة موسمية (رمضان/الحج/الصيف)، توقيع شراكات مع خدمات مكملة (تنظيف، صيانة).</p>
-            <div class="task-meta"><span class="badge badge-role">GM</span><span class="badge badge-day">اليوم 90</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: نمو الإيرادات +25%</span><span class="badge badge-kpi">KPI: شراكة واحدة</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-vault" style="color:#10B981;"></i> خارطة طريق 3 سنوات</h4>
-            <p>حساب الرصيد الفعلي للصندوق، وضع خارطة طريق 24-36 شهراً، وإعداد ملف تمويلي احترافي.</p>
-            <div class="task-meta"><span class="badge badge-role">GM</span><span class="badge badge-day">اليوم 85-90</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: خارطة طريق معتمدة</span><span class="badge badge-kpi">KPI: Pitch Deck جاهز</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-heart" style="color:#10B981;"></i> برنامج الولاء وقصص النجاح</h4>
-            <p>إطلاق Loyalty Program، إنشاء 5 Case Studies من عملاء راضين، وتحليل بيانات NPS والإحالات.</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي تجربة العملاء</span><span class="badge badge-day">اليوم 80-90</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: NPS فوق 60</span><span class="badge badge-kpi">KPI: 5 قصص نجاح</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-star" style="color:#10B981;"></i> بناء السمعة الرقمية</h4>
-            <p>السعي لجائزة قطاعية، تفعيل PR في الإعلام المحلي، وبناء تقييم قوي على Google Maps.</p>
-            <div class="task-meta"><span class="badge badge-role">أخصائي تجربة العملاء + وكالة</span><span class="badge badge-day">اليوم 90</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: Google Maps 4.5+</span><span class="badge badge-kpi">KPI: تغطية إعلامية</span></div>
-        </div>
-        <div class="task">
-            <h4><i class="fas fa-book" style="color:#10B981;"></i> الكتاب الأبيض (Whitepaper)</h4>
-            <p>إعداد وثيقة توضح رؤية الشركة للترقية، بناء فريق استشاري داخلي، وخطة تواصل مع الوزارة.</p>
-            <div class="task-meta"><span class="badge badge-role">GM + مدير التخطيط</span><span class="badge badge-day">اليوم 90</span></div>
-            <div class="task-meta"><span class="badge badge-kpi">KPI: Whitepaper معتمد</span></div>
-        </div>
-    </div>
-</div>
+<h2 class="section-title"><i class="fas fa-table"></i><span>الميزانية التفصيلية: السنة الأولى (الأرباع 1-4)</span></h2>
+<table class="budget-table">
+    <thead>
+        <tr>
+            <th>الربع</th>
+            <th>الإيرادات المتوقعة</th>
+            <th>المصروفات التشغيلية</th>
+            <th>صافي الربح</th>
+            <th>مساهمة الصندوق</th>
+            <th>رصيد الصندوق التراكمي</th>
+            <th>التوظيف الجديد</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>الربع 1</strong><br><small>الشهور 1-3</small></td>
+            <td>450,000 ريال</td>
+            <td>170,000 ريال</td>
+            <td class="positive">280,000 ريال</td>
+            <td class="highlight">70,000 ريال (25%)</td>
+            <td class="highlight">70,000 ريال</td>
+            <td>+2-3 أشخاص</td>
+        </tr>
+        <tr>
+            <td><strong>الربع 2</strong><br><small>الشهور 4-6</small></td>
+            <td>580,000 ريال</td>
+            <td>205,000 ريال</td>
+            <td class="positive">375,000 ريال</td>
+            <td class="highlight">112,500 ريال (30%)</td>
+            <td class="highlight">182,500 ريال</td>
+            <td>+1 شخص</td>
+        </tr>
+        <tr>
+            <td><strong>الربع 3</strong><br><small>الشهور 7-9</small></td>
+            <td>750,000 ريال</td>
+            <td>335,000 ريال</td>
+            <td class="positive">415,000 ريال</td>
+            <td class="highlight">145,250 ريال (35%)</td>
+            <td class="highlight">327,750 ريال</td>
+            <td>+5 أشخاص</td>
+        </tr>
+        <tr>
+            <td><strong>الربع 4</strong><br><small>الشهور 10-12</small></td>
+            <td>880,000 ريال</td>
+            <td>370,000 ريال</td>
+            <td class="positive">510,000 ريال</td>
+            <td class="highlight">204,000 ريال (40%)</td>
+            <td class="highlight">531,750 ريال</td>
+            <td>+2 أشخاص</td>
+        </tr>
+        <tr style="background: #f8fafc; font-weight: 700;">
+            <td>📊 <strong>مجموع السنة 1</strong></td>
+            <td>2.66 مليون ريال</td>
+            <td>1.08 مليون ريال</td>
+            <td class="positive">1.11 مليون ريال</td>
+            <td class="highlight">531,750 ريال</td>
+            <td class="highlight">531,750 ريال</td>
+            <td>+10-11 شخص</td>
+        </tr>
+    </tbody>
+</table>
 
 <h2 class="section-title"><i class="fas fa-map-marked-alt"></i><span>خارطة طريق 3 سنوات للترقية إلى الفئة (ب)</span></h2>
 <div class="roadmap-grid">
     <div class="roadmap-card roadmap-year-1">
         <span class="roadmap-year">السنة الأولى</span>
         <div class="roadmap-title">الأساس القوي</div>
-        <div class="roadmap-subtitle">اليوم 1 → اليوم 365 • بناء عجلة الإيرادات العضوية</div>
-        <div class="roadmap-amount">🎯 2-3 مليون ريال</div>
+        <div class="roadmap-subtitle">الأرباع 1-4 • بناء عجلة الإيرادات العضوية</div>
+        <div class="roadmap-amount">🎯 532,000 ريال (عضوي)</div>
         <ul class="roadmap-list">
-            <li><i class="fas fa-check"></i> تميز تشغيلي مطلق في الفئة (ج)</li>
-            <li><i class="fas fa-check"></i> قاعدة عملاء قوية ومخلصة</li>
-            <li><i class="fas fa-check"></i> علامة تجارية معروفة وموثوقة</li>
-            <li><i class="fas fa-check"></i> استقرار مالي وتشغيلي كامل</li>
-            <li><i class="fas fa-check"></i> استثمارات منخفضة المخاطر للصندوق</li>
+            <li><i class="fas fa-check"></i> تميز تشغيلي في الفئة (ج): استبدال ≤20%</li>
+            <li><i class="fas fa-check"></i> رضا عملاء (NPS) ≥ 55</li>
+            <li><i class="fas fa-check"></i> فريق مؤسس متماسك (14 شخص)</li>
+            <li><i class="fas fa-check"></i> علامة تجارية معروفة في نطاقها</li>
+            <li><i class="fas fa-check"></i> نظام حوكمة مالي واضح</li>
         </ul>
     </div>
     <div class="roadmap-card roadmap-year-2">
         <span class="roadmap-year">السنة الثانية</span>
         <div class="roadmap-title">التوسع والرافعة المالية</div>
-        <div class="roadmap-subtitle">اليوم 366 → اليوم 730 • استكشاف التمويل الذكي</div>
-        <div class="roadmap-amount">🎯 8-12 مليون ريال</div>
+        <div class="roadmap-subtitle">الأرباع 5-8 • استكشاف التمويل الذكي</div>
+        <div class="roadmap-amount">🎯 2.31 مليون ريال (عضوي)</div>
         <ul class="roadmap-list">
-            <li><i class="fas fa-check"></i> بدء استكشاف الرافعة المالية</li>
-            <li><i class="fas fa-check"></i> قروض بنكية ميسرة</li>
-            <li><i class="fas fa-check"></i> شراكات استثمارية استراتيجية</li>
-            <li><i class="fas fa-check"></i> مذكرات تفاهم مع شركاء</li>
-            <li><i class="fas fa-check"></i> علاقات بنكية قوية</li>
+            <li><i class="fas fa-check"></i> نمو إيرادات +133% سنوياً</li>
+            <li><i class="fas fa-check"></i> فريق قيادي متكامل (30 شخص)</li>
+            <li><i class="fas fa-check"></i> إطلاق قناة إيرادات B2B</li>
+            <li><i class="fas fa-check"></i> استكشاف قروض ميسرة وشراكات</li>
+            <li><i class="fas fa-check"></i> جاهزية تنظيمية 80% للفئة (ب)</li>
         </ul>
     </div>
     <div class="roadmap-card roadmap-year-3">
         <span class="roadmap-year">السنة الثالثة</span>
-        <div class="roadmap-title">الترقية</div>
-        <div class="roadmap-subtitle">اليوم 731 → اليوم 1095 • تحقيق الحلم المؤسسي</div>
-        <div class="roadmap-amount">🎯 20 مليون ريال</div>
+        <div class="roadmap-title">الترقية المؤسسية</div>
+        <div class="roadmap-subtitle">الأرباع 9-12 • تحقيق الحلم المؤسسي</div>
+        <div class="roadmap-amount">🎯 20 مليون ريال (مزيج)</div>
         <ul class="roadmap-list">
-            <li><i class="fas fa-check"></i> الوصول للضمان البنكي المطلوب</li>
-            <li><i class="fas fa-check"></i> تقديم طلب "تعديل كيان"</li>
+            <li><i class="fas fa-check"></i> ~6 مليون ريال عضوي + تمويل ذكي</li>
+            <li><i class="fas fa-check"></i> تقديم طلب "تعديل كيان" للوزارة</li>
             <li><i class="fas fa-check"></i> الحصول على ترخيص الفئة (ب)</li>
+            <li><i class="fas fa-check"></i> فريق مؤسسي متكامل (50 شخص)</li>
             <li><i class="fas fa-check"></i> موقع قيادي في السوق السعودي</li>
-            <li><i class="fas fa-check"></i> شركة مؤسسية متكاملة</li>
         </ul>
     </div>
 </div>
 
-<h2 class="section-title"><i class="fas fa-tachometer-alt"></i><span>ملخص مؤشرات الأداء الرئيسية (KPIs)</span></h2>
+<h2 class="section-title"><i class="fas fa-balance-scale"></i><span>موازنة المخاطر والفرص</span></h2>
+<div class="risk-grid">
+    <div class="risk-card danger">
+        <h4><i class="fas fa-shield-alt"></i> إدارة المخاطر (لا تشاؤم، بل استعداد)</h4>
+        <ul>
+            <li><i class="fas fa-exclamation-triangle"></i> <strong>تغير متطلبات الفئة (ب):</strong> متابعة شهرية للتحديثات، ملف جاهزية مرن</li>
+            <li><i class="fas fa-exclamation-triangle"></i> <strong>صعوبة التمويل الخارجي:</strong> بناء سجل أداء قوي، علاقات بنكية مبكرة</li>
+            <li><i class="fas fa-exclamation-triangle"></i> <strong>ارتفاع تكاليف التوظيف:</strong> أتمتة العمليات، هيكلة رواتب ذكية</li>
+            <li><i class="fas fa-exclamation-triangle"></i> <strong>منافسة شرسة:</strong> التميز في تجربة العملاء، علامة تجارية قوية</li>
+        </ul>
+    </div>
+    <div class="risk-card success">
+        <h4><i class="fas fa-lightbulb"></i> استغلال الفرص (لا أحلام، بل تخطيط)</h4>
+        <ul>
+            <li><i class="fas fa-check-circle"></i> <strong>نمو سوق العمالة المنزلية:</strong> التوسع الجغرافي، خدمات متميزة</li>
+            <li><i class="fas fa-check-circle"></i> <strong>دعم رؤية 2030:</strong> المواءمة مع الأهداف الوطنية، شراكات حكومية</li>
+            <li><i class="fas fa-check-circle"></i> <strong>التكنولوجيا تخفض التكاليف:</strong> استثمار مبكر في أتمتة وAI</li>
+            <li><i class="fas fa-check-circle"></i> <strong>شراكات استراتيجية:</strong> بناء علاقات مبكرة، عرض قيمة واضح</li>
+        </ul>
+    </div>
+</div>
+
+<h2 class="section-title"><i class="fas fa-tachometer-alt"></i><span>مؤشرات الأداء الرئيسية: تطور عبر الدورات</span></h2>
 <table class="kpi-table">
     <thead>
         <tr>
-            <th>الركيزة</th>
             <th>المؤشر</th>
-            <th>القيمة المستهدفة</th>
-            <th>المسؤول</th>
-            <th>الموعد</th>
+            <th>الربع 1-2</th>
+            <th>الربع 3-4</th>
+            <th>السنة 2 (الأرباع 5-8)</th>
+            <th>السنة 3 (الأرباع 9-12)</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td><strong>التميز التشغيلي</strong></td><td>معدل استبدال العمالة (90 يوم)</td><td style="color:var(--success);font-weight:700;">تخفيض 20%</td><td>أخصائي العمليات</td><td>اليوم 90</td></tr>
-        <tr><td><strong>التميز التشغيلي</strong></td><td>وقت دورة النشر</td><td style="color:var(--success);font-weight:700;">تخفيض 15%</td><td>مدير التخطيط</td><td>اليوم 90</td></tr>
-        <tr><td><strong>تعظيم الإيرادات</strong></td><td>نمو الإيرادات العضوية</td><td style="color:var(--success);font-weight:700;">زيادة 25%</td><td>GM</td><td>اليوم 90</td></tr>
-        <tr><td><strong>تعظيم الإيرادات</strong></td><td>متوسط الإيراد لكل عقد</td><td style="color:var(--success);font-weight:700;">زيادة 10%</td><td>GM + محاسب</td><td>اليوم 60</td></tr>
-        <tr><td><strong>صندوق الترقية</strong></td><td>الالتزام بالتحويل الشهري</td><td style="color:var(--success);font-weight:700;">100%</td><td>GM</td><td>شهري</td></tr>
-        <tr><td><strong>تجربة العملاء</strong></td><td>مؤشر صافي المروجين (NPS)</td><td style="color:var(--success);font-weight:700;">فوق 60</td><td>أخصائي CX</td><td>اليوم 90</td></tr>
-        <tr><td><strong>تجربة العملاء</strong></td><td>معدل الإحالة</td><td style="color:var(--success);font-weight:700;">فوق 25%</td><td>أخصائي CX</td><td>اليوم 90</td></tr>
-        <tr><td><strong>العلامة التجارية</strong></td><td>تقييم Google Maps</td><td style="color:var(--success);font-weight:700;">فوق 4.5/5</td><td>أخصائي CX</td><td>اليوم 90</td></tr>
-        <tr><td><strong>الامتثال</strong></td><td>حالة منصات الوزارة</td><td style="color:var(--success);font-weight:700;">100% أخضر</td><td>أخصائي العمليات</td><td>مستمر</td></tr>
-        <tr><td><strong>الاستعداد</strong></td><td>خارطة طريق 3 سنوات</td><td style="color:var(--accent);font-weight:700;">معتمدة</td><td>GM</td><td>اليوم 85</td></tr>
+        <tr>
+            <td><strong>معدل استبدال العمالة (90 يوم)</strong></td>
+            <td>≤ 25%</td>
+            <td>≤ 20%</td>
+            <td>≤ 15%</td>
+            <td style="color:var(--success);font-weight:700;">≤ 12%</td>
+        </tr>
+        <tr>
+            <td><strong>وقت دورة النشر (من العقد للتسليم)</strong></td>
+            <td>≤ 21 يوم</td>
+            <td>≤ 18 يوم</td>
+            <td>≤ 15 يوم</td>
+            <td style="color:var(--success);font-weight:700;">≤ 12 يوم</td>
+        </tr>
+        <tr>
+            <td><strong>رضا العملاء (NPS)</strong></td>
+            <td>≥ 45</td>
+            <td>≥ 55</td>
+            <td>≥ 65</td>
+            <td style="color:var(--success);font-weight:700;">≥ 70</td>
+        </tr>
+        <tr>
+            <td><strong>معدل الإحالة من العملاء</strong></td>
+            <td>≥ 10%</td>
+            <td>≥ 20%</td>
+            <td>≥ 25%</td>
+            <td style="color:var(--success);font-weight:700;">≥ 30%</td>
+        </tr>
+        <tr>
+            <td><strong>هامش الربح الصافي</strong></td>
+            <td>≥ 25%</td>
+            <td>≥ 30%</td>
+            <td>≥ 32%</td>
+            <td style="color:var(--success);font-weight:700;">≥ 35%</td>
+        </tr>
+        <tr>
+            <td><strong>رصيد صندوق الترقية</strong></td>
+            <td>182,500 ريال</td>
+            <td>531,750 ريال</td>
+            <td>2.31 مليون ريال</td>
+            <td style="color:var(--accent);font-weight:700;">~6M عضوي + تمويل</td>
+        </tr>
+        <tr>
+            <td><strong>حالة الامتثال على منصات الوزارة</strong></td>
+            <td>100% أخضر</td>
+            <td>100% أخضر</td>
+            <td>100% + تقارير متقدمة</td>
+            <td style="color:var(--success);font-weight:700;">جاهزية كاملة للتدقيق</td>
+        </tr>
     </tbody>
 </table>
 
 <h2 class="section-title"><i class="fas fa-hands-helping"></i><span>استراتيجية التعويض (الاستعانة بمصادر خارجية)</span></h2>
 <div class="compensate-grid">
-    <div class="compensate-card"><i class="fas fa-calculator"></i><h4>المالية والمحاسبة</h4><p>مكتب محاسبي خارجي (Retainer). المدير العام يستلم التقارير ولا يقوم بالإدخال.</p></div>
-    <div class="compensate-card"><i class="fas fa-code"></i><h4>التكنولوجيا والأنظمة</h4><p>منصات Low-Code (Zoho, Airtable, Make.com) تحت إشراف مدير التخطيط لبناء الأنظمة.</p></div>
-    <div class="compensate-card"><i class="fas fa-palette"></i><h4>التسويق الرقمي والمحتوى</h4><p>وكالة تسويق رقمي لإنتاج المحتوى وإدارة الحملات، بينما يدير الأخصائي الاستراتيجية والبيانات.</p></div>
-    <div class="compensate-card"><i class="fas fa-balance-scale"></i><h4>الشؤون القانونية</h4><p>مستشار قانوني بساعات استشارية لمتابعة متطلبات الفئة (ب) ومراجعة عقود الوكالات الدولية.</p></div>
+    <div class="compensate-card"><i class="fas fa-calculator"></i><h4>المالية والمحاسبة</h4><p>مكتب محاسبي خارجي (Retainer). المدير العام يستلم التقارير ولوحات المعلومات ولا يقوم بالإدخال اليدوي.</p></div>
+    <div class="compensate-card"><i class="fas fa-code"></i><h4>التكنولوجيا والأنظمة</h4><p>منصات Low-Code/No-Code (Zoho, Airtable, Make.com) تحت إشراف مدير التخطيط، مع مطورين مستقلين للمهام المعقدة.</p></div>
+    <div class="compensate-card"><i class="fas fa-palette"></i><h4>التسويق الرقمي والمحتوى</h4><p>وكالة تسويق رقمي لإنتاج المحتوى وإدارة الحملات، بينما يدير الأخصائي الاستراتيجية، الجدولة، وتحليل البيانات.</p></div>
+    <div class="compensate-card"><i class="fas fa-balance-scale"></i><h4>الشؤون القانونية</h4><p>مستشار قانوني خارجي بساعات استشارية لمتابعة متطلبات الفئة (ب)، مراجعة عقود الوكالات، وضمان توافق السجل التجاري.</p></div>
 </div>
 
 <div class="summary">
     <h2><i class="fas fa-quote-right"></i> الرسالة الاستراتيجية للمالك</h2>
     <div class="summary-quote">
-        "نحن لا نسعى للترقية قبل أوانها. نسعى لأن نكون الأفضل في فئتنا الحالية، ونترك السوق يتحدث عنّا، ونترك الأرقام العضوية تبني لنا رأسمال الترقية."
+        "نحن لا نراهن على الحظ، ولا ننتظر المعجزات. نبني مؤسسة خطوة بخطوة، برقم برقم، وبشخص بشخص. الترقية للفئة (ب) ليست هدفاً بعيداً، بل نتيجة طبيعية للتميز اليوم."
     </div>
-    <p>بنهاية الـ 90 يوماً، سنكون قد بنينا: شركة متميزة تشغيلياً في الفئة (ج)، نمواً عضوياً قوياً، صندوق ترقية يُبنى بتأنٍ، قاعدة عملاء مخلصة، وعلامة تجارية قوية. وفي 3 سنوات، سنحقق الترقية إلى الفئة (ب) <strong>برأسمال عضوي حقيقي وليس ديوناً مثقلة</strong>، لنصبح شركة مؤسسية متكاملة بموقع قيادي في سوق القوى العاملة السعودي.</p>
+    <p>هذه الخطة تجمع بين <strong>الواقعية</strong> (نقر بأن 20 مليون ريال تحتاج وقتاً) و <strong>التفاؤل</strong> (نؤمن بأنها قابلة للتحقيق). كل ربع سنوي هو دورة تعلم، قياس، وتعديل. بنهاية الـ 3 سنوات، سنحقق الترقية إلى الفئة (ب) <strong>برأسمال عضوي حقيقي + تمويل ذكي</strong>، لنصبح شركة مؤسسية متكاملة بموقع قيادي في سوق القوى العاملة السعودي.</p>
 </div>
 
 <div class="footer">
-    <p><i class="fas fa-shield-alt"></i> وثيقة استراتيجية سرية — مُعدة للعرض على المدير العام والمالك | 2026</p>
+    <p><i class="fas fa-shield-alt"></i> وثيقة استراتيجية سرية — مُعدة للعرض على المدير العام والمالك | النموذج الدوري الواقعي 2026-2028</p>
 </div>
 
 </div>
@@ -763,32 +858,45 @@ body {
 Chart.defaults.font.family = "'Tajawal', 'Cairo', sans-serif";
 Chart.defaults.color = '#334155';
 
-// War Chest 3-Year Trajectory (20M)
+// War Chest: Hybrid Model (Organic + Leverage)
 new Chart(document.getElementById('warChestChart'), {
     type: 'line',
     data: {
         labels: ['بداية', '6 شهور', 'سنة 1', '18 شهر', 'سنة 2', '30 شهر', 'سنة 3'],
-        datasets: [{
-            label: 'صندوق الترقية (مليون ريال)',
-            data: [0, 0.8, 2.5, 5.5, 10, 15, 20],
-            borderColor: '#C9A961',
-            backgroundColor: 'rgba(201, 169, 97, 0.2)',
-            borderWidth: 4,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: '#0A2540',
-            pointBorderColor: '#C9A961',
-            pointBorderWidth: 3,
-            pointRadius: 6
-        }, {
-            label: 'هدف الفئة (ب)',
-            data: [20, 20, 20, 20, 20, 20, 20],
-            borderColor: '#EF4444',
-            borderWidth: 2,
-            borderDash: [10, 5],
-            fill: false,
-            pointRadius: 0
-        }]
+        datasets: [
+            {
+                label: 'التراكم العضوي',
+                data: [0, 0.18, 0.53, 1.2, 2.31, 4.2, 6.0],
+                borderColor: '#10B981',
+                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#0A2540',
+                pointRadius: 5
+            },
+            {
+                label: 'التمويل الخارجي (قروض/شراكات)',
+                data: [0, 0, 0, 0.5, 2.0, 4.5, 14.0],
+                borderColor: '#8B5CF6',
+                backgroundColor: 'rgba(139, 92, 246, 0.15)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#0A2540',
+                pointRadius: 5,
+                borderDash: [5, 5]
+            },
+            {
+                label: 'الهدف: 20 مليون ريال',
+                data: [20, 20, 20, 20, 20, 20, 20],
+                borderColor: '#EF4444',
+                borderWidth: 2,
+                borderDash: [10, 5],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
     },
     options: {
         responsive: true,
@@ -803,95 +911,116 @@ new Chart(document.getElementById('warChestChart'), {
     }
 });
 
-// Pillars Chart
-new Chart(document.getElementById('pillarChart'), {
+// Team Growth Chart
+new Chart(document.getElementById('teamGrowthChart'), {
     type: 'bar',
     data: {
-        labels: ['التميز B2C', 'الإيرادات', 'صندوق الترقية', 'تجربة العملاء', 'العلامة التجارية', 'الاستعداد'],
+        labels: ['بداية', '6 شهور', 'سنة 1', 'سنة 1.5', 'سنة 2', 'سنة 2.5', 'سنة 3'],
         datasets: [{
-            label: 'عدد المهام',
-            data: [5, 4, 4, 5, 4, 3],
-            backgroundColor: ['#0A2540', '#C9A961', '#1E3A5F', '#10B981', '#F59E0B', '#8B5CF6'],
-            borderRadius: 8
+            label: 'حجم الفريق',
+            data: [4, 7, 14, 20, 30, 40, 50],
+            backgroundColor: ['#0A2540', '#3B82F6', '#F59E0B', '#F59E0B', '#10B981', '#10B981', '#10B981'],
+            borderRadius: 8,
+            borderWidth: 2,
+            borderColor: '#fff'
         }]
     },
     options: {
         responsive: true,
         plugins: { legend: { display: false } },
         scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+            y: { beginAtZero: true, ticks: { stepSize: 10 }, grid: { color: '#f1f5f9' } },
             x: { grid: { display: false } }
         }
     }
 });
 
-// KPI Radar
-new Chart(document.getElementById('kpiChart'), {
-    type: 'radar',
+// Revenue vs Expenses Chart
+new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
     data: {
-        labels: ['الامتثال', 'تقليل الاستبدال', 'نمو الإيرادات', 'NPS', 'معدل الإحالة', 'Google Rating'],
-        datasets: [{
-            label: 'الأهداف المستهدفة (%)',
-            data: [100, 80, 75, 95, 85, 90],
-            backgroundColor: 'rgba(201, 169, 97, 0.3)',
-            borderColor: '#C9A961',
-            borderWidth: 2,
-            pointBackgroundColor: '#0A2540'
-        }]
+        labels: ['سنة 1', 'سنة 2', 'سنة 3'],
+        datasets: [
+            {
+                label: 'الإيرادات',
+                data: [2.66, 6.2, 10.2],
+                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                borderColor: '#10B981',
+                borderWidth: 2
+            },
+            {
+                label: 'المصروفات',
+                data: [1.08, 3.8, 6.5],
+                backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                borderColor: '#EF4444',
+                borderWidth: 2
+            },
+            {
+                label: 'صافي الربح',
+                data: [1.11, 2.4, 3.7],
+                type: 'line',
+                borderColor: '#C9A961',
+                backgroundColor: '#C9A961',
+                borderWidth: 4,
+                fill: false,
+                pointRadius: 6,
+                pointBackgroundColor: '#0A2540'
+            }
+        ]
     },
     options: {
         responsive: true,
-        scales: { r: { beginAtZero: true, max: 100, ticks: { stepSize: 20, backdropColor: 'transparent' }, grid: { color: '#e2e8f0' } } },
-        plugins: { legend: { position: 'bottom' } }
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            y: { beginAtZero: true, ticks: { callback: v => v + 'M' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+        }
     }
 });
 
-// Team Chart
-new Chart(document.getElementById('teamChart'), {
-    type: 'doughnut',
+// KPI Evolution Radar
+new Chart(document.getElementById('kpiEvolutionChart'), {
+    type: 'radar',
     data: {
-        labels: ['المدير العام (GM)', 'مدير التخطيط', 'أخصائي العمليات', 'أخصائي تجربة العملاء'],
-        datasets: [{
-            data: [6, 6, 4, 5],
-            backgroundColor: ['#0A2540', '#C9A961', '#1E3A5F', '#10B981'],
-            borderWidth: 3,
-            borderColor: '#fff'
-        }]
-    },
-    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { padding: 15, font: { size: 12 } } } } }
-});
-
-// Gantt Chart
-new Chart(document.getElementById('ganttChart'), {
-    type: 'bar',
-    data: {
-        labels: ['المرحلة 1: التشخيص', 'المرحلة 2: الأتمتة', 'المرحلة 3: التعظيم', 'صندوق الترقية (War Chest)', 'بناء العلامة التجارية', 'برامج الولاء والإحالات', 'خارطة طريق 3 سنوات'],
-        datasets: [{
-            label: 'بداية (يوم)',
-            data: [0, 30, 60, 0, 30, 40, 85],
-            backgroundColor: 'rgba(10, 37, 64, 0.2)',
-            borderWidth: 0,
-            stack: 'Stack 0'
-        }, {
-            label: 'المدة (أيام)',
-            data: [30, 30, 30, 1095, 90, 50, 5],
-            backgroundColor: ['#3B82F6', '#F59E0B', '#10B981', '#C9A961', '#8B5CF6', '#EC4899', '#0A2540'],
-            borderWidth: 0,
-            stack: 'Stack 0',
-            borderRadius: 6
-        }]
+        labels: ['الامتثال', 'تقليل الاستبدال', 'نمو الإيرادات', 'رضا العملاء (NPS)', 'هامش الربح', 'جاهزية الفئة (ب)'],
+        datasets: [
+            {
+                label: 'نهاية السنة 1',
+                data: [100, 80, 75, 85, 70, 40],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: '#3B82F6',
+                borderWidth: 2,
+                pointBackgroundColor: '#3B82F6'
+            },
+            {
+                label: 'نهاية السنة 2',
+                data: [100, 90, 90, 95, 85, 80],
+                backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                borderColor: '#F59E0B',
+                borderWidth: 2,
+                pointBackgroundColor: '#F59E0B'
+            },
+            {
+                label: 'نهاية السنة 3',
+                data: [100, 100, 100, 100, 100, 100],
+                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                borderColor: '#10B981',
+                borderWidth: 2,
+                pointBackgroundColor: '#10B981'
+            }
+        ]
     },
     options: {
-        indexAxis: 'y',
         responsive: true,
-        plugins: {
-            legend: { position: 'bottom' },
-            tooltip: { callbacks: { label: function(ctx) { return ctx.datasetIndex === 0 ? 'البداية: يوم ' + ctx.raw : 'المدة: ' + ctx.raw + ' يوماً'; } } }
+        scales: { 
+            r: { 
+                beginAtZero: true, 
+                max: 100, 
+                ticks: { stepSize: 20, backdropColor: 'transparent' }, 
+                grid: { color: '#e2e8f0' } 
+            } 
         },
-        scales: {
-            x: { stacked: true, max: 1100, ticks: { callback: v => 'يوم ' + v, stepSize: 100 }, grid: { color: '#f1f5f9' } },
-            y: { stacked: true, grid: { display: false } }
-        }
+        plugins: { legend: { position: 'bottom' } }
     }
 });
 </script>
