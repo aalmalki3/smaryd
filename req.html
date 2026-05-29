@@ -3,441 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الامتثال والمخاطر النظامية - شركات الاستقدام فئة ج</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>الدليل الشامل لامتثال شركات الاستقدام فئة ج</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1a365d;
-            --primary-light: #2a4a7f;
-            --secondary: #0056b3;
-            --accent: #e53e3e;
-            --warning: #d69e2e;
-            --success: #38a169;
-            --bg: #f7fafc;
-            --card-bg: #ffffff;
-            --text: #2d3748;
-            --text-light: #4a5568;
+            --primary: #1e3a5f;
+            --secondary: #2563eb;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --success: #059669;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg);
+            background: var(--bg);
             color: var(--text);
-            line-height: 1.7;
-            font-size: 16px;
+            line-height: 1.8;
             padding-bottom: 40px;
         }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
         header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            padding: 35px 20px;
             text-align: center;
-            border-radius: var(--radius);
+            border-radius: 12px;
             margin-bottom: 30px;
             box-shadow: var(--shadow);
         }
-
-        header h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 10px;
+        header h1 { font-size: 2rem; margin-bottom: 10px; }
+        header p { font-size: 1.05rem; opacity: 0.9; max-width: 750px; margin: 0 auto; }
+        
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
         }
-
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
+        .nav-tabs button {
+            background: #e2e8f0;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: 0.2s;
         }
+        .nav-tabs button.active { background: var(--secondary); color: #fff; }
+        .nav-tabs button:hover { background: #cbd5e1; }
 
-        .badge {
+        .section { display: none; animation: fadeIn 0.4s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { color: var(--primary); margin: 25px 0 15px; font-size: 1.5rem; border-right: 4px solid var(--secondary); padding-right: 12px; }
+        h3 { color: var(--primary); margin: 18px 0 10px; font-size: 1.25rem; }
+        p, li { margin-bottom: 10px; color: var(--text); }
+        ul { padding-right: 20px; }
+
+        .card {
+            background: var(--card);
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-right: 4px solid var(--secondary);
+        }
+        .card.danger { border-right-color: var(--danger); background: #fef2f2; }
+        .card.warning { border-right-color: var(--warning); background: #fffbeb; }
+        
+        .tag {
             display: inline-block;
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-left: 8px;
-            vertical-align: middle;
+            margin: 0 5px;
         }
-
-        .badge-cat-c { background: #ebf8ff; color: #2b6cb0; }
-        .badge-high { background: #fff5f5; color: #c53030; }
-        .badge-medium { background: #fffff0; color: #b7791f; }
-
-        .axis-title {
-            font-size: 1.6rem;
-            color: var(--primary);
-            margin: 40px 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--secondary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .violation-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border-right: 4px solid var(--secondary);
-        }
-
-        .violation-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .violation-card h3 {
-            color: var(--primary);
-            font-size: 1.25rem;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .detail-item {
-            margin-bottom: 12px;
-            padding: 10px;
-            background: #f8fafc;
-            border-radius: 8px;
-            border-right: 3px solid var(--border);
-        }
-
-        .detail-item strong {
-            color: var(--primary-light);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .penalty-box, .impact-box {
+        .tag-j { background: #dbeafe; color: #1e40af; }
+        .tag-critical { background: #fee2e2; color: #991b1b; }
+        
+        .penalty, .impact {
             padding: 12px;
             border-radius: 8px;
             margin-top: 10px;
-            font-weight: 500;
+            font-size: 0.95rem;
         }
+        .penalty { background: #fff1f2; border: 1px solid #fecaca; color: #991b1b; }
+        .impact { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
 
-        .penalty-box {
-            background: #fff5f5;
-            border: 1px solid #fed7d7;
-            color: #c53030;
-        }
-
-        .impact-box {
-            background: #ebf8ff;
-            border: 1px solid #bee3f8;
-            color: #2b6cb0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            background: white;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        thead {
-            background: var(--primary);
-            color: white;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: right;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th { font-weight: 700; font-size: 0.95rem; }
-        td { font-size: 0.9rem; }
-        tr:last-child td { border-bottom: none; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+        th, td { padding: 14px; text-align: right; border-bottom: 1px solid var(--border); }
+        th { background: var(--primary); color: #fff; font-weight: 700; }
         tr:nth-child(even) { background: #f8fafc; }
-        tr:hover { background: #edf2f7; }
 
-        .summary-box {
-            background: linear-gradient(to left, #f0fff4, #f0f4ff);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin-top: 40px;
-            border: 1px solid #c6f6d5;
+        .footer { text-align: center; margin-top: 40px; padding: 20px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--border); }
+
+        @media print {
+            .nav-tabs { display: none; }
+            .section { display: block !important; page-break-before: always; }
+            header { background: #fff; color: #000; box-shadow: none; border: 2px solid #000; }
         }
-
-        .summary-box h2 {
-            color: var(--success);
-            margin-bottom: 15px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border);
-        }
-
         @media (max-width: 768px) {
             header h1 { font-size: 1.6rem; }
-            .container { padding: 15px; }
-            .violation-card { padding: 18px; }
-            th, td { padding: 12px; font-size: 0.85rem; }
-            .axis-title { font-size: 1.4rem; }
+            .card { padding: 18px; }
+            th, td { padding: 10px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <header>
-        <h1>دليل الامتثال والمخاطر النظامية</h1>
-        <p>تحليل مفصل للمخالفات، العقوبات، والأثر التشغيلي على شركات ومكاتب استقدام الفئة ج (≤20 عاملاً)</p>
+        <h1>الدليل الشامل لامتثال شركات الاستقدام فئة ج</h1>
+        <p>تحليل تفصيلي للمستندات النظامية الخمسة، مقسّم إلى أدوار تشغيلية، تخطيط استراتيجي، ودليل مخالفات وعقوبات كامل مع الأثر المباشر على فئة ج (≤20 عاملاً)</p>
     </header>
 
-    <!-- المحور 1 -->
-    <h2 class="axis-title"><span>🏛️</span> المحور الأول: التأسيس، التراخيص، والضمانات المالية</h2>
-    
-    <div class="violation-card">
-        <h3>1. الحفاظ على الضمان البنكي ورأس المال <span class="badge badge-cat-c">فئة ج</span></h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> يجب بقاء الضمان البنكي (مثلاً 500,000 ريال للمكتب أو 1.5 مليون للشركة الصغيرة) كاملاً في البنك. يُسحب منه فقط بأمر وزاري لسداد التزامات عاجلة.
-        </div>
-        <div class="detail-item">
-            <strong>المخالفة:</strong> عدم إكمال نقص الضمان البنكي خلال المدة المحددة (15 يوماً للمكاتب، 30 يوماً للشركات) من تاريخ الإبلاغ بالسحب.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 1,000 - 2,000 ريال + تعليق الترخيص حتى السداد. في حال التكرار أو التأخر الشديد: سحب الترخيص نهائياً.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> سحب الترخيص يعني إفلاساً فورياً وتصفية الأعمال. التعليق يعني توقف الدخل تماماً بينما تكاليف الإيواء والرواتب مستمرة.
+    <div class="nav-tabs">
+        <button class="active" onclick="showSection('intro')">المقدمة والتصنيف</button>
+        <button onclick="showSection('frontline')">التشغيل اليومي (الخطوط الأمامية)</button>
+        <button onclick="showSection('strategy')">التخطيط الاستراتيجي (الإدارة)</button>
+        <button onclick="showSection('violations')">دليل المخالفات والعقوبات</button>
+        <button onclick="showSection('summary')">ملخص إدارة المخاطر</button>
+    </div>
+
+    <!-- 1. المقدمة -->
+    <div id="intro" class="section active">
+        <h2>📌 تعريف الفئة ج وأهميتها التشغيلية</h2>
+        <p>وفقاً لجدول المخالفات والعقوبات المعتمد من وزارة الموارد البشرية والتنمية الاجتماعية، يُصنّف صاحب العمل أو المرخص له بناءً على عدد العاملين المسجلين أو الخاضعين لإدارته المباشرة:</p>
+        <ul>
+            <li><strong>الفئة أ:</strong> 50 عاملاً فأكثر</li>
+            <li><strong>الفئة ب:</strong> 21 إلى 49 عاملاً</li>
+            <li><strong>الفئة ج:</strong> 20 عاملاً فأقل (تشمل المكاتب الصغيرة وشركات الاستقدام الناشئة)</li>
+        </ul>
+        <div class="card">
+            <h3>💡 لماذا يهم هذا التصنيف شركة فئة ج؟</h3>
+            <ul>
+                <li><strong>ميزة مالية:</strong> الغرامات الإدارية غير الجسيمة مخفضة بنسبة 30%–50% مقارنة بالفئة أ.</li>
+                <li><strong>خطر مركّز:</strong> لا توجد حماية في المخالفات الجسيمة (الاتجار، التزوير، سلامة الحياة) حيث تكون الغرامات موحدة وعالية.</li>
+                <li><strong>مرونة إدارية:</strong> الحجم الصغير يسهل التحكم في جودة العمالة، سرعة اتخاذ القرار، وتقليل تعقيدات الإيواء والسلامة المهنية.</li>
+            </ul>
         </div>
     </div>
 
-    <div class="violation-card">
-        <h3>2. ممارسة النشاط المرخص فقط</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> الالتزام الصارم بنطاق النشاط المسموح (مثلاً: مكتب استقدام يقتصر على التوسط، ولا يمارس تقديم خدمات يومية أو توظيف سعوديين).
+    <!-- 2. الخطوط الأمامية -->
+    <div id="frontline" class="section">
+        <h2>👥 العمليات التشغيلية اليومية (دليل موظفي الخطوط الأمامية)</h2>
+        <p>هؤلاء الموظفون هم واجهة الشركة. المعلومات الواردة في المستندات تحدد بدقة ما يجب عليهم فعله يومياً لتجنب الغرامات الفورية وضمان سلاسة المعاملات.</p>
+        
+        <div class="card">
+            <h3>🔹 قسم المبيعات وخدمة العملاء</h3>
+            <ul>
+                <li><strong>فحص الأهلية المالية:</strong> التحقق من الراتب/الرصيد حسب جدول مساند قبل فتح الملف. (مواطن: تأشيرة 1 ≥40k رصيد، مقيم: تأشيرة 2 ≥20k راتب).</li>
+                <li><strong>ضوابط الإعلان:</strong> منع صور/فيديو العمال تماماً. الاعتماد على الوصف النصي. ذكر رقم الترخيص والتكلفة بوضوح. (مخالفة الإعلان تغرم 30,000 ريال).</li>
+                <li><strong>إدارة رفض العمالة:</strong> استخدام قرار الانتقال 212875 لتحويل الرفض إلى "نقل خدمة" بدلاً من الخروج النهائي، مما يخفف تكاليف الإيواء ويعيد توليد الدخل.</li>
+            </ul>
         </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 5,000 - 10,000 ريال + تعليق الترخيص لمدة شهرين أو حتى إزالة المخالفة. الاستمرار بعد التعليق يؤدي لسحب الترخيص.
+
+        <div class="card">
+            <h3>🔹 قسم عمليات الاستقدام والتأشيرات</h3>
+            <ul>
+                <li><strong>التعاقد الخارجي:</strong> التأكد من وجود عقد ارتباط موثق وساري مع المكتب المرسل قبل طلب أي تأشيرة.</li>
+                <li><strong>التوثيق الإلكتروني:</strong> توثيق عقد التوسط وعقد العمل فور التوقيع. التعامل المالي حصرياً عبر المنصة المعتمدة (ممنوع الكاش).</li>
+                <li><strong>الاستقبال والإيواء:</strong> استلام العامل فور الوصول، نقله للسكن المعتمد، وتحديث الحالة آلياً. التأخر يغرم 200 ريال/عامل.</li>
+            </ul>
         </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> فقدان السمعة وصعوبة تجديد الترخيص مستقبلاً. الغرامة تمثل نسبة كبيرة من صافي ربح شركة صغيرة.
+
+        <div class="card">
+            <h3>🔹 قسم الامتثال الداخلي والشكاوى</h3>
+            <ul>
+                <li><strong>معالجة الشكاوى:</strong> تسجيل فوري، رد ضمن المهلة، حل النزاع قبل تصعيده للوزارة.</li>
+                <li><strong>مراقبة الضمان البنكي:</strong> سداد أي نقص خلال 15 يوم (مكتب) أو 30 يوم (شركة) لتجنب تعليق/سحب الترخيص.</li>
+            </ul>
         </div>
     </div>
 
-    <!-- المحور 2 -->
-    <h2 class="axis-title"><span>✈️</span> المحور الثاني: عمليات الاستقدام والتعاقد الخارجي</h2>
+    <!-- 3. الاستراتيجية -->
+    <div id="strategy" class="section">
+        <h2>📈 التخطيط الاستراتيجي (دليل الإدارة العليا ومجلس الإدارة)</h2>
+        <p>الإدارة تستخدم المستندات نفسها لرسم الخريطة طويلة المدى، حماية الأصول، وضمان استدامة الترخيص.</p>
 
-    <div class="violation-card">
-        <h3>3. التعاقد مع مكاتب الإرسال الخارجية</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> لا يجوز استقدام عامل إلا عبر مكتب خارجي مرتبط بعقد ارتباط موثق وساري المفعول في نظام الوزارة.
+        <div class="card">
+            <h3>💰 1. التخطيط المالي وهيكلة التكاليف</h3>
+            <ul>
+                <li>الحفاظ على الضمان البنكي ورأس المال كأصول غير قابلة للمس إلا للضرورة القصوى.</li>
+                <li>استثمار الفائض النقدي في ودائع بنكية محلية فقط (مسموح نظامياً).</li>
+                <li>تسعير الخدمات بما يتناسب مع التكاليف المعلنة في مساند، وتجنب "المزايدة" التي تُعد مخالفة نظامية.</li>
+                <li>استهداف شرائح ذات هامش ربح أعلى: المقيمين ذوي الدخل المرتفع، وذوي الإعاقة (إعفاءات مالية تسرع الإنجاز).</li>
+            </ul>
         </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 5,000 ريال لكل عقد (بدون عقد موثق). غرامة 20,000 ريال إذا كانت الجهة غير مرخصة أو موقوفة + تعليق أو سحب الترخيص.
+
+        <div class="card">
+            <h3>🛡️ 2. إدارة المخاطر الجسيمة (خطوط حمراء)</h3>
+            <ul>
+                <li>سياسة "عدم التسامح" مع الاتجار بالأشخاص أو تشغيل الأطفال (سحب ترخيص فوري + مسؤولية جنائية).</li>
+                <li>منع تزوير البيانات أو إخفاء المعلومات عن المفتشين (تعليق 12 شهراً).</li>
+                <li>وضع خطة استمرارية أعمال (Backup Systems) لضمان العمل حال تعطل المنصات الإلكترونية.</li>
+            </ul>
         </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> توقف كامل لاستقدام عمالة جديدة. تراكم الغرامات قد يتجاوز رأس المال العامل للشركة الصغيرة.
+
+        <div class="card">
+            <h3>📋 3. الحوكمة، التوسع، ونقل الملكية</h3>
+            <ul>
+                <li>تعيين مدير التزام سعودي الجنسية (حسب الحجم) ورفع تقارير ربع سنوية لمجلس الإدارة.</li>
+                <li>تقديم القوائم المالية المدققة سنوياً للوزارة.</li>
+                <li>نقل الملكية مسموح فقط بعد مرور 3 سنوات على الترخيص، مما يؤثر على خطط الخروج الاستثماري.</li>
+                <li>فتح الفروع أو تعديل النشاط يتطلب دراسة جدوى معتمدة وموافقة مبدئية قبل 180 يوماً.</li>
+            </ul>
         </div>
     </div>
 
-    <div class="violation-card">
-        <h3>4. الالتزام بتكاليف الاستقدام المعلنة</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> الالتزام التام بالتكلفة المحددة في الاتفاقيات الثنائية ومنصة مساند. ممنوع أخذ مبالغ إضافية غير موثقة.
+    <!-- 4. المخالفات التفصيلية -->
+    <div id="violations" class="section">
+        <h2>⚖️ الدليل التفصيلي للمخالفات والعقوبات (الفئة ج)</h2>
+        <p>تم استخلاص النقاط الأكثر تأثيراً من جداول العقوبات، مع تفصيل الإجراء، المخالفة، العقوبة المحددة، والأثر المباشر.</p>
+
+        <div class="card danger">
+            <h3>1. عدم إكمال نقص الضمان البنكي <span class="tag tag-critical">خطر وجودي</span></h3>
+            <p><strong>الإجراء:</strong> سداد المبلغ المسحوب خلال 15-30 يوماً حسب نوع الكيان.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 1,000–2,000 ريال + تعليق حتى السداد. التكرار = سحب الترخيص.</div>
+            <div class="impact"><strong>الأثر:</strong> شلل مالي فوري. الشركة الصغيرة لا تملك احتياطياً كافياً لاستيعاب تعليق النشاط.</div>
         </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 10,000 ريال تتعدد بعدد العقود + تعليق الترخيص لمدة 6 أشهر.
+
+        <div class="card danger">
+            <h3>2. ممارسة نشاط غير مرخص به</h3>
+            <p><strong>الإجراء:</strong> الالتزام الصارم بنطاق الترخيص (مثلاً: مكتب استقدام لا يمارس خدمات يومية).</p>
+            <div class="penalty"><strong>العقوبة:</strong> 5,000–10,000 ريال + تعليق شهرين. الاستمرار = سحب.</div>
+            <div class="impact"><strong>الأثر:</strong> فقدان السمعة، تعقيد التجديد، وغرامة تستنزف أرباح أشهر.</div>
         </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> تعليق 6 أشهر يعني شبه إغلاق للشركة، وفقدان العملاء لصالح المنافسين، وصعوبة شديدة في التعافي المالي بعد العودة.
+
+        <div class="card danger">
+            <h3>3. التعاقد مع جهات إرسال غير موثقة <span class="tag tag-critical">خطر حرج</span></h3>
+            <p><strong>الإجراء:</strong> توثيق عقد الارتباط مع كل مكتب خارجي قبل طلب التأشيرة.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 5,000 ريال/عقد. التعامل مع جهة موقوفة = 20,000 ريال + إيقاف/سحب.</div>
+            <div class="impact"><strong>الأثر:</strong> توقف الاستيراد الكامل للعمالة، وتراكم ديون الإيواء دون عائد.</div>
+        </div>
+
+        <div class="card danger">
+            <h3>4. المزايدة في تكاليف الاستقدام</h3>
+            <p><strong>الإجراء:</strong> الالتزام بالتكلفة المعلنة في مساند والاتفاقيات الثنائية.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 10,000 ريال تتعدد بعدد العقود + تعليق 6 أشهر.</div>
+            <div class="impact"><strong>الأثر:</strong> تعليق نصف سنة = خسارة السوق بالكامل، وصعوبة استعادة الحصة السوقية.</div>
+        </div>
+
+        <div class="card danger">
+            <h3>5. عدم توثيق العقود إلكترونياً</h3>
+            <p><strong>الإجراء:</strong> التوثيق الفوري على المنصة المعتمدة.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 5,000 ريال تتعدد بالعقود + تعليق.</div>
+            <div class="impact"><strong>الأثر:</strong> فقدان الحق القانوني في المطالبة بالتعويضات أمام لجان الفصل.</div>
+        </div>
+
+        <div class="card danger">
+            <h3>6. عدم توفير السكن الجماعي (الإيواء)</h3>
+            <p><strong>الإجراء:</strong> توفير سكن مطابق للاشتراطات فور وصول العامل.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 20,000 ريال (عدم التوفر) أو 2,000 ريال (عدم المطابقة) + تعليق.</div>
+            <div class="impact"><strong>الأثر:</strong> أغلى مخالفة إدارية. قد تمحو أرباح ربع سنوي كامل للشركة الصغيرة.</div>
+        </div>
+
+        <div class="card warning">
+            <h3>7. تجاوز مؤشر التغيب ورفض العمل</h3>
+            <p><strong>الإجراء:</strong> فرز دقيق في المصدر، وتفعيل بروتوكول النقل البديل.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 1,000–2,000 ريال + إيقاف إصدار تأشيرات حتى 180 يوماً.</div>
+            <div class="impact"><strong>الأثر:</strong> شلّ المصدر الرئيسي للدخل. يتطلب مراجعة فورية لعقود المكاتب الخارجية.</div>
+        </div>
+
+        <div class="card danger">
+            <h3>8. مخالفة ضوابط الإعلان (صور العمال) <span class="tag tag-critical">خطر حرج</span></h3>
+            <p><strong>الإجراء:</strong> الاعتماد على الوصف النصي فقط بعد موافقة خطية.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 30,000 ريال + سحب فوري للإعلان وتعليق الترخيص.</div>
+            <div class="impact"><strong>الأثر:</strong> ضربة مالية قوية، وتضرر سمعة الشركة بسبب انتهاك الخصوصية.</div>
+        </div>
+
+        <div class="card warning">
+            <h3>9. عدم معالجة شكاوى العملاء</h3>
+            <p><strong>الإجراء:</strong> قناة شكاوى مفعّلة، رد وحل ضمن المهلة.</p>
+            <div class="penalty"><strong>العقوبة:</strong> 1,000–2,000 ريال + إيقاف خدمات الوزارة.</div>
+            <div class="impact"><strong>الأثر:</strong> توقف المعاملات الحكومية تماماً بسبب شكوى واحدة مهملة.</div>
+        </div>
+
+        <div class="card warning">
+            <h3>10. عرقلة التفتيش أو تزوير البيانات <span class="tag tag-critical">خطر وجودي</span></h3>
+            <p><strong>الإجراء:</strong> تسهيل مهمة المفتش، إظهار السجلات فوراً.</p>
+            <div class="penalty"><strong>العقوبة:</strong> تعليق الترخيص 12 شهراً.</div>
+            <div class="impact"><strong>الأثر:</strong> حكم بالإفلاس غير المباشر. فقدان العملاء والموظفين، وغالباً سحب نهائي لاحقاً.</div>
         </div>
     </div>
 
-    <div class="violation-card">
-        <h3>5. توثيق العقود إلكترونياً</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> عقد التوسط مع العميل، وعقد العمل مع العامل، يجب توثيقهما على المنصة المعتمدة فور التوقيع.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 5,000 ريال تتعدد بعدد العقود + تعليق الترخيص حتى التوثيق.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> عدم القدرة على المطالبة بحقوقك قانونياً أمام لجان الفصل في حال نزاع العميل، بالإضافة للغرامة الفورية.
-        </div>
-    </div>
-
-    <!-- المحور 3 -->
-    <h2 class="axis-title"><span>🏠</span> المحور الثالث: استقبال، إيواء، وإدارة العمالة</h2>
-
-    <div class="violation-card">
-        <h3>6. توفير السكن الجماعي (الإيواء)</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> توفير سكن مطابق للاشتراطات (مساحة، نظافة، فصل جنسي) للعمالة حتى تسليمهم أو عند رفضهم.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 20,000 ريال (عدم توفر سكن) أو 2,000 ريال (عدم مطابقة الاشتراطات) + تعليق الترخيص.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> أغلى مخالفة لشركة صغيرة. غرامة 20,000 ريال قد تأكل أرباح عدة أشهر. التعليق يعني استمرار تكاليف العمال دون دخل.
-        </div>
-    </div>
-
-    <div class="violation-card">
-        <h3>7. استقبال العمالة عند الوصول</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> استلام العامل من المطار/المنفذ ونقله للسكن فوراً، وتحديث الحالة في النظام.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 200 ريال لكل عامل + إنذار.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> غرامة بسيطة مادياً، لكن تكرارها يعطي انطباعاً سيئاً للوزارة ويؤدي لإنذارات متراكمة تسهل سحب الترخيص لاحقاً.
-        </div>
-    </div>
-
-    <div class="violation-card">
-        <h3>8. مؤشر التغيب ورفض العمل <span class="badge badge-high">خطر حرج</span></h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> مراقبة نسبة العمال الذين يرفضون العمل أو يتغيبون دون سبب مقبول نظامي.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 1,000 - 2,000 ريال + إيقاف خدمة إصدار تأشيرات جديدة لمدة تصل إلى 180 يوماً.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> إيقاف التأشيرات يعني شلّ النشاط الرئيسي. يجب فرز العمال بدقة في بلد المصدر لتجنب هذه الكارثة.
-        </div>
-    </div>
-
-    <!-- المحور 4 -->
-    <h2 class="axis-title"><span>📢</span> المحور الرابع: التسويق، الإعلانات، وحقوق العميل</h2>
-
-    <div class="violation-card">
-        <h3>9. ضوابط الإعلان (صور العمال) <span class="badge badge-high">خطر حرج</span></h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> منع نشر صور أو فيديوهات للعمالة. الاكتفاء بالوصف النصي للمؤهلات بعد موافقة خطية.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 30,000 ريال + سحب الإعلان خلال يوم واحد وتعليق الترخيص حتى الإزالة.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> غرامة ضخمة جداً مقارنة بحجم الشركة. قد تؤدي للإفلاس إذا تكررت. تضرر السمعة بسبب انتهاك الخصوصية.
-        </div>
-    </div>
-
-    <div class="violation-card">
-        <h3>10. معالجة شكاوى العملاء</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> وجود قناة شكاوى مفعّلة، توثيق الشكوى، والرد والحل ضمن المهلة النظامية المحددة.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 1,000 - 2,000 ريال + إيقاف خدمات الوزارة عن الشركة (منع إصدار تأشيرات) حتى الحل.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> توقف العمل تماماً. شكوى واحدة مهملة يمكن أن تشلّ شركة صغيرة وتعطل السيولة.
-        </div>
-    </div>
-
-    <!-- المحور 5 -->
-    <h2 class="axis-title"><span>⚙️</span> المحور الخامس: الامتثال الداخلي والتقارير</h2>
-
-    <div class="violation-card">
-        <h3>11. الربط الإلكتروني ونظام ERP</h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> ربط أنظمة الشركة الداخلية مع منصة الوزارة لتحديث البيانات آلياً وعدم الاعتماد على الإدخال اليدوي المتأخر.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> غرامة 5,000 ريال + تعليق الترخيص حتى الربط.
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> تعطيل المعاملات اليومية. الشركة التي تعمل يدوياً معرضة للخطأ البشري وبالتالي الغرامات المستمرة.
-        </div>
-    </div>
-
-    <div class="violation-card">
-        <h3>12. التعاون مع مفتشي الوزارة <span class="badge badge-high">خطر وجودي</span></h3>
-        <div class="detail-item">
-            <strong>التفصيل التشغيلي:</strong> تسهيل مهمة المفتش، وإظهار السجلات والسجلات المالية فوراً دون عرقلة أو إخفاء.
-        </div>
-        <div class="penalty-box">
-            <strong>العقوبة (الفئة ج):</strong> تعليق الترخيص لمدة 12 شهراً (مخالفة إدارية صارمة).
-        </div>
-        <div class="impact-box">
-            <strong>الأثر على شركة فئة ج:</strong> حكم بالإعدام على الشركة. تعليق سنة يعني فقدان جميع العملاء والموظفين، وغالباً ما يتبعه سحب نهائي للترخيص.
-        </div>
-    </div>
-
-    <!-- الجدول الختامي -->
-    <div class="summary-box">
-        <h2>📊 ملخص إدارة المخاطر الاستراتيجية (الفئة ج)</h2>
+    <!-- 5. الملخص -->
+    <div id="summary" class="section">
+        <h2>📊 ملخص إدارة المخاطر الاستراتيجية</h2>
         <table>
             <thead>
-                <tr>
-                    <th>نوع الخطر</th>
-                    <th>الاحتمالية</th>
-                    <th>شدة الأثر</th>
-                    <th>الإجراء الوقائي العاجل</th>
-                </tr>
+                <tr><th>نوع الخطر</th><th>الاحتمالية</th><th>شدة الأثر</th><th>الإجراء الوقائي العاجل</th></tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>سحب الترخيص</td>
-                    <td>متوسط</td>
-                    <td><span class="badge badge-high">كارثي (إغلاق)</span></td>
-                    <td>الالتزام الصارم بـ: عدم الاتجار، عدم تزوير البيانات، سداد الضمان البنكي فور السحب.</td>
-                </tr>
-                <tr>
-                    <td>إيقاف التأشيرات</td>
-                    <td>عالي</td>
-                    <td><span class="badge badge-medium">شديد (شلل مؤقت)</span></td>
-                    <td>ضبط مؤشر التغيب/الرفض، وحل الشكاوى خلال 24-48 ساعة.</td>
-                </tr>
-                <tr>
-                    <td>غرامات مالية تراكمية</td>
-                    <td>عالي</td>
-                    <td><span class="badge badge-medium">متوسط (تآكل الربح)</span></td>
-                    <td>أتمتة التوثيق الإلكتروني، والتدقيق اليومي على الإعلانات (منع الصور).</td>
-                </tr>
-                <tr>
-                    <td>تلف السمعة</td>
-                    <td>متوسط</td>
-                    <td><span class="badge badge-medium">شديد (فقدان العملاء)</span></td>
-                    <td>الشفافية في الأسعار، واحترام خصوصية العمال (نصوص بدلاً من صور).</td>
-                </tr>
+                <tr><td>سحب الترخيص</td><td>متوسط</td><td><span class="tag tag-critical">كارثي</span></td><td>الالتزام الصارم بـ: عدم الاتجار، عدم تزوير البيانات، سداد الضمان البنكي فور السحب.</td></tr>
+                <tr><td>إيقاف التأشيرات</td><td>عالي</td><td><span class="tag" style="background:#fef3c7;color:#92400e">شديد</span></td><td>ضبط مؤشر التغيب/الرفض، وحل الشكاوى خلال 24-48 ساعة.</td></tr>
+                <tr><td>غرامات مالية تراكمية</td><td>عالي</td><td><span class="tag" style="background:#dbeafe;color:#1e40af">متوسط</span></td><td>أتمتة التوثيق الإلكتروني، والتدقيق اليومي على الإعلانات.</td></tr>
+                <tr><td>تلف السمعة</td><td>متوسط</td><td><span class="tag" style="background:#fef3c7;color:#92400e">شديد</span></td><td>الشفافية في الأسعار، واحترام خصوصية العمال (نصوص بدلاً من صور).</td></tr>
             </tbody>
         </table>
+
+        <div class="card" style="margin-top:20px; border-right-color: var(--success); background: #f0fdf4;">
+            <h3>✅ التوصية التنفيذية النهائية</h3>
+            <p>بسبب صغر حجم الفئة ج، لا تملك الشركة هامشاً مالياً لاستيعاب الغرامات الكبيرة (20k–30k ريال). لذلك، يجب تحويل <strong>"الامتثال"</strong> من كونه عبئاً إدارياً إلى <strong>سياسة بيع وتسويق</strong>.</p>
+            <ul>
+                <li>صمّم عقوداً واضحة تمنح العميل حق "نقل الخدمة" بدلاً من الخروج النهائي.</li>
+                <li>أتمت التوثيق الإلكتروني عبر ربط بسيط مع المنصات المعتمدة.</li>
+                <li>درّب موظفي الخط الأمامي على ضوابط الإعلان والقدرة المالية باستخدام قوائم مرجعية سريعة (Checklists).</li>
+                <li>راجع الضمان البنكي ومؤشر الشكاوى أسبوعياً، وليس شهرياً.</li>
+            </ul>
+            <p style="text-align:center; margin-top:15px; font-weight:600;">"التزامنا النظامي يحمي استثمارك وضماناتك" 🛡️</p>
+        </div>
     </div>
 
     <div class="footer">
-        <p>📄 تم إعداد هذا الدليل بناءً على قواعد ممارسة نشاط الاستقدام، القرار الوزاري 212875، وجدول المخالفات والعقوبات المعتمد.<br>
-        <strong>التوصية النهائية:</strong> حوّل الامتثال من عبء إداري إلى ميزة تسويقية: "التزامنا النظامي يحمي استثمارك وضماناتك".</p>
+        <p>تم إعداد هذا الدليل الشامل بناءً على: قواعد ممارسة نشاط الاستقدام، القرار الوزاري 212875، جدول المخالفات والعقوبات، وضوابط الإعلان ومنصة مساند.<br>
+        قابل للطباعة مباشرة (Ctrl+P) ويعمل على جميع الأجهزة.</p>
     </div>
 </div>
 
+<script>
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
 </body>
 </html>
