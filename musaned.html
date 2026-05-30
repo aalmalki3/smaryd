@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام عمليات منصة مساند | دليل الموظفين</title>
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #0d3b4f;
+            --secondary: #57c5b6;
+            --accent: #f39c12;
+            --success: #27ae60;
+            --warning: #e67e22;
+            --danger: #c0392b;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 25px rgba(0,0,0,0.15);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.25);
+            width: 280px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Main Layout */
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-item i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-badge {
+            margin-right: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Service Cards Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--secondary);
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-top-color: var(--primary);
+        }
+
+        .service-card.important {
+            border-top-color: var(--accent);
+            background: linear-gradient(135deg, #fff9e6 0%, white 100%);
+        }
+
+        .service-card.new {
+            border-top-color: var(--success);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .service-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+
+        .service-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            min-height: 60px;
+        }
+
+        .service-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .service-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .service-meta i {
+            color: var(--primary);
+        }
+
+        /* Detail View */
+        .detail-view {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .detail-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .detail-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .detail-title i {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .back-btn {
+            background: var(--light);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .requirements-list {
+            background: #f8fafc;
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            border-right: 4px solid var(--accent);
+        }
+
+        .requirements-list li {
+            margin-bottom: 0.6rem;
+            padding-right: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .requirements-list li:before {
+            content: "✓";
+            position: absolute;
+            right: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, white 100%);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            border-right: 4px solid var(--primary);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .step-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .step-number {
+            position: absolute;
+            left: -12px;
+            top: -12px;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .step-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            padding-right: 1rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            border-right: 4px solid var(--primary);
+            margin: 1rem 0;
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-right-color: var(--accent);
+        }
+
+        .highlight-box.success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-right-color: var(--success);
+        }
+
+        .highlight-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .price-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+
+        .price-tag i {
+            font-size: 1.3rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.4);
+        }
+
+        .btn-print {
+            background: white;
+            color: var(--dark);
+            border: 2px solid var(--border);
+        }
+
+        .btn-print:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-audit {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-audit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        /* Quick Tips Panel */
+        .quick-tips {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-top: 1rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tip-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border-right: 3px solid var(--secondary);
+        }
+
+        .tip-card h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .tip-card p {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-new {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-important {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .badge-updated {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .sidebar {
+                position: static;
+                max-height: none;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .nav-item {
+                flex: 1;
+                min-width: 150px;
+                justify-content: center;
+            }
+            
+            .nav-badge {
+                margin-right: 0;
+                position: absolute;
+                top: -5px;
+                left: -5px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-box {
+                min-width: 100%;
+                max-width: 400px;
+            }
+            
+            .search-box input:focus {
+                width: 100%;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .sidebar, .action-buttons, .search-box {
+                display: none !important;
+            }
+            
+            .container {
+                grid-template-columns: 1fr !important;
+                padding: 0;
+            }
+            
+            .detail-view {
+                display: block !important;
+                box-shadow: none;
+                padding: 0;
+            }
+            
+            .service-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+        }
+
+        /* Icons (using Unicode characters for simplicity) */
+        .icon {
+            font-style: normal;
+            font-weight: normal;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">م</div>
+            <div class="logo-text">
+                <h1>نظام عمليات منصة مساند</h1>
+                <p>دليل الموظفين لخدمة العملاء</p>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <div class="search-box">
+                <span class="icon">🔍</span>
+                <input type="text" id="globalSearch" placeholder="ابحث عن خدمة أو إجراء...">
+            </div>
+            <button class="btn btn-outline" onclick="window.print()">🖨️ طباعة الدليل</button>
+            <button class="btn btn-primary" onclick="toggleView('grid')">🏠 الرئيسية</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-title">📋 خدمات التأشيرات</div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-target="grid">
+                    <span class="icon">🏠</span> الصفحة الرئيسية
+                </li>
+                <li class="nav-item" data-target="service-1">
+                    <span class="icon">🛂</span> إصدار تأشيرة عمالة منزلية
+                    <span class="nav-badge">شائع</span>
+                </li>
+                <li class="nav-item" data-target="service-2">
+                    <span class="icon">♿</span> تأشيرة ذوي الإعاقة
+                    <span class="nav-badge">مميز</span>
+                </li>
+                <li class="nav-item" data-target="service-3">
+                    <span class="icon">🔄</span> تأشيرة بديلة (تعويضية)
+                </li>
+                <li class="nav-item" data-target="service-4">
+                    <span class="icon">🔍</span> الاستعلام عن التأشيرة
+                </li>
+                <li class="nav-item" data-target="service-5">
+                    <span class="icon">❌</span> إلغاء التأشيرة
+                </li>
+            </ul>
+            
+            <div class="sidebar-title" style="margin-top: 1.5rem;">👥 خدمات الاستقدام</div>
+            <ul class="nav-menu">
+                <li class="nav-item" data-target="service-6">
+                    <span class="icon">🏢</span> استقدام عبر المكاتب
+                    <span class="nav-badge">جديد</span>
+                </li>
+                <li class="nav-item" data-target="service-7">
+                    <span class="icon">⭐</span> استقدام محدد (مع تجربة)
+                </li>
+                <li class="nav-item" data-target="service-8">
+                    <span class="icon">👤</span> استقدام عاملة معروفة
+                </li>
+            </ul>
+            
+            <div class="sidebar-title" style="margin-top: 1.5rem;">⚙️ خدمات إضافية</div>
+            <ul class="nav-menu">
+                <li class="nav-item" data-target="service-9">
+                    <span class="icon">🚶</span> نقل خدمات متغيبة
+                    <span class="nav-badge">هام</span>
+                </li>
+                <li class="nav-item" data-target="service-10">
+                    <span class="icon">💰</span> تفويض دفع الرواتب
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Services Grid View (Default) -->
+            <div id="servicesGrid" class="services-grid">
+                <!-- Service 1 -->
+                <div class="service-card" onclick="showDetail('service-1')">
+                    <div class="service-header">
+                        <div class="service-icon">🛂</div>
+                        <h3 class="service-title">إصدار تأشيرة العمالة المنزلية</h3>
+                    </div>
+                    <p class="service-desc">خدمة تمكّن صاحب العمل من إصدار تأشيرات العمالة المنزلية لاستقدام العمالة المطلوبة وفقاً للمهن والجنسيات المتاحة.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">💰</span> رسوم: 2,000 ريال حكومي + 172.50 ريال مساند</span>
+                        <span><span class="icon">⏱️</span> المدة: فوري بعد الدفع</span>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card important" onclick="showDetail('service-2')">
+                    <div class="service-header">
+                        <div class="service-icon">♿</div>
+                        <h3 class="service-title">تأشيرة الأشخاص ذوي الإعاقة</h3>
+                    </div>
+                    <p class="service-desc">خدمة مخصصة للأشخاص ذوي الإعاقة مع إعفاءات من الرسوم الحكومية للتأشيرة الأولى حسب نوع الإعاقة.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">🎁</span> إعفاء جزئي/كلي من الرسوم</span>
+                        <span><span class="icon">📋</span> يتطلب تأييد تأهيل شامل</span>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card" onclick="showDetail('service-3')">
+                    <div class="service-header">
+                        <div class="service-icon">🔄</div>
+                        <h3 class="service-title">تأشيرة بديلة (تعويضية)</h3>
+                    </div>
+                    <p class="service-desc">إصدار تأشيرة بديلة دون رسوم حكومية عند مغادرة العاملة خلال فترة التجربة (90 يوماً).</p>
+                    <div class="service-meta">
+                        <span><span class="icon">✅</span> بدون رسوم حكومية</span>
+                        <span><span class="icon">⏰</span> خلال سنتين من التأشيرة السابقة</span>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card" onclick="showDetail('service-4')">
+                    <div class="service-header">
+                        <div class="service-icon">🔍</div>
+                        <h3 class="service-title">الاستعلام عن التأشيرة</h3>
+                    </div>
+                    <p class="service-desc">التحقق من حالة طلب تأشيرة العمالة المنزلية بشكل إلكتروني ومباشر عبر المنصة.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">🆔</span> يتطلب: رقم الهوية + رقم الطلب</span>
+                        <span><span class="icon">🌐</span> متاح 24/7</span>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card" onclick="showDetail('service-5')">
+                    <div class="service-header">
+                        <div class="service-icon">❌</div>
+                        <h3 class="service-title">إلغاء تأشيرة العمالة المنزلية</h3>
+                    </div>
+                    <p class="service-desc">إلغاء إصدار تأشيرة عمالة منزلية تم إصدارها مسبقاً ولم تُستخدم مع إمكانية استرداد الرسوم.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">💵</span> استرداد الرسوم الحكومية</span>
+                        <span><span class="icon">⚡</span> معالجة فورية</span>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card new" onclick="showDetail('service-6')">
+                    <div class="service-header">
+                        <div class="service-icon">🏢</div>
+                        <h3 class="service-title">استقدام عبر مكاتب الاستقدام</h3>
+                    </div>
+                    <p class="service-desc">استقدام العمالة المنزلية من خارج المملكة عبر تحديد التفضيلات وإرسال الطلب للمكاتب المعتمدة.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">🎯</span> اختر حتى 3 مكاتب</span>
+                        <span><span class="icon">⏱️</span> رد خلال 48 ساعة</span>
+                    </div>
+                </div>
+
+                <!-- Service 7 -->
+                <div class="service-card" onclick="showDetail('service-7')">
+                    <div class="service-header">
+                        <div class="service-icon">⭐</div>
+                        <h3 class="service-title">استقدام محدد (مع فترة تجربة)</h3>
+                    </div>
+                    <p class="service-desc">استقدام عمالة محددة مسبقاً بالاسم وبيانات الجواز مع فترة تجربة 3 أشهر من تاريخ الوصول.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">📝</span> يتطلب: اسم + رقم جواز</span>
+                        <span><span class="icon">🛡️</span> فترة تجربة 90 يوم</span>
+                    </div>
+                </div>
+
+                <!-- Service 8 -->
+                <div class="service-card" onclick="showDetail('service-8')">
+                    <div class="service-header">
+                        <div class="service-icon">👤</div>
+                        <h3 class="service-title">استقدام عاملة معروفة (بدون تجربة)</h3>
+                    </div>
+                    <p class="service-desc">استقدام عاملة محددة مسبقاً من جنسيات معينة دون فترة تجربة.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">🌍</span> جنسيات محددة فقط</span>
+                        <span><span class="icon">⚡</span> إجراءات أسرع</span>
+                    </div>
+                </div>
+
+                <!-- Service 9 -->
+                <div class="service-card important" onclick="showDetail('service-9')">
+                    <div class="service-header">
+                        <div class="service-icon">🚶</div>
+                        <h3 class="service-title">نقل خدمات العمالة المتغيبة</h3>
+                    </div>
+                    <p class="service-desc">نقل خدمات العمالة المسجل عليها "تغيب عن العمل" إلى صاحب عمل جديد مع الربط بمنصة أبشر.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">🔗</span> يتطلب: أبشر + مساند</span>
+                        <span><span class="icon">💰</span> رسوم: 115 ريال</span>
+                    </div>
+                </div>
+
+                <!-- Service 10 -->
+                <div class="service-card" onclick="showDetail('service-10')">
+                    <div class="service-header">
+                        <div class="service-icon">💰</div>
+                        <h3 class="service-title">تفويض دفع رواتب العمالة</h3>
+                    </div>
+                    <p class="service-desc">إصدار أو إلغاء تفويض إلكتروني لمستخدم آخر لدفع رواتب العمالة المنزلية نيابة عن صاحب العمل.</p>
+                    <div class="service-meta">
+                        <span><span class="icon">🔐</span> تحقق برمز مؤقت</span>
+                        <span><span class="icon">⚡</span> تفعيل فوري</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Views (Hidden by default) -->
+            
+            <!-- Service 1: Issue Domestic Worker Visa -->
+            <div id="service-1" class="detail-view">
+                <div class="detail-header">
+                    <h2 class="detail-title"><span class="icon">🛂</span> إصدار تأشيرة العمالة المنزلية</h2>
+                    <button class="back-btn" onclick="toggleView('grid')">← العودة للرئيسية</button>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📋 وصف الخدمة</h3>
+                    <p>خدمة تمكّن صاحب العمل من إصدار تأشيرات العمالة المنزلية، لاستقدام العمالة المطلوبة وفقاً للمهن والجنسيات المتاحة عبر منصة مساند.</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">✅ المتطلبات الأساسية</h3>
+                    <ul class="requirements-list">
+                        <li>سداد الرسوم الحكومية (2000 ريال) عبر الحساب البنكي خارج منصة مساند لإتمام إصدار التأشيرة</li>
+                        <li>امتلاك حساب نشط على منصة مساند</li>
+                        <li>استيفاء شروط وضوابط وزارة الموارد البشرية والتنمية الاجتماعية للحصول على تأشيرة عمالة منزلية</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📝 خطوات الإصدار</h3>
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-title">تسجيل الدخول</div>
+                            <div class="step-desc">دخول صاحب العمل إلى منصة مساند عبر <code>musaned.com</code> أو عبر بوابة النفاذ الوطني الموحد</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-title">الانتقال للتأشيرات</div>
+                            <div class="step-desc">من لوحة التحكم، الدخول على صفحة "التأشيرات"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-title">بدء الطلب الجديد</div>
+                            <div class="step-desc">النقر على "قدّم الآن" في قسم "تأشيرة العمالة المنزلية"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-title">تحديد بيانات التأشيرة</div>
+                            <div class="step-desc">اختيار (الجنس، المهنة، الجنسية، وجهة القدوم) ثم الموافقة على الشروط</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">5</div>
+                            <div class="step-title">دفع رسوم المنصة</div>
+                            <div class="step-desc">سداد الرسوم التشغيلية لمساند: <span class="price-tag"><span class="icon">💰</span> 172.50 ريال</span> (شامل ضريبة القيمة المضافة)</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">6</div>
+                            <div class="step-title">عرض التأشيرة الصادرة</div>
+                            <div class="step-desc">النقر على "عرض الطلب" لمشاهدة تفاصيل التأشيرة وحالتها "صدرت بنجاح"</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box warning">
+                    <div class="highlight-title">⚠️ ملاحظة هامة للموظف</div>
+                    <p>تأكد من توضيح للعميل أن الرسوم الحكومية (2000 ريال) تُسدد <strong>خارج المنصة</strong> عبر الحساب البنكي، بينما رسوم مساند (172.50 ريال) تُسدد إلكترونياً داخل المنصة.</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-action btn-start" onclick="alert('✅ تم توجيه العميل لبدء الإصدار عبر مساند')">🚀 بدء الإصدار مع العميل</button>
+                    <button class="btn-action btn-print" onclick="window.print()">🖨️ طباعة الدليل</button>
+                    <button class="btn-action btn-audit" onclick="alert('📋 تم فتح نموذج التدقيق لهذا الإجراء')">🔍 نموذج التدقيق</button>
+                </div>
+            </div>
+
+            <!-- Service 2: Disability Visa -->
+            <div id="service-2" class="detail-view">
+                <div class="detail-header">
+                    <h2 class="detail-title"><span class="icon">♿</span> تأشيرة الأشخاص ذوي الإعاقة</h2>
+                    <button class="back-btn" onclick="toggleView('grid')">← العودة للرئيسية</button>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📋 وصف الخدمة</h3>
+                    <p>تمكّن هذه الخدمة الأشخاص ذوي الإعاقة من تقديم طلب تأشيرة العمالة المنزلية من خلال حساب مقدم الطلب في بوابة مساند، أو وحدات الخدمات المساندة، أو إدارات استقدام الأفراد.</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">✅ المتطلبات الأساسية</h3>
+                    <ul class="requirements-list">
+                        <li>تسجيل الأشخاص ذوي الإعاقة في نظام الرعاية الاجتماعية للاستفادة من خدمات مساند والحصول على التأييد من التأهيل الشامل</li>
+                        <li>يكتفى بالتأييد الافتراضي حسب نوع الإعاقة المحددة من قبل الفريق الطبي لدى نظام الرعاية الاجتماعية للتأشيرة الأولى</li>
+                        <li>للتأشيرة الثانية والثالثة يرجى الاطلاع على ضوابط إصدار التأشيرات</li>
+                        <li>وجود حساب مفعل في منصة مساند</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📝 خطوات الإصدار</h3>
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-title">تسجيل الدخول</div>
+                            <div class="step-desc">دخول صاحب العمل إلى منصة مساند عبر <code>musaned.com</code></div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-title">الانتقال للتأشيرات</div>
+                            <div class="step-desc">من لوحة التحكم، الدخول على صفحة "التأشيرات"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-title">اختيار خدمة ذوي الإعاقة</div>
+                            <div class="step-desc">النقر على "قدّم الآن" في قسم "تأشيرة الأشخاص ذوي الإعاقة"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-title">إدخال البيانات والإقرار</div>
+                            <div class="step-desc">تحديد (الجنس، المهنة، الجنسية، وجهة القدوم)، ثم الموافقة على الشروط والضغط على "إرسال الطلب"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">5</div>
+                            <div class="step-title">عرض التأشيرة</div>
+                            <div class="step-desc">النقر على "عرض تفاصيل الطلب" لمشاهدة بيانات التأشيرة الصادرة</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box success">
+                    <div class="highlight-title">🎁 ميزة الإعفاء من الرسوم</div>
+                    <p>التأشيرة الأولى <strong>تُعفى من الرسوم الحكومية</strong> حسب نوع الإعاقة والتأييد الطبي. في حال عدم الإعفاء، يتوجب سداد الرسوم عبر المدفوعات الحكومية.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <div class="highlight-title">💡 نصيحة للموظف</div>
+                    <p>اسأل العميل عن نوع الإعاقة المسجلة في نظام الرعاية الاجتماعية، وتأكد من وجود التأييد الطبي قبل بدء الإجراء لتجنب التأخير.</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-action btn-start" onclick="alert('✅ تم التحقق من أهلية العميل للإعفاء')">🚀 التحقق من الأهلية</button>
+                    <button class="btn-action btn-print" onclick="window.print()">🖨️ طباعة الدليل</button>
+                </div>
+            </div>
+
+            <!-- Service 3: Replacement Visa -->
+            <div id="service-3" class="detail-view">
+                <div class="detail-header">
+                    <h2 class="detail-title"><span class="icon">🔄</span> تأشيرة بديلة (تعويضية)</h2>
+                    <button class="back-btn" onclick="toggleView('grid')">← العودة للرئيسية</button>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📋 وصف الخدمة</h3>
+                    <p>تمكّن هذه الخدمة صاحب العمل من إصدار تأشيرة بديلة (تعويضية) دون رسوم حكومية، في حال مغادرة العاملة المملكة خروجاً نهائياً خلال 90 يوماً من تاريخ دخولها (فترة التجربة النظامية).</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">✅ المتطلبات الأساسية</h3>
+                    <ul class="requirements-list">
+                        <li>إصدار تأشيرة خروج نهائي للعاملة المنزلية من المملكة أثناء فترة التجربة المسموح بها نظاماً (90 يوماً من تاريخ الوصول) عبر منصة أبشر</li>
+                        <li>أن تكون حالة التأشيرة في النظام "خروج نهائي"</li>
+                        <li>أن يتم إصدار التأشيرة البديلة خلال سنتين من تاريخ إصدار التأشيرة السابقة</li>
+                        <li>أن تكون مهنة العاملة المنزلية ضمن الفئات: عمالة منزلية - سائق خاص</li>
+                        <li>وجود حساب مفعل في مساند</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📝 خطوات الإصدار</h3>
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-title">تسجيل الدخول</div>
+                            <div class="step-desc">دخول صاحب العمل إلى منصة مساند</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-title">الانتقال للتأشيرات</div>
+                            <div class="step-desc">من لوحة التحكم، الدخول على صفحة "التأشيرات"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-title">التحقق من الأهلية</div>
+                            <div class="step-desc">يظهر النظام تلقائياً رسالة "أنت مؤهل للحصول على تأشيرة بديلة"، انقر على "قدّم الآن"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-title">استكمال البيانات</div>
+                            <div class="step-desc">تحديد المتطلبات والبيانات ثم الموافقة على الشروط</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">5</div>
+                            <div class="step-title">دفع رسوم المنصة</div>
+                            <div class="step-desc">سداد الرسوم التشغيلية لمساند: <span class="price-tag"><span class="icon">💰</span> 172.50 ريال</span></div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">6</div>
+                            <div class="step-title">عرض التأشيرة البديلة</div>
+                            <div class="step-desc">النقر على "عرض الطلب" للاطلاع على التأشيرة الصادرة بنجاح</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box warning">
+                    <div class="highlight-title">⏰ شرط زمني هام</div>
+                    <p>يجب إصدار التأشيرة البديلة <strong>خلال سنتين</strong> من تاريخ إصدار التأشيرة السابقة، ولا تُمنح إلا للعمالة التي غادرت خلال فترة التجربة (90 يوماً).</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-action btn-start" onclick="alert('✅ تم التحقق من استحقاق العميل للتأشيرة البديلة')">🔍 التحقق من الاستحقاق</button>
+                    <button class="btn-action btn-print" onclick="window.print()">🖨️ طباعة الدليل</button>
+                </div>
+            </div>
+
+            <!-- Service 4: Visa Inquiry -->
+            <div id="service-4" class="detail-view">
+                <div class="detail-header">
+                    <h2 class="detail-title"><span class="icon">🔍</span> الاستعلام عن التأشيرة</h2>
+                    <button class="back-btn" onclick="toggleView('grid')">← العودة للرئيسية</button>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📋 وصف الخدمة</h3>
+                    <p>خدمة تتيح للمستخدم التحقق من حالة طلب تأشيرة العمالة المنزلية بشكل إلكتروني ومباشر عبر منصة مساند.</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">✅ المتطلبات</h3>
+                    <ul class="requirements-list">
+                        <li>أن يكون طلب التأشيرة قد تم تقديمه مسبقاً عبر منصة مساند</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📝 خطوات الاستعلام</h3>
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-title">الدخول للخدمات</div>
+                            <div class="step-desc">دخول صاحب العمل إلى <code>musaned.com</code> ثم اختيار "الخدمات" من القائمة العلوية</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-title">اختيار خدمة الاستعلام</div>
+                            <div class="step-desc">اختيار "الاستعلام عن حالة التأشيرة" من صفحة الخدمات</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-title">تعبئة بيانات البحث</div>
+                            <div class="step-desc">إدخال: رقم الهوية/الإقامة، تاريخ الميلاد/انتهاء الإقامة (هجري)، ورقم الطلب، ثم النقر على "بحث"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-title">عرض النتائج</div>
+                            <div class="step-desc">ظهور تفاصيل وحالة التأشيرة، والنقر على "عرض تفاصيل الطلب" للفاتورة والبيانات الكاملة</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <div class="highlight-title">💡 أسئلة شائعة للعميل</div>
+                    <p><strong>س:</strong> ماذا لو نسيت رقم الطلب؟<br>
+                    <strong>ج:</strong> يمكن الاستعلام برقم الهوية وتاريخ الميلاد فقط في معظم الحالات.</p>
+                    <p style="margin-top: 0.5rem;"><strong>س:</strong> كم مدة ظهور حالة التأشيرة بعد الدفع؟<br>
+                    <strong>ج:</strong> عادةً فورية، وقد تستغرق حتى 15 دقيقة في أوقات الذروة.</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-action btn-start" onclick="alert('✅ تم مساعدة العميل في الاستعلام عن حالته')">🔍 إجراء الاستعلام</button>
+                    <button class="btn-action btn-print" onclick="window.print()">🖨️ طباعة الدليل</button>
+                </div>
+            </div>
+
+            <!-- Service 5: Cancel Visa -->
+            <div id="service-5" class="detail-view">
+                <div class="detail-header">
+                    <h2 class="detail-title"><span class="icon">❌</span> إلغاء تأشيرة العمالة المنزلية</h2>
+                    <button class="back-btn" onclick="toggleView('grid')">← العودة للرئيسية</button>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📋 وصف الخدمة</h3>
+                    <p>خدمة إلكترونية تمكّن الأفراد من إلغاء إصدار تأشيرة عمالة منزلية تم إصدارها مسبقاً ولم تُستخدم.</p>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">✅ المتطلبات الأساسية</h3>
+                    <ul class="requirements-list">
+                        <li>حساب مفعل على منصة مساند</li>
+                        <li>وجود تأشيرة عمالة منزلية سارية وصالحة للإلغاء في حساب المستخدم</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">📝 خطوات الإلغاء</h3>
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-title">تسجيل الدخول</div>
+                            <div class="step-desc">دخول صاحب العمل إلى منصة مساند</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-title">الانتقال للتأشيرات</div>
+                            <div class="step-desc">من لوحة التحكم، الدخول على صفحة "التأشيرات"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-title">اختيار التأشيرة</div>
+                            <div class="step-desc">تحديد التأشيرة المراد إلغاؤها من الجدول والنقر على "عرض"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-title">بدء الإلغاء</div>
+                            <div class="step-desc">في صفحة التفاصيل، النقر على خيار "إلغاء التأشيرة"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">5</div>
+                            <div class="step-title">تحديد السبب والتأكيد</div>
+                            <div class="step-desc">اختيار سبب الإلغاء من القائمة، ثم التأكيد بالنقر على "إلغاء"</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">6</div>
+                            <div class="step-title">التحقق من النجاح</div>
+                            <div class="step-desc">النقر على "عرض تفاصيل الطلب" للتأكد من ظهور رسالة "تم إلغاؤها بنجاح"</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box success">
+                    <div class="highlight-title">💵 استرداد الرسوم</div>
+                    <p>بعد الإلغاء الناجح، يتم بدء إجراءات استرداد الرسوم الحكومية تلقائياً. تُعاد الرسوم إلى نفس وسيلة الدفع خلال 5-10 أيام عمل.</p>
+                </div>
+                
+                <div class="highlight-box warning">
+                    <div class="highlight-title">⚠️ تحذير هام</div>
+                    <p>لا يمكن إلغاء التأشيرة إذا تم استخدامها بالفعل (تم إصدار تأشيرة دخول أو تم دخول العاملة). تأكد من حالة التأشيرة قبل البدء.</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-action btn-start" onclick="alert('✅ تم التحقق من صلاحية التأشيرة للإلغاء')">🔍 التحقق من الصلاحية</button>
+                    <button class="btn-action btn-print" onclick="window.print()">🖨️ طباعة الدليل</button>
+                </div>
+            </div>
+
+            <!-- Quick Tips Panel (Visible in Grid View) -->
+            <div class="quick-tips" id="quickTips">
+                <h3 class="section-title">💡 نصائح سريعة لخدمة العملاء</h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4><span class="icon">🗣️</span> التواصل الفعال</h4>
+                        <p>استخدم لغة بسيطة وواضحة، وتجنب المصطلحات الفنية المعقدة مع العملاء.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4><span class="icon">✅</span> التحقق المسبق</h4>
+                        <p>تأكد دائماً من استيفاء المتطلبات الأساسية قبل بدء أي إجراء لتوفير وقت العميل.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4><span class="icon">📞</span> قنوات الدعم</h4>
+                        <p>وجه العملاء للدعم الفني عبر: 920000606 أو support@musaned.com عند الحاجة.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4><span class="icon">🔄</span> المتابعة</h4>
+                        <p>دوّن رقم طلب العميل وتابع حالته، وأبلغه بأي تحديثات هامة.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Navigation and View Management
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize: Show grid view
+            toggleView('grid');
+            
+            // Global Search
+            document.getElementById('globalSearch').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.service-card');
+                
+                cards.forEach(card => {
+                    const title = card.querySelector('.service-title').textContent.toLowerCase();
+                    const desc = card.querySelector('.service-desc').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Sidebar Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    // Add active to clicked
+                    this.classList.add('active');
+                    
+                    const target = this.getAttribute('data-target');
+                    if (target === 'grid') {
+                        toggleView('grid');
+                    } else {
+                        showDetail(target);
+                    }
+                });
+            });
+            
+            // Service Card Clicks
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Find the corresponding service ID from onclick attribute
+                    const onclickAttr = this.getAttribute('onclick');
+                    if (onclickAttr && onclickAttr.includes("showDetail('")) {
+                        const serviceId = onclickAttr.match(/showDetail\('([^']+)'/)[1];
+                        showDetail(serviceId);
+                    }
+                });
+            });
+        });
+
+        function toggleView(viewName) {
+            const grid = document.getElementById('servicesGrid');
+            const details = document.querySelectorAll('.detail-view');
+            const tips = document.getElementById('quickTips');
+            
+            if (viewName === 'grid') {
+                grid.style.display = 'grid';
+                tips.style.display = 'block';
+                details.forEach(d => d.classList.remove('active'));
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelector('.nav-item[data-target="grid"]').classList.add('active');
+            }
+        }
+
+        function showDetail(serviceId) {
+            // Hide grid and tips
+            document.getElementById('servicesGrid').style.display = 'none';
+            document.getElementById('quickTips').style.display = 'none';
+            
+            // Hide all detail views
+            document.querySelectorAll('.detail-view').forEach(d => d.classList.remove('active'));
+            
+            // Show selected detail view
+            const detail = document.getElementById(serviceId);
+            if (detail) {
+                detail.classList.add('active');
+            }
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelector(`.nav-item[data-target="${serviceId}"]`)?.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // ESC to go back to grid
+            if (e.key === 'Escape') {
+                toggleView('grid');
+            }
+            // Ctrl/Cmd + P handled by browser for print
+        });
+
+        // Add copy-to-clipboard functionality for important info
+        document.querySelectorAll('.price-tag, code').forEach(el => {
+            el.style.cursor = 'pointer';
+            el.title = 'انقر للنسخ';
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const text = this.textContent.replace('💰', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = this.textContent;
+                    this.textContent = '✅ تم النسخ!';
+                    setTimeout(() => {
+                        this.textContent = original;
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
