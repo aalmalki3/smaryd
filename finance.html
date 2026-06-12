@@ -1,463 +1,537 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KSA Recruitment Financial System (Grade G)</title>
+    <title>نظام إدارة عقود الاستقدام | Domestic Recruitment ERP</title>
     
-    <!-- External Libraries for ZATCA/Finance Logic -->
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        :root { --primary: #0f766e; --secondary: #1e293b; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; }
-        .sidebar { width: 260px; background: var(--secondary); color: white; height: 100vh; position: fixed; }
-        .main-content { margin-left: 260px; padding: 2rem; }
-        .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
-        .zatca-badge { background: #e0f2fe; color: #0369a1; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        :root { --primary: #0f766e; --secondary: #1e293b; --accent: #d97706; }
+        * { font-family: 'Tajawal', sans-serif; }
+        body { background-color: #f1f5f9; color: #1e293b; }
         
-        /* Print Styles for ZATCA Invoice */
+        .sidebar { width: 280px; background: var(--secondary); color: white; height: 100vh; position: fixed; right: 0; top: 0; z-index: 50; }
+        .main-content { margin-right: 280px; padding: 2rem; min-height: 100vh; }
+        
+        .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .btn-primary { background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; border:none; cursor:pointer;}
+        .btn-primary:hover { background: #0d5c56; }
+        
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; margin-bottom: 0.4rem; font-weight: 700; font-size: 0.85rem; color: #475569; }
+        .input-field { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.9rem; }
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1); }
+
+        /* Status Badges matching Excel */
+        .status-badge { padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
+        .status-arrived { background: #dcfce7; color: #166534; }
+        .status-uploaded { background: #dbeafe; color: #1e40af; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+        .status-agency { background: #fef3c7; color: #92400e; }
+
         @media print {
             .sidebar, .no-print { display: none !important; }
-            .main-content { margin: 0; padding: 0; }
-            .print-only { display: block !important; }
-            body { background: white; }
+            .main-content { margin: 0; padding: 1rem; }
         }
-        .print-only { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
-    <div class="sidebar flex flex-col p-4">
-        <div class="text-xl font-bold mb-8 flex items-center gap-2">
-            <i class="fa-solid fa-plane-departure text-teal-400"></i>
-            <span>RecruitFin KSA</span>
+    <!-- SIDEBAR -->
+    <div class="sidebar flex flex-col p-5">
+        <div class="text-2xl font-extrabold mb-10 flex items-center gap-3 text-teal-400">
+            <i class="fa-solid fa-passport"></i>
+            <span class="text-white">نظام الاستقدام</span>
         </div>
-        <nav class="space-y-2">
-            <button onclick="showSection('dashboard')" class="w-full text-left px-4 py-3 hover:bg-slate-700 rounded transition"><i class="fa-solid fa-chart-line w-6"></i> Dashboard</button>
-            <button onclick="showSection('invoicing')" class="w-full text-left px-4 py-3 hover:bg-slate-700 rounded transition"><i class="fa-solid fa-file-invoice-dollar w-6"></i> ZATCA Invoicing</button>
-            <button onclick="showSection('payroll')" class="w-full text-left px-4 py-3 hover:bg-slate-700 rounded transition"><i class="fa-solid fa-money-check-dollar w-6"></i> Payroll & WPS</button>
-            <button onclick="showSection('ledger')" class="w-full text-left px-4 py-3 hover:bg-slate-700 rounded transition"><i class="fa-solid fa-book w-6"></i> General Ledger</button>
-            <button onclick="showSection('compliance')" class="w-full text-left px-4 py-3 hover:bg-slate-700 rounded transition"><i class="fa-solid fa-shield-halved w-6"></i> MOHR/License</button>
+        
+        <nav class="space-y-1 flex-1">
+            <button onclick="app.nav('dashboard')" class="nav-btn w-full text-right px-4 py-3 hover:bg-slate-700 rounded-lg transition flex items-center gap-3 bg-slate-700">
+                <i class="fa-solid fa-chart-pie w-6 text-center"></i> لوحة التحكم
+            </button>
+            <button onclick="app.nav('contracts')" class="nav-btn w-full text-right px-4 py-3 hover:bg-slate-700 rounded-lg transition flex items-center gap-3">
+                <i class="fa-solid fa-file-contract w-6 text-center"></i> العقود والعملاء
+            </button>
+            <button onclick="app.nav('visas')" class="nav-btn w-full text-right px-4 py-3 hover:bg-slate-700 rounded-lg transition flex items-center gap-3">
+                <i class="fa-solid fa-id-card w-6 text-center"></i> التأشيرات والعمالة
+            </button>
+            <button onclick="app.nav('financials')" class="nav-btn w-full text-right px-4 py-3 hover:bg-slate-700 rounded-lg transition flex items-center gap-3">
+                <i class="fa-solid fa-coins w-6 text-center"></i> الحسابات والأرباح
+            </button>
+            <button onclick="app.nav('audit')" class="nav-btn w-full text-right px-4 py-3 hover:bg-slate-700 rounded-lg transition flex items-center gap-3">
+                <i class="fa-solid fa-user-shield w-6 text-center"></i> سجل التدقيق
+            </button>
         </nav>
-        <div class="mt-auto text-xs text-slate-400">
-            Grade G License: 1029384<br>
-            VAT Reg: 300123456700003
+
+        <div class="mt-auto pt-6 border-t border-slate-700 text-xs text-slate-400 space-y-1">
+            <p>ترخيص مكتب استقدام: ١٠٢٩٣٨٤</p>
+            <p>الرقم الضريبي: ٣٠٠١٢٣٤٥٦٧٠٠٠٠٣</p>
         </div>
     </div>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- MAIN CONTENT -->
     <div class="main-content">
-        
-        <!-- HEADER -->
-        <header class="flex justify-between items-center mb-6 no-print">
-            <h1 id="page-title" class="text-2xl font-bold text-slate-800">Financial Dashboard</h1>
-            <div class="flex gap-3">
-                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">ZATCA Phase 2 Ready</span>
-                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">WPS Compliant</span>
+        <header class="flex justify-between items-center mb-8 no-print">
+            <div>
+                <h1 id="page-title" class="text-3xl font-extrabold text-slate-800">لوحة تحكم العقود</h1>
+                <p class="text-slate-500 text-sm mt-1">إدارة متكاملة لعقود العمالة المنزلية والاستقدام الفردي</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="text-left">
+                    <p class="text-sm font-bold">المستخدم: مدير النظام</p>
+                    <p class="text-xs text-slate-500">آخر تحديث: يونيو ٢٠٢٦</p>
+                </div>
             </div>
         </header>
 
-        <!-- SECTION: DASHBOARD -->
+        <!-- === DASHBOARD === -->
         <section id="dashboard" class="content-section">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="card border-l-4 border-teal-500">
-                    <p class="text-slate-500 text-sm">Monthly Revenue (SAR)</p>
-                    <h3 class="text-2xl font-bold">452,300.00</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
+                <div class="card border-r-4 border-teal-500">
+                    <p class="text-slate-500 text-sm font-bold">إجمالي العقود النشطة</p>
+                    <h3 class="text-3xl font-extrabold mt-2" id="dash-total-contracts">0</h3>
                 </div>
-                <div class="card border-l-4 border-blue-500">
-                    <p class="text-slate-500 text-sm">Outstanding Receivables</p>
-                    <h3 class="text-2xl font-bold">128,450.00</h3>
+                <div class="card border-r-4 border-green-500">
+                    <p class="text-slate-500 text-sm font-bold">عمالة تم وصولها</p>
+                    <h3 class="text-3xl font-extrabold mt-2" id="dash-arrived">0</h3>
                 </div>
-                <div class="card border-l-4 border-orange-500">
-                    <p class="text-slate-500 text-sm">Pending Mobilizations</p>
-                    <h3 class="text-2xl font-bold">14 Candidates</h3>
+                <div class="card border-r-4 border-blue-500">
+                    <p class="text-slate-500 text-sm font-bold">تأشيرات مرفوعة (قيد الإجراء)</p>
+                    <h3 class="text-3xl font-extrabold mt-2" id="dash-uploaded">0</h3>
                 </div>
-                <div class="card border-l-4 border-red-500">
-                    <p class="text-slate-500 text-sm">VAT Payable (15%)</p>
-                    <h3 class="text-2xl font-bold">34,215.00</h3>
+                <div class="card border-r-4 border-red-500">
+                    <p class="text-slate-500 text-sm font-bold">عقود ملغاة</p>
+                    <h3 class="text-3xl font-extrabold mt-2" id="dash-cancelled">0</h3>
                 </div>
             </div>
-            
+
             <div class="card">
-                <h3 class="font-bold mb-4">Recent ZATCA Invoices</h3>
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-100"><tr><th class="p-3">Invoice #</th><th class="p-3">Client</th><th class="p-3">Amount (SAR)</th><th class="p-3">Status</th><th class="p-3">Hash</th></tr></thead>
-                    <tbody id="dash-invoice-list">
-                        <!-- Populated by JS -->
-                    </tbody>
-                </table>
+                <h3 class="font-bold text-lg mb-4">أحدث العمليات المسجلة</h3>
+                <div id="dash-recent-logs" class="space-y-2 max-h-64 overflow-y-auto text-sm"></div>
             </div>
         </section>
 
-        <!-- SECTION: ZATCA INVOICING -->
-        <section id="invoicing" class="content-section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Invoice Form -->
-                <div class="lg:col-span-1 card no-print">
-                    <h3 class="font-bold mb-4 text-lg">Create Tax Invoice</h3>
-                    <form id="invoiceForm" onsubmit="generateInvoice(event)">
-                        <div class="mb-3">
-                            <label class="block text-xs font-bold text-slate-600">Client Name (Arabic/English)</label>
-                            <input type="text" id="clientName" required class="w-full border p-2 rounded" placeholder="Al-Rajhi Construction">
+        <!-- === CONTRACTS & CLIENTS MODULE === -->
+        <section id="contracts" class="content-section hidden">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                
+                <!-- INPUT FORM -->
+                <div class="xl:col-span-4 card h-fit no-print">
+                    <h3 class="font-bold text-lg mb-5 border-b pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-teal-600"></i> تسجيل عقد جديد
+                    </h3>
+                    
+                    <form id="contractForm" onsubmit="app.contracts.save(event)">
+                        <input type="hidden" id="editId" value="">
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>رقم العقد</label>
+                                <input type="number" id="cContractNo" required class="input-field" placeholder="1343">
+                            </div>
+                            <div class="input-group">
+                                <label>تاريخ التقديم</label>
+                                <input type="date" id="cDate" required class="input-field">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-xs font-bold text-slate-600">Client VAT ID (15 Digit)</label>
-                            <input type="text" id="clientVat" maxlength="15" pattern="\d{15}" required class="w-full border p-2 rounded" placeholder="3xxxxxxxxxxxxx3">
+
+                        <div class="input-group">
+                            <label>اسم العميل (الكفيل)</label>
+                            <input type="text" id="cClientName" required class="input-field" placeholder="مثال: رنا دريهم سعد الدريهم">
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-xs font-bold text-slate-600">Service Type</label>
-                            <select id="serviceType" class="w-full border p-2 rounded">
-                                <option value="recruitment_fee">Recruitment Fee (Grade G)</option>
-                                <option value="visa_processing">Visa Processing</option>
-                                <option value="mobilization">Mobilization/Ticketing</option>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>رقم هوية العميل</label>
+                                <input type="text" id="cClientId" required class="input-field" placeholder="539672527">
+                            </div>
+                            <div class="input-group">
+                                <label>الشهر / الفترة</label>
+                                <input type="text" id="cMonth" class="input-field" placeholder="يناير 2025">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>المهنة في العقد</label>
+                            <select id="cProfession" class="input-field">
+                                <option value="عامله منزليه">عاملة منزلية</option>
+                                <option value="عامل منزلي">عامل منزلي</option>
+                                <option value="سائق خاص">سائق خاص</option>
+                                <option value="حارس منزلي">حارس منزلي</option>
+                                <option value="مزارع منزلي">مزارع منزلي</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-xs font-bold text-slate-600">Subtotal (Excl. VAT)</label>
-                            <input type="number" id="subtotal" step="0.01" required class="w-full border p-2 rounded">
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>السعر المتفق عليه (ر.س)</label>
+                                <input type="number" step="0.01" id="cPrice" required class="input-field font-bold">
+                            </div>
+                            <div class="input-group">
+                                <label>مدة العقد (يوم)</label>
+                                <input type="number" id="cDuration" value="90" class="input-field">
+                            </div>
                         </div>
-                        <button type="submit" class="w-full bg-teal-700 text-white py-2 rounded hover:bg-teal-800">Generate ZATCA Invoice</button>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label>الوكيل / المورد</label>
+                                <input type="text" id="cAgent" class="input-field" placeholder="كل شي / نوريا / LOJU">
+                            </div>
+                            <div class="input-group">
+                                <label>كاتب العقد</label>
+                                <input type="text" id="cWriter" class="input-field" placeholder="مشعل / صلاح">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full justify-center mt-2">
+                            <i class="fa-solid fa-save"></i> حفظ العقد
+                        </button>
+                        <button type="button" onclick="document.getElementById('contractForm').reset(); document.getElementById('editId').value=''" class="w-full mt-2 text-sm text-slate-500 hover:text-slate-800">مسح النموذج</button>
                     </form>
                 </div>
 
-                <!-- Invoice Preview / Print View -->
-                <div class="lg:col-span-2 card relative">
-                    <div class="absolute top-4 right-4 no-print">
-                        <button onclick="window.print()" class="bg-slate-800 text-white px-4 py-2 rounded text-sm"><i class="fa-solid fa-print mr-2"></i>Print / PDF</button>
+                <!-- OUTPUT TABLE -->
+                <div class="xl:col-span-8 card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg">سجل العقود والعملاء</h3>
+                        <div class="flex gap-2">
+                            <input type="text" placeholder="بحث برقم العقد أو اسم العميل..." class="input-field py-1 text-sm w-64" onkeyup="app.contracts.filter(this.value)">
+                        </div>
                     </div>
                     
-                    <div id="invoicePreview" class="opacity-50 pointer-events-none select-none">
-                        <div class="flex justify-between border-b pb-4 mb-4">
-                            <div>
-                                <h2 class="text-2xl font-bold text-teal-900">TAX INVOICE</h2>
-                                <p class="text-sm text-slate-500">Original / أصل الفاتورة</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">Global Recruiters Co. Ltd.</p>
-                                <p>VAT: 300123456700003</p>
-                                <p>Riyadh, KSA</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
-                            <div>
-                                <p class="font-bold">Bill To:</p>
-                                <p id="prev-client">Client Name</p>
-                                <p id="prev-vat">VAT: ----------------</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">Invoice Details:</p>
-                                <p>ID: <span id="prev-id">INV-00000</span></p>
-                                <p>Date: <span id="prev-date"></span></p>
-                                <p>UUID: <span id="prev-uuid" class="text-xs break-all"></span></p>
-                            </div>
-                        </div>
-
-                        <table class="w-full text-sm mb-6">
-                            <thead class="bg-slate-100 border-y">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-100">
                                 <tr>
-                                    <th class="p-2 text-left">Item</th>
-                                    <th class="p-2 text-right">Net Amount</th>
-                                    <th class="p-2 text-right">VAT (15%)</th>
-                                    <th class="p-2 text-right">Total</th>
+                                    <th class="p-3">رقم العقد</th>
+                                    <th class="p-3">اسم العميل</th>
+                                    <th class="p-3">رقم الهوية</th>
+                                    <th class="p-3">المهنة</th>
+                                    <th class="p-3">السعر</th>
+                                    <th class="p-3">الوكيل</th>
+                                    <th class="p-3">الكاتب</th>
+                                    <th class="p-3 text-center">إجراءات</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="p-2" id="prev-item">Recruitment Services</td>
-                                    <td class="p-2 text-right" id="prev-net">0.00</td>
-                                    <td class="p-2 text-right" id="prev-tax">0.00</td>
-                                    <td class="p-2 text-right" id="prev-total">0.00</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="contractsTableBody"></tbody>
                         </table>
-
-                        <div class="flex justify-end mb-6">
-                            <div class="w-64 text-sm">
-                                <div class="flex justify-between py-1"><span>Total Excl. VAT:</span> <span id="sum-net">0.00</span></div>
-                                <div class="flex justify-between py-1"><span>Total VAT:</span> <span id="sum-tax">0.00</span></div>
-                                <div class="flex justify-between py-2 border-t font-bold text-lg"><span>Total Payable:</span> <span id="sum-total">0.00 SAR</span></div>
-                            </div>
-                        </div>
-
-                        <!-- ZATCA QR CODE SECTION -->
-                        <div class="border-t pt-4 flex items-start gap-4">
-                            <div id="qrcode" class="border p-1"></div>
-                            <div class="text-xs text-slate-500 max-w-md">
-                                <p class="font-bold mb-1">ZATCA Compliance Info:</p>
-                                <p>Hash: <span id="prev-hash" class="break-all font-mono"></span></p>
-                                <p class="mt-1">This invoice complies with KSA E-Invoicing Phase 2 requirements.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="emptyState" class="text-center py-20 text-slate-400">
-                        <i class="fa-solid fa-file-circle-plus text-4xl mb-3"></i>
-                        <p>Fill form to generate compliant invoice</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: PAYROLL & WPS -->
-        <section id="payroll" class="content-section hidden">
+        <!-- === VISAS & WORKERS MODULE === -->
+        <section id="visas" class="content-section hidden">
             <div class="card">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg">WPS Payroll Generator (MOHR Compliant)</h3>
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm"><i class="fa-solid fa-download mr-2"></i>Export SIF File</button>
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-xl">متابعة التأشيرات ووصول العمالة</h3>
+                    <button onclick="app.visas.showModal()" class="btn-primary"><i class="fa-solid fa-user-plus"></i> ربط تأشيرة بعقد</button>
                 </div>
+
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left">
+                    <table class="w-full text-sm text-right">
                         <thead class="bg-slate-100">
                             <tr>
-                                <th class="p-3">Employee ID</th>
-                                <th class="p-3">Name</th>
-                                <th class="p-3">Iqama #</th>
-                                <th class="p-3">Basic Salary</th>
-                                <th class="p-3">Housing</th>
-                                <th class="p-3">Deductions</th>
-                                <th class="p-3">Net Pay</th>
-                                <th class="p-3">IBAN</th>
+                                <th class="p-3">رقم التأشيرة</th>
+                                <th class="p-3">اسم العامل/ة</th>
+                                <th class="p-3">الدولة</th>
+                                <th class="p-3">رقم العقد المرتبط</th>
+                                <th class="p-3">تاريخ الوصول</th>
+                                <th class="p-3">الحالة</th>
+                                <th class="p-3 text-center">تحديث الحالة</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="border-b">
-                                <td class="p-3">EMP-001</td>
-                                <td class="p-3">Ahmed Al-Saud</td>
-                                <td class="p-3">2012345678</td>
-                                <td class="p-3">8,000.00</td>
-                                <td class="p-3">2,000.00</td>
-                                <td class="p-3 text-red-600">-500.00</td>
-                                <td class="p-3 font-bold">9,500.00</td>
-                                <td class="p-3 text-xs font-mono">SA0380000...</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-3">EMP-002</td>
-                                <td class="p-3">John Doe (Expat)</td>
-                                <td class="p-3">2598765432</td>
-                                <td class="p-3">12,000.00</td>
-                                <td class="p-3">3,000.00</td>
-                                <td class="p-3 text-red-600">-0.00</td>
-                                <td class="p-3 font-bold">15,000.00</td>
-                                <td class="p-3 text-xs font-mono">SA4420000...</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="visasTableBody"></tbody>
                     </table>
                 </div>
-                <div class="mt-4 p-3 bg-yellow-50 text-yellow-800 text-sm rounded">
-                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                    <strong>Note:</strong> Ensure all deductions are documented per MOHR regulations. SIF export must be uploaded to Mudad platform within 7 days of payment.
-                </div>
             </div>
         </section>
 
-        <!-- SECTION: GENERAL LEDGER -->
-        <section id="ledger" class="content-section hidden">
+        <!-- === FINANCIALS MODULE === -->
+        <section id="financials" class="content-section hidden">
             <div class="card">
-                <h3 class="font-bold text-lg mb-4">Double Entry Ledger (IFRS)</h3>
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-100">
-                        <tr>
-                            <th class="p-3">Date</th>
-                            <th class="p-3">Account</th>
-                            <th class="p-3">Description</th>
-                            <th class="p-3 text-right">Debit (SAR)</th>
-                            <th class="p-3 text-right">Credit (SAR)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-b bg-teal-50">
-                            <td class="p-3" colspan="5" class="font-bold text-xs text-teal-800">Transaction: INV-2024-001 | Recruitment Fee</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="p-3">2024-05-10</td>
-                            <td class="p-3">1100 - Accounts Receivable</td>
-                            <td class="p-3">Client: Al-Rajhi Construction</td>
-                            <td class="p-3 text-right">11,500.00</td>
-                            <td class="p-3 text-right">-</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="p-3">2024-05-10</td>
-                            <td class="p-3">4100 - Recruitment Revenue</td>
-                            <td class="p-3">Service Income</td>
-                            <td class="p-3 text-right">-</td>
-                            <td class="p-3 text-right">10,000.00</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="p-3">2024-05-10</td>
-                            <td class="p-3">2200 - VAT Output Liability</td>
-                            <td class="p-3">15% VAT Collected</td>
-                            <td class="p-3 text-right">-</td>
-                            <td class="p-3 text-right">1,500.00</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- SECTION: COMPLIANCE -->
-        <section id="compliance" class="content-section hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="card">
-                    <h3 class="font-bold mb-3">Recruitment License Status</h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between"><span>License Number:</span> <span class="font-mono">1029384-G</span></div>
-                        <div class="flex justify-between"><span>Expiry Date:</span> <span class="text-red-600 font-bold">2024-12-31</span></div>
-                        <div class="flex justify-between"><span>Bank Guarantee:</span> <span class="text-green-600">Active (300k SAR)</span></div>
-                        <div class="flex justify-between"><span>Musaned/Mudad Status:</span> <span class="text-green-600">Compliant</span></div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3 class="font-bold mb-3">ZATCA Integration Status</h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between"><span>Onboarding Status:</span> <span class="text-green-600">Completed</span></div>
-                        <div class="flex justify-between"><span>Cryptographic Stamp:</span> <span class="text-green-600">Valid</span></div>
-                        <div class="flex justify-between"><span>Last Clearance:</span> <span>2024-05-10 09:41 AM</span></div>
-                        <div class="p-2 bg-slate-100 rounded mt-2 text-xs font-mono break-all">
-                            Device Serial: TSEC-KSA-REC-8821-XJ
-                        </div>
-                    </div>
+                <h3 class="font-bold text-xl mb-6">تحليل الأرباح والتكاليف حسب الوكيل</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="p-3">الوكيل / المورد</th>
+                                <th class="p-3">عدد العقود</th>
+                                <th class="p-3">إجمالي الإيرادات</th>
+                                <th class="p-3">متوسط سعر العقد</th>
+                                <th class="p-3">الدولة الأكثر طلباً</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agentReportBody"></tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
+        <!-- AUDIT LOG -->
+        <section id="audit" class="content-section hidden">
+            <div class="card">
+                <h3 class="font-bold text-xl mb-6">سجل التدقيق والرقابة</h3>
+                <div id="fullAuditLog" class="space-y-3 text-sm"></div>
+            </div>
+        </section>
     </div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- NAVIGATION LOGIC ---
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
-            
-            const titles = {
-                'dashboard': 'Financial Dashboard',
-                'invoicing': 'ZATCA E-Invoicing Portal',
-                'payroll': 'Payroll & WPS Management',
-                'ledger': 'General Ledger (IFRS)',
-                'compliance': 'Regulatory Compliance'
-            };
-            document.getElementById('page-title').innerText = titles[sectionId];
-        }
+        const app = {
+            state: {
+                contracts: [],
+                visas: [],
+                auditLog: [],
+                currentUser: "مدير النظام"
+            },
 
-        // --- ZATCA INVOICE GENERATION LOGIC ---
-        function generateInvoice(e) {
-            e.preventDefault();
-            
-            // 1. Gather Data
-            const clientName = document.getElementById('clientName').value;
-            const clientVat = document.getElementById('clientVat').value;
-            const subtotal = parseFloat(document.getElementById('subtotal').value);
-            const vatRate = 0.15;
-            const vatAmount = subtotal * vatRate;
-            const totalAmount = subtotal + vatAmount;
-            
-            // Generate Unique Identifiers
-            const uuid = crypto.randomUUID();
-            const invoiceId = `INV-${new Date().getFullYear()}-${Math.floor(Math.random()*10000).toString().padStart(4,'0')}`;
-            const issueDate = new Date().toISOString().split('T')[0];
-            const issueTime = new Date().toTimeString().split(' ')[0].substring(0,5);
+            init() {
+                // Load sample data based on 111.xlsx structure
+                this.loadSampleData();
+                this.render.dashboard();
+                this.render.contracts();
+                this.render.visas();
+                this.render.financials();
+            },
 
-            // 2. Update Preview UI
-            document.getElementById('emptyState').classList.add('hidden');
-            document.getElementById('invoicePreview').classList.remove('opacity-50', 'pointer-events-none', 'select-none');
-            
-            document.getElementById('prev-client').innerText = clientName;
-            document.getElementById('prev-vat').innerText = `VAT: ${clientVat}`;
-            document.getElementById('prev-id').innerText = invoiceId;
-            document.getElementById('prev-date').innerText = `${issueDate} ${issueTime}`;
-            document.getElementById('prev-uuid').innerText = uuid;
-            
-            document.getElementById('prev-net').innerText = subtotal.toFixed(2);
-            document.getElementById('prev-tax').innerText = vatAmount.toFixed(2);
-            document.getElementById('prev-total').innerText = totalAmount.toFixed(2);
-            
-            document.getElementById('sum-net').innerText = subtotal.toFixed(2);
-            document.getElementById('sum-tax').innerText = vatAmount.toFixed(2);
-            document.getElementById('sum-total').innerText = totalAmount.toFixed(2) + " SAR";
+            nav(sectionId) {
+                document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+                document.getElementById(sectionId).classList.remove('hidden');
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-slate-700'));
+                event.currentTarget.classList.add('bg-slate-700');
+                
+                const titles = {
+                    'dashboard': 'لوحة التحكم',
+                    'contracts': 'إدارة العقود والعملاء',
+                    'visas': 'متابعة التأشيرات والعمالة',
+                    'financials': 'التقارير المالية والأرباح',
+                    'audit': 'سجل التدقيق'
+                };
+                document.getElementById('page-title').innerText = titles[sectionId];
+            },
 
-            // 3. ZATCA QR Code Generation (Simplified TLV Structure)
-            // Note: Real Phase 2 requires ECDSA signing. This simulates the Base64 TLV structure 
-            // using SHA-256 hash of invoice data as a placeholder for the digital signature tag.
-            const sellerName = "Global Recruiters Co. Ltd.";
-            const sellerVat = "300123456700003";
-            
-            // Create Hash (Simulating Digital Signature)
-            const hashString = `${sellerVat}${issueDate}${issueTime}${totalAmount}${vatAmount}${uuid}`;
-            const hash = CryptoJS.SHA256(hashString).toString(CryptoJS.enc.Hex);
-            document.getElementById('prev-hash').innerText = hash.substring(0, 32) + "...";
+            // --- DATA MANAGEMENT ---
+            loadSampleData() {
+                // Simulating first few rows from 111.xlsx
+                this.state.contracts = [
+                    { id: 1343, client: "رنا دريهم سعد الدريهم", clientId: "539672527", profession: "عامله منزليه", month: "يناير 2025", date: "2025-01-02", price: 4501.40, agent: "كل شي", writer: "مشعل", duration: 90 },
+                    { id: 1344, client: "شيخه مفلح بن ملفي الدوسري", clientId: "557373627", profession: "عامله منزليه", month: "يناير 2025", date: "2025-01-04", price: 4501.40, agent: "كل شي", writer: "صلاح", duration: 90 },
+                    { id: 1345, client: "عايضه مرود ماطر البقمي", clientId: "565961959", profession: "عامله منزليه", month: "يناير 2025", date: "2025-01-06", price: 14000.30, agent: "1010", writer: "مشعل", duration: 90 }
+                ];
 
-            // Build TLV (Tag-Length-Value) Byte Array for QR
-            // Tags: 1=Seller, 2=VAT, 3=Timestamp, 4=Total, 5=VAT Amt, 6=Hash(Sig Placeholder)
-            const tlvData = buildTLV(sellerName, sellerVat, `${issueDate} ${issueTime}`, totalAmount.toFixed(2), vatAmount.toFixed(2), hash);
-            
-            // Clear previous QR and generate new one
-            document.getElementById("qrcode").innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), {
-                text: arrayBufferToBase64(tlvData),
-                width: 128,
-                height: 128,
-                correctLevel: QRCode.CorrectLevel.L
-            });
+                this.state.visas = [
+                    { visaNo: "1906804945", worker: "MEBUBA SHIKUR HULCHAFO", country: "اثيوبيا", contractId: 1343, arrival: "2025-02-20", status: "تم الوصول" },
+                    { visaNo: "1906805321", worker: "ZABIBA YASIN JEMAL", country: "اثيوبيا", contractId: 1344, arrival: "2025-02-26", status: "تم الوصول" },
+                    { visaNo: "1906805475", worker: "JENNAL YN PLACIDOROMA", country: "الفلبين", contractId: 1345, arrival: "2025-04-16", status: "تم الوصول" }
+                ];
 
-            // Add to dashboard list
-            addDashboardRow(invoiceId, clientName, totalAmount, hash.substring(0,12));
-        }
+                this.audit.log("SYSTEM", "تهيئة النظام", "تم تحميل بيانات تجريبية مطابقة لملف 111.xlsx");
+            },
 
-        // Helper: Build TLV Byte Array (ZATCA Spec)
-        function buildTLV(seller, vat, date, total, tax, hash) {
-            const encoder = new TextEncoder();
-            const tags = [];
-            
-            const addTag = (tagNum, value) => {
-                const valBytes = encoder.encode(value);
-                const len = valBytes.length;
-                const tagByte = new Uint8Array([tagNum]);
-                const lenByte = new Uint8Array([len]);
-                return new Uint8Array([...tagByte, ...lenByte, ...valBytes]);
-            };
+            audit: {
+                log(action, entity, details) {
+                    const entry = {
+                        timestamp: new Date().toISOString(),
+                        user: app.state.currentUser,
+                        action, entity, details,
+                        id: crypto.randomUUID().substring(0,8)
+                    };
+                    app.state.auditLog.unshift(entry);
+                    app.render.recentLogs();
+                }
+            },
 
-            const t1 = addTag(1, seller);
-            const t2 = addTag(2, vat);
-            const t3 = addTag(3, date);
-            const t4 = addTag(4, total);
-            const t5 = addTag(5, tax);
-            // Tag 6 is usually the ECDSA signature. We use hash bytes here for demo.
-            const t6 = addTag(6, hash); 
+            // --- CONTRACTS MODULE ---
+            contracts: {
+                save(e) {
+                    e.preventDefault();
+                    const editId = document.getElementById('editId').value;
+                    const contract = {
+                        id: parseInt(document.getElementById('cContractNo').value),
+                        client: document.getElementById('cClientName').value,
+                        clientId: document.getElementById('cClientId').value,
+                        profession: document.getElementById('cProfession').value,
+                        month: document.getElementById('cMonth').value,
+                        date: document.getElementById('cDate').value,
+                        price: parseFloat(document.getElementById('cPrice').value),
+                        agent: document.getElementById('cAgent').value,
+                        writer: document.getElementById('cWriter').value,
+                        duration: parseInt(document.getElementById('cDuration').value)
+                    };
 
-            return new Uint8Array([...t1, ...t2, ...t3, ...t4, ...t5, ...t6]);
-        }
+                    if (editId) {
+                        const idx = app.state.contracts.findIndex(c => c.id == editId);
+                        if (idx > -1) {
+                            app.state.contracts[idx] = contract;
+                            app.audit.log("EDIT", "CONTRACT", `تعديل العقد رقم ${contract.id}`);
+                        }
+                    } else {
+                        app.state.contracts.push(contract);
+                        app.audit.log("CREATE", "CONTRACT", `إنشاء عقد جديد رقم ${contract.id} للعميل ${contract.client}`);
+                    }
 
-        function arrayBufferToBase64(buffer) {
-            let binary = '';
-            const bytes = new Uint8Array(buffer);
-            const len = bytes.byteLength;
-            for (let i = 0; i < len; i++) {
-                binary += String.fromCharCode(bytes[i]);
+                    app.render.contracts();
+                    app.render.dashboard();
+                    app.render.financials();
+                    document.getElementById('contractForm').reset();
+                    document.getElementById('editId').value = '';
+                },
+
+                edit(id) {
+                    const c = app.state.contracts.find(x => x.id == id);
+                    if (!c) return;
+                    
+                    document.getElementById('editId').value = c.id;
+                    document.getElementById('cContractNo').value = c.id;
+                    document.getElementById('cClientName').value = c.client;
+                    document.getElementById('cClientId').value = c.clientId;
+                    document.getElementById('cProfession').value = c.profession;
+                    document.getElementById('cMonth').value = c.month;
+                    document.getElementById('cDate').value = c.date;
+                    document.getElementById('cPrice').value = c.price;
+                    document.getElementById('cAgent').value = c.agent;
+                    document.getElementById('cWriter').value = c.writer;
+                    document.getElementById('cDuration').value = c.duration;
+                    
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                },
+
+                filter(query) {
+                    const rows = document.querySelectorAll('#contractsTableBody tr');
+                    rows.forEach(row => {
+                        const text = row.innerText.toLowerCase();
+                        row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+                    });
+                }
+            },
+
+            // --- VISAS MODULE ---
+            visas: {
+                showModal() {
+                    alert("نافذة ربط التأشيرة: سيتم تفعيلها في النسخة القادمة. حالياً يمكن إضافة التأشيرات عبر الاستيراد.");
+                },
+                
+                updateStatus(visaNo, newStatus) {
+                    const v = app.state.visas.find(x => x.visaNo === visaNo);
+                    if (v) {
+                        const oldStatus = v.status;
+                        v.status = newStatus;
+                        if (newStatus === "تم الوصول") v.arrival = new Date().toISOString().split('T')[0];
+                        app.audit.log("UPDATE", "VISA", `تحديث حالة التأشيرة ${visaNo} من ${oldStatus} إلى ${newStatus}`);
+                        app.render.visas();
+                        app.render.dashboard();
+                    }
+                }
+            },
+
+            // --- RENDER ENGINE ---
+            render: {
+                dashboard() {
+                    document.getElementById('dash-total-contracts').innerText = app.state.contracts.length;
+                    document.getElementById('dash-arrived').innerText = app.state.visas.filter(v => v.status === "تم الوصول").length;
+                    document.getElementById('dash-uploaded').innerText = app.state.visas.filter(v => v.status === "مرفوع").length;
+                    document.getElementById('dash-cancelled').innerText = app.state.contracts.filter(c => c.status === "ملغي").length + app.state.visas.filter(v => v.status === "ملغي").length;
+                    this.recentLogs();
+                },
+
+                recentLogs() {
+                    const container = document.getElementById('dash-recent-logs');
+                    container.innerHTML = app.state.auditLog.slice(0, 5).map(log => `
+                        <div class="p-3 bg-slate-50 rounded border-r-4 border-teal-500 flex justify-between items-center">
+                            <span class="font-bold text-slate-700">${log.details}</span>
+                            <span class="text-xs text-slate-400 font-mono">${new Date(log.timestamp).toLocaleTimeString('ar-SA')}</span>
+                        </div>
+                    `).join('');
+                },
+
+                contracts() {
+                    const tbody = document.getElementById('contractsTableBody');
+                    tbody.innerHTML = app.state.contracts.map(c => `
+                        <tr class="border-b hover:bg-slate-50 transition">
+                            <td class="p-3 font-mono font-bold text-teal-700">${c.id}</td>
+                            <td class="p-3 font-bold">${c.client}</td>
+                            <td class="p-3 font-mono text-slate-500">${c.clientId}</td>
+                            <td class="p-3">${c.profession}</td>
+                            <td class="p-3 font-bold">${c.price.toFixed(2)}</td>
+                            <td class="p-3 text-xs bg-slate-100 rounded px-2 py-1 w-fit">${c.agent}</td>
+                            <td class="p-3 text-slate-500">${c.writer}</td>
+                            <td class="p-3 text-center">
+                                <button onclick="app.contracts.edit(${c.id})" class="text-blue-600 hover:text-blue-800 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </td>
+                        </tr>
+                    `).join('');
+                },
+
+                visas() {
+                    const tbody = document.getElementById('visasTableBody');
+                    tbody.innerHTML = app.state.visas.map(v => {
+                        let statusClass = 'status-uploaded';
+                        if (v.status === 'تم الوصول') statusClass = 'status-arrived';
+                        if (v.status === 'ملغي') statusClass = 'status-cancelled';
+                        if (v.status === 'وكالة') statusClass = 'status-agency';
+
+                        return `
+                        <tr class="border-b hover:bg-slate-50 transition">
+                            <td class="p-3 font-mono text-xs">${v.visaNo}</td>
+                            <td class="p-3 font-bold text-slate-800">${v.worker}</td>
+                            <td class="p-3">${v.country}</td>
+                            <td class="p-3 font-mono text-teal-600">${v.contractId}</td>
+                            <td class="p-3 text-slate-500">${v.arrival || '-'}</td>
+                            <td class="p-3"><span class="status-badge ${statusClass}">${v.status}</span></td>
+                            <td class="p-3 text-center">
+                                <select onchange="app.visas.updateStatus('${v.visaNo}', this.value)" class="text-xs border rounded p-1 bg-white">
+                                    <option value="">تغيير...</option>
+                                    <option value="تم الوصول">تم الوصول</option>
+                                    <option value="مرفوع">مرفوع</option>
+                                    <option value="ملغي">ملغي</option>
+                                    <option value="وكالة">وكالة</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `}).join('');
+                },
+
+                financials() {
+                    // Group by Agent
+                    const agents = {};
+                    app.state.contracts.forEach(c => {
+                        if (!agents[c.agent]) agents[c.agent] = { count: 0, total: 0, countries: {} };
+                        agents[c.agent].count++;
+                        agents[c.agent].total += c.price;
+                        
+                        // Find associated visa to get country
+                        const visa = app.state.visas.find(v => v.contractId === c.id);
+                        const country = visa ? visa.country : 'غير محدد';
+                        agents[c.agent].countries[country] = (agents[c.agent].countries[country] || 0) + 1;
+                    });
+
+                    const tbody = document.getElementById('agentReportBody');
+                    tbody.innerHTML = Object.entries(agents).map(([name, data]) => {
+                        const topCountry = Object.entries(data.countries).sort((a,b) => b[1] - a[1])[0]?.[0] || '-';
+                        return `
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-3 font-bold">${name}</td>
+                            <td class="p-3">${data.count}</td>
+                            <td class="p-3 font-bold text-teal-700">${data.total.toFixed(2)} ر.س</td>
+                            <td class="p-3">${(data.total / data.count).toFixed(2)} ر.س</td>
+                            <td class="p-3 text-slate-500">${topCountry}</td>
+                        </tr>
+                    `}).join('');
+                }
             }
-            return window.btoa(binary);
-        }
+        };
 
-        function addDashboardRow(id, client, amount, hash) {
-            const tbody = document.getElementById('dash-invoice-list');
-            const row = `<tr class="border-b hover:bg-slate-50">
-                <td class="p-3 font-mono text-xs">${id}</td>
-                <td class="p-3">${client}</td>
-                <td class="p-3 font-bold">${amount.toFixed(2)}</td>
-                <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Reported</span></td>
-                <td class="p-3 font-mono text-xs text-slate-400">${hash}...</td>
-            </tr>`;
-            tbody.insertAdjacentHTML('afterbegin', row);
-        }
-
-        // Initialize Dashboard with dummy data
-        addDashboardRow("INV-2024-0089", "Bin Laden Contracting", 23000.00, "a1b2c3d4e5f6");
-        addDashboardRow("INV-2024-0088", "Nesma Partners", 15750.00, "f6e5d4c3b2a1");
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
 </body>
 </html>
