@@ -1,47 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database to XLS Converter</title>
-    <!-- Pinned specific working version of SheetJS -->
+    <title>محول قاعدة البيانات إلى XLS</title>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         :root { --primary: #2563eb; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: system-ui, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { background: var(--card); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); max-width: 600px; width: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: var(--card); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); max-width: 650px; width: 100%; direction: rtl; text-align: right; }
         h1 { margin-top: 0; color: #1e293b; font-size: 1.5rem; }
-        .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px; font-size: 0.85rem; margin-bottom: 1.5rem; color: #92400e; }
+        .note { background: #fffbeb; border-right: 4px solid #f59e0b; padding: 10px; font-size: 0.85rem; margin-bottom: 1.5rem; color: #92400e; }
         label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #334155; }
-        textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.9rem; resize: vertical; box-sizing: border-box; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box; }
+        textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.9rem; resize: vertical; box-sizing: border-box; direction: ltr; text-align: left; }
+        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box; font-size: 0.95rem; }
+        .row { display: flex; gap: 1rem; }
+        .row > div { flex: 1; }
         button { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s; }
         button:hover { background: #1d4ed8; }
         #status { margin-top: 1rem; text-align: center; font-size: 0.9rem; min-height: 1.2em;}
+        .preview-label { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📊 Database to XLS Converter</h1>
+        <h1>📊 محول قاعدة البيانات إلى XLS</h1>
         
         <div class="note">
-            <strong>⚠️ Note:</strong> Browsers cannot read <code>.accdb</code> directly. 
-            Export your Access table to <strong>CSV</strong>, then paste or drop it below.
+            <strong>⚠️ ملاحظة:</strong> المتصفحات لا تقرأ ملفات <code>.accdb</code> مباشرة. 
+            قم بتصدير الجدول من Access بصيغة <strong>CSV</strong>، ثم اسحبه أو الصقه أدناه.
         </div>
 
-        <label for="fileName">Output Filename</label>
-        <input type="text" id="fileName" value="converted_data.xls">
+        <div class="row">
+            <div>
+                <label for="fileName">اسم الملف الناتج</label>
+                <input type="text" id="fileName" value="converted_data.xls" dir="ltr">
+            </div>
+            <div>
+                <label for="encoding">ترميز النص (Encoding)</label>
+                <select id="encoding">
+                    <option value="auto">🔍 كشف تلقائي</option>
+                    <option value="windows-1256">Windows-1256 (عربي شائع)</option>
+                    <option value="utf-8">UTF-8</option>
+                    <option value="utf-16le">UTF-16 LE (Access Unicode)</option>
+                    <option value="iso-8859-6">ISO-8859-6 (عربي قديم)</option>
+                </select>
+            </div>
+        </div>
 
-        <label for="csvInput">CSV Data (Paste or Drop File)</label>
-        <textarea id="csvInput" placeholder="Name,Age,City&#10;Alice,30,NY&#10;Bob,25,LA"></textarea>
+        <label for="csvInput">بيانات CSV (اسحب الملف أو الصق النص)</label>
+        <textarea id="csvInput" placeholder="الاسم,العمر,المدينة&#10;أحمد,30,الرياض&#10;فاطمة,25,القاهرة"></textarea>
+        <div class="preview-label" id="previewLabel"></div>
         <input type="file" id="fileInput" accept=".csv,.txt" style="display:none">
 
-        <button id="convertBtn">Convert to XLS & Download</button>
+        <button id="convertBtn">تحويل إلى XLS وتنزيل</button>
         <div id="status"></div>
     </div>
 
     <script>
-        // ✅ Native CSV Parser - No dependency on XLSX.utils.csv_to_sheet
+        // ✅ Native CSV Parser (handles quoted fields, CRLF, etc.)
         function parseCSV(csvText) {
             const rows = [];
             let currentRow = [];
@@ -55,7 +72,7 @@
                 if (inQuotes) {
                     if (char === '"' && nextChar === '"') {
                         currentCell += '"';
-                        i++; // Skip escaped quote
+                        i++;
                     } else if (char === '"') {
                         inQuotes = false;
                     } else {
@@ -72,7 +89,7 @@
                         rows.push(currentRow);
                         currentRow = [];
                         currentCell = '';
-                        i++; // Skip \n
+                        i++;
                     } else if (char === '\n' || char === '\r') {
                         currentRow.push(currentCell);
                         rows.push(currentRow);
@@ -83,14 +100,58 @@
                     }
                 }
             }
-            
-            // Push last cell/row if file doesn't end with newline
             if (currentCell || currentRow.length > 0) {
                 currentRow.push(currentCell);
                 rows.push(currentRow);
             }
-            
             return rows.filter(r => r.some(cell => cell.trim() !== ''));
+        }
+
+        // ✅ Auto-detect Arabic encoding from raw bytes
+        function detectArabicEncoding(buffer) {
+            const bytes = new Uint8Array(buffer);
+            // Check for UTF-16 LE BOM (FF FE) - common in Access Unicode exports
+            if (bytes[0] === 0xFF && bytes[1] === 0xFE) return 'utf-16le';
+            // Check for UTF-8 BOM (EF BB BF)
+            if (bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) return 'utf-8';
+            
+            // Heuristic: Windows-1256 Arabic bytes fall in range 0xC0-0xDB
+            // If we see many bytes in this range without valid UTF-8 multi-byte sequences, it's likely Win-1256
+            let win1256Score = 0;
+            let utf8Score = 0;
+            for (let i = 0; i < Math.min(bytes.length, 2000); i++) {
+                const b = bytes[i];
+                if (b >= 0xC0 && b <= 0xDB) win1256Score++;
+                if (b >= 0xD8 && b <= 0xDF && i + 1 < bytes.length && bytes[i+1] >= 0x80 && bytes[i+1] <= 0xBF) utf8Score++;
+            }
+            
+            if (utf8Score > win1256Score) return 'utf-8';
+            if (win1256Score > 5) return 'windows-1256';
+            return 'windows-1256'; // Default fallback for Arabic Access
+        }
+
+        // ✅ Read file with correct encoding
+        function readFileWithEncoding(file, encoding, callback) {
+            const reader = new FileReader();
+            
+            if (encoding === 'auto') {
+                // First read as ArrayBuffer to detect encoding
+                const bufReader = new FileReader();
+                bufReader.onload = (e) => {
+                    const detected = detectArabicEncoding(e.target.result);
+                    document.getElementById('encoding').value = detected;
+                    document.getElementById('previewLabel').textContent = `✅ تم الكشف التلقائي: ${detected}`;
+                    
+                    // Re-read with detected encoding
+                    const textReader = new FileReader();
+                    textReader.onload = (evt) => callback(evt.target.result);
+                    textReader.readAsText(file, detected);
+                };
+                bufReader.readAsArrayBuffer(file);
+            } else {
+                reader.onload = (evt) => callback(evt.target.result);
+                reader.readAsText(file, encoding);
+            }
         }
 
         const csvInput = document.getElementById('csvInput');
@@ -98,6 +159,8 @@
         const statusDiv = document.getElementById('status');
         const fileNameInput = document.getElementById('fileName');
         const fileInput = document.getElementById('fileInput');
+        const encodingSelect = document.getElementById('encoding');
+        const previewLabel = document.getElementById('previewLabel');
 
         csvInput.addEventListener('click', () => {
             if (csvInput.value.trim() === '') fileInput.click();
@@ -106,13 +169,22 @@
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (evt) => {
-                csvInput.value = evt.target.result;
-                statusDiv.textContent = `✅ Loaded "${file.name}"`;
+            readFileWithEncoding(file, encodingSelect.value, (text) => {
+                csvInput.value = text;
+                statusDiv.textContent = `✅ تم تحميل "${file.name}"`;
                 statusDiv.style.color = '#16a34a';
-            };
-            reader.readAsText(file);
+            });
+        });
+
+        // Re-read when encoding is manually changed
+        encodingSelect.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                readFileWithEncoding(file, encodingSelect.value, (text) => {
+                    csvInput.value = text;
+                    previewLabel.textContent = `🔄 إعادة القراءة بترميز: ${encodingSelect.value}`;
+                });
+            }
         });
 
         csvInput.addEventListener('dragover', (e) => { e.preventDefault(); csvInput.style.borderColor = '#2563eb'; });
@@ -122,54 +194,39 @@
             csvInput.style.borderColor = '#cbd5e1';
             const file = e.dataTransfer.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (evt) => {
-                    csvInput.value = evt.target.result;
-                    statusDiv.textContent = `✅ Dropped "${file.name}"`;
+                readFileWithEncoding(file, encodingSelect.value, (text) => {
+                    csvInput.value = text;
+                    statusDiv.textContent = `✅ تم إسقاط "${file.name}"`;
                     statusDiv.style.color = '#16a34a';
-                };
-                reader.readAsText(file);
+                });
             }
         });
 
         convertBtn.addEventListener('click', () => {
             const raw = csvInput.value.trim();
             if (!raw) {
-                statusDiv.textContent = '❌ Please paste CSV data or upload a file.';
+                statusDiv.textContent = '❌ يرجى لصق بيانات CSV أو رفع ملف أولاً.';
                 statusDiv.style.color = '#dc2626';
                 return;
             }
-
             try {
-                // ✅ Verify XLSX loaded correctly
-                if (typeof XLSX === 'undefined') {
-                    throw new Error('SheetJS library failed to load. Check your internet connection.');
-                }
-
-                // ✅ Use native parser instead of csv_to_sheet
-                const parsedData = parseCSV(raw);
+                if (typeof XLSX === 'undefined') throw new Error('فشل تحميل مكتبة SheetJS. تحقق من اتصال الإنترنت.');
                 
-                if (parsedData.length === 0) {
-                    throw new Error('No valid data found in CSV.');
-                }
+                const parsedData = parseCSV(raw);
+                if (parsedData.length === 0) throw new Error('لا توجد بيانات صالحة في CSV.');
 
                 const workbook = XLSX.utils.book_new();
-                const worksheet = XLSX.utils.aoa_to_sheet(parsedData); // aoa = Array of Arrays
-                
+                const worksheet = XLSX.utils.aoa_to_sheet(parsedData);
                 XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
                 
-                const filename = fileNameInput.value.endsWith('.xls') 
-                    ? fileNameInput.value 
-                    : fileNameInput.value + '.xls';
-                    
+                const filename = fileNameInput.value.endsWith('.xls') ? fileNameInput.value : fileNameInput.value + '.xls';
                 XLSX.writeFile(workbook, filename);
                 
-                statusDiv.textContent = `✅ Success! Downloading ${filename}...`;
+                statusDiv.textContent = `✅ نجاح! جاري تنزيل ${filename}...`;
                 statusDiv.style.color = '#16a34a';
             } catch (err) {
-                statusDiv.textContent = `❌ Error: ${err.message}`;
+                statusDiv.textContent = `❌ خطأ: ${err.message}`;
                 statusDiv.style.color = '#dc2626';
-                console.error(err);
             }
         });
     </script>
