@@ -3,232 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محول قاعدة البيانات إلى XLS</title>
+    <title>محول Google Sheets Ritz إلى XLS</title>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
-        :root { --primary: #2563eb; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { background: var(--card); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); max-width: 650px; width: 100%; direction: rtl; text-align: right; }
-        h1 { margin-top: 0; color: #1e293b; font-size: 1.5rem; }
-        .note { background: #fffbeb; border-right: 4px solid #f59e0b; padding: 10px; font-size: 0.85rem; margin-bottom: 1.5rem; color: #92400e; }
-        label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #334155; }
-        textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.9rem; resize: vertical; box-sizing: border-box; direction: ltr; text-align: left; }
-        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box; font-size: 0.95rem; }
-        .row { display: flex; gap: 1rem; }
-        .row > div { flex: 1; }
-        button { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.2s; }
-        button:hover { background: #1d4ed8; }
-        #status { margin-top: 1rem; text-align: center; font-size: 0.9rem; min-height: 1.2em;}
-        .preview-label { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+        :root{--p:#2563eb;--bg:#f8fafc;--c:#fff}
+        body{font-family:system-ui,sans-serif;background:var(--bg);display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:20px}
+        .box{background:var(--c);padding:2rem;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);max-width:700px;width:100%;direction:rtl;text-align:right}
+        h1{margin-top:0;color:#1e293b;font-size:1.4rem}
+        .note{background:#eff6ff;border-right:4px solid var(--p);padding:10px;font-size:.85rem;margin-bottom:1.5rem;color:#1e40af}
+        label{display:block;font-weight:600;margin-bottom:.5rem;color:#334155}
+        textarea{width:100%;height:180px;padding:10px;border:1px solid #cbd5e1;border-radius:6px;font-family:monospace;font-size:.8rem;resize:vertical;box-sizing:border-box;direction:ltr;text-align:left}
+        input[type=text]{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:1rem;box-sizing:border-box}
+        button{background:var(--p);color:#fff;border:none;padding:12px;border-radius:6px;font-size:1rem;cursor:pointer;width:100%}
+        button:hover{background:#1d4ed8}
+        #status{margin-top:1rem;text-align:center;font-size:.9rem;min-height:1.2em}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📊 محول قاعدة البيانات إلى XLS</h1>
-        
-        <div class="note">
-            <strong>⚠️ ملاحظة:</strong> المتصفحات لا تقرأ ملفات <code>.accdb</code> مباشرة. 
-            قم بتصدير الجدول من Access بصيغة <strong>CSV</strong>، ثم اسحبه أو الصقه أدناه.
-        </div>
-
-        <div class="row">
-            <div>
-                <label for="fileName">اسم الملف الناتج</label>
-                <input type="text" id="fileName" value="converted_data.xls" dir="ltr">
-            </div>
-            <div>
-                <label for="encoding">ترميز النص (Encoding)</label>
-                <select id="encoding">
-                    <option value="auto">🔍 كشف تلقائي</option>
-                    <option value="windows-1256">Windows-1256 (عربي شائع)</option>
-                    <option value="utf-8">UTF-8</option>
-                    <option value="utf-16le">UTF-16 LE (Access Unicode)</option>
-                    <option value="iso-8859-6">ISO-8859-6 (عربي قديم)</option>
-                </select>
-            </div>
-        </div>
-
-        <label for="csvInput">بيانات CSV (اسحب الملف أو الصق النص)</label>
-        <textarea id="csvInput" placeholder="الاسم,العمر,المدينة&#10;أحمد,30,الرياض&#10;فاطمة,25,القاهرة"></textarea>
-        <div class="preview-label" id="previewLabel"></div>
-        <input type="file" id="fileInput" accept=".csv,.txt" style="display:none">
-
-        <button id="convertBtn">تحويل إلى XLS وتنزيل</button>
-        <div id="status"></div>
+<div class="box">
+    <h1>📊 محول Google Sheets Ritz JSON → XLS</h1>
+    <div class="note">
+        <strong>ℹ️ مخصص لبيانات Ritz:</strong> الصق محتوى JSON الخام المستخرج من Google Sheets (الذي يحتوي على حقول <code>dih</code>, <code>data</code>, <code>csm</code>). سيتم فك ترميز النصوص العربية الثنائية تلقائياً.
     </div>
 
-    <script>
-        // ✅ Native CSV Parser (handles quoted fields, CRLF, etc.)
-        function parseCSV(csvText) {
-            const rows = [];
-            let currentRow = [];
-            let currentCell = '';
-            let inQuotes = false;
-            
-            for (let i = 0; i < csvText.length; i++) {
-                const char = csvText[i];
-                const nextChar = csvText[i + 1];
-                
-                if (inQuotes) {
-                    if (char === '"' && nextChar === '"') {
-                        currentCell += '"';
-                        i++;
-                    } else if (char === '"') {
-                        inQuotes = false;
-                    } else {
-                        currentCell += char;
-                    }
-                } else {
-                    if (char === '"') {
-                        inQuotes = true;
-                    } else if (char === ',') {
-                        currentRow.push(currentCell);
-                        currentCell = '';
-                    } else if (char === '\r' && nextChar === '\n') {
-                        currentRow.push(currentCell);
-                        rows.push(currentRow);
-                        currentRow = [];
-                        currentCell = '';
-                        i++;
-                    } else if (char === '\n' || char === '\r') {
-                        currentRow.push(currentCell);
-                        rows.push(currentRow);
-                        currentRow = [];
-                        currentCell = '';
-                    } else {
-                        currentCell += char;
-                    }
-                }
-            }
-            if (currentCell || currentRow.length > 0) {
-                currentRow.push(currentCell);
-                rows.push(currentRow);
-            }
-            return rows.filter(r => r.some(cell => cell.trim() !== ''));
+    <label for="fileName">اسم الملف الناتج</label>
+    <input type="text" id="fileName" value="google_sheets_export.xls" dir="ltr">
+
+    <label for="jsonInput">الصق بيانات Ritz JSON هنا</label>
+    <textarea id="jsonInput" placeholder='{"dih":...,"data":"{\"cid\":...}","edi":...}'></textarea>
+
+    <button id="convertBtn">فك الترميز وتحويل إلى XLS</button>
+    <div id="status"></div>
+</div>
+
+<script>
+/**
+ * Decodes Google Sheets Ritz UTF-16LE binary escape sequences
+ * e.g., "\u0000\u0002\u0000\u0007" → actual Arabic characters
+ */
+function decodeRitzUtf16(str) {
+    const bytes = [];
+    for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i);
+        // Only capture byte-range values (0x00-0xFF), skip high unicode
+        if (code <= 0xFF) {
+            bytes.push(code);
         }
+    }
+    
+    if (bytes.length === 0 || bytes.length % 2 !== 0) return str;
+    
+    try {
+        const buffer = new Uint8Array(bytes).buffer;
+        return new TextDecoder('utf-16le').decode(buffer);
+    } catch {
+        return str;
+    }
+}
 
-        // ✅ Auto-detect Arabic encoding from raw bytes
-        function detectArabicEncoding(buffer) {
-            const bytes = new Uint8Array(buffer);
-            // Check for UTF-16 LE BOM (FF FE) - common in Access Unicode exports
-            if (bytes[0] === 0xFF && bytes[1] === 0xFE) return 'utf-16le';
-            // Check for UTF-8 BOM (EF BB BF)
-            if (bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) return 'utf-8';
-            
-            // Heuristic: Windows-1256 Arabic bytes fall in range 0xC0-0xDB
-            // If we see many bytes in this range without valid UTF-8 multi-byte sequences, it's likely Win-1256
-            let win1256Score = 0;
-            let utf8Score = 0;
-            for (let i = 0; i < Math.min(bytes.length, 2000); i++) {
-                const b = bytes[i];
-                if (b >= 0xC0 && b <= 0xDB) win1256Score++;
-                if (b >= 0xD8 && b <= 0xDF && i + 1 < bytes.length && bytes[i+1] >= 0x80 && bytes[i+1] <= 0xBF) utf8Score++;
-            }
-            
-            if (utf8Score > win1256Score) return 'utf-8';
-            if (win1256Score > 5) return 'windows-1256';
-            return 'windows-1256'; // Default fallback for Arabic Access
+/**
+ * Strips control characters that corrupt Excel output
+ */
+function cleanCell(text) {
+    if (!text) return '';
+    // Remove null, bell, escape, record separator, unit separator, etc.
+    let cleaned = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+    // Decode any remaining Ritz UTF-16LE sequences
+    cleaned = decodeRitzUtf16(cleaned);
+    // Trim and collapse whitespace
+    return cleaned.trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Parses the embedded HTML table from Ritz data field
+ */
+function parseRitzHtml(htmlStr) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlStr, 'text/html');
+    const rows = doc.querySelectorAll('tr');
+    const result = [];
+    
+    rows.forEach(tr => {
+        const cells = tr.querySelectorAll('td');
+        const rowData = [];
+        cells.forEach(td => {
+            rowData.push(cleanCell(td.textContent));
+        });
+        // Skip completely empty rows
+        if (rowData.some(c => c !== '')) {
+            result.push(rowData);
         }
+    });
+    
+    return result;
+}
 
-        // ✅ Read file with correct encoding
-        function readFileWithEncoding(file, encoding, callback) {
-            const reader = new FileReader();
-            
-            if (encoding === 'auto') {
-                // First read as ArrayBuffer to detect encoding
-                const bufReader = new FileReader();
-                bufReader.onload = (e) => {
-                    const detected = detectArabicEncoding(e.target.result);
-                    document.getElementById('encoding').value = detected;
-                    document.getElementById('previewLabel').textContent = `✅ تم الكشف التلقائي: ${detected}`;
-                    
-                    // Re-read with detected encoding
-                    const textReader = new FileReader();
-                    textReader.onload = (evt) => callback(evt.target.result);
-                    textReader.readAsText(file, detected);
-                };
-                bufReader.readAsArrayBuffer(file);
-            } else {
-                reader.onload = (evt) => callback(evt.target.result);
-                reader.readAsText(file, encoding);
-            }
+document.getElementById('convertBtn').addEventListener('click', () => {
+    const status = document.getElementById('status');
+    const raw = document.getElementById('jsonInput').value.trim();
+    
+    if (!raw) {
+        status.textContent = '❌ يرجى لصق بيانات JSON أولاً';
+        status.style.color = '#dc2626';
+        return;
+    }
+    
+    try {
+        if (typeof XLSX === 'undefined') throw new Error('فشل تحميل مكتبة SheetJS');
+        
+        // Step 1: Parse outer JSON
+        let outerJson;
+        try {
+            outerJson = JSON.parse(raw);
+        } catch {
+            throw new Error('JSON الخارجي غير صالح. تأكد من نسخ كامل كائن Ritz.');
         }
-
-        const csvInput = document.getElementById('csvInput');
-        const convertBtn = document.getElementById('convertBtn');
-        const statusDiv = document.getElementById('status');
-        const fileNameInput = document.getElementById('fileName');
-        const fileInput = document.getElementById('fileInput');
-        const encodingSelect = document.getElementById('encoding');
-        const previewLabel = document.getElementById('previewLabel');
-
-        csvInput.addEventListener('click', () => {
-            if (csvInput.value.trim() === '') fileInput.click();
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            readFileWithEncoding(file, encodingSelect.value, (text) => {
-                csvInput.value = text;
-                statusDiv.textContent = `✅ تم تحميل "${file.name}"`;
-                statusDiv.style.color = '#16a34a';
-            });
-        });
-
-        // Re-read when encoding is manually changed
-        encodingSelect.addEventListener('change', () => {
-            const file = fileInput.files[0];
-            if (file) {
-                readFileWithEncoding(file, encodingSelect.value, (text) => {
-                    csvInput.value = text;
-                    previewLabel.textContent = `🔄 إعادة القراءة بترميز: ${encodingSelect.value}`;
-                });
-            }
-        });
-
-        csvInput.addEventListener('dragover', (e) => { e.preventDefault(); csvInput.style.borderColor = '#2563eb'; });
-        csvInput.addEventListener('dragleave', () => { csvInput.style.borderColor = '#cbd5e1'; });
-        csvInput.addEventListener('drop', (e) => {
-            e.preventDefault();
-            csvInput.style.borderColor = '#cbd5e1';
-            const file = e.dataTransfer.files[0];
-            if (file) {
-                readFileWithEncoding(file, encodingSelect.value, (text) => {
-                    csvInput.value = text;
-                    statusDiv.textContent = `✅ تم إسقاط "${file.name}"`;
-                    statusDiv.style.color = '#16a34a';
-                });
-            }
-        });
-
-        convertBtn.addEventListener('click', () => {
-            const raw = csvInput.value.trim();
-            if (!raw) {
-                statusDiv.textContent = '❌ يرجى لصق بيانات CSV أو رفع ملف أولاً.';
-                statusDiv.style.color = '#dc2626';
-                return;
-            }
-            try {
-                if (typeof XLSX === 'undefined') throw new Error('فشل تحميل مكتبة SheetJS. تحقق من اتصال الإنترنت.');
-                
-                const parsedData = parseCSV(raw);
-                if (parsedData.length === 0) throw new Error('لا توجد بيانات صالحة في CSV.');
-
-                const workbook = XLSX.utils.book_new();
-                const worksheet = XLSX.utils.aoa_to_sheet(parsedData);
-                XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-                
-                const filename = fileNameInput.value.endsWith('.xls') ? fileNameInput.value : fileNameInput.value + '.xls';
-                XLSX.writeFile(workbook, filename);
-                
-                statusDiv.textContent = `✅ نجاح! جاري تنزيل ${filename}...`;
-                statusDiv.style.color = '#16a34a';
-            } catch (err) {
-                statusDiv.textContent = `❌ خطأ: ${err.message}`;
-                statusDiv.style.color = '#dc2626';
-            }
-        });
-    </script>
+        
+        // Step 2: Parse inner data field (it's a stringified JSON)
+        if (!outerJson.data) throw new Error('الحقل "data" مفقود من JSON');
+        
+        let innerData;
+        try {
+            innerData = JSON.parse(outerJson.data);
+        } catch {
+            throw new Error('الحقل "data" ليس JSON صالحاً');
+        }
+        
+        // Step 3: Extract and parse the embedded HTML table
+        if (!innerData.grh) throw new Error('الحقل "grh" (HTML) مفقود');
+        
+        const parsedRows = parseRitzHtml(innerData.grh);
+        
+        if (parsedRows.length === 0) {
+            throw new Error('لم يتم العثور على بيانات صالحة في الجدول المضمن');
+        }
+        
+        // Step 4: Build XLS
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(parsedRows);
+        
+        // Set RTL direction on the worksheet
+        ws['!rtl'] = true;
+        
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        
+        const filename = document.getElementById('fileName').value.endsWith('.xls')
+            ? document.getElementById('fileName').value
+            : document.getElementById('fileName').value + '.xls';
+            
+        XLSX.writeFile(wb, filename);
+        
+        status.textContent = `✅ نجح! تم استخراج ${parsedRows.length} صف وتنزيل ${filename}`;
+        status.style.color = '#16a34a';
+        
+    } catch (err) {
+        status.textContent = `❌ خطأ: ${err.message}`;
+        status.style.color = '#dc2626';
+        console.error(err);
+    }
+});
+</script>
 </body>
 </html>
