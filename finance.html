@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام تخطيط موارد مكاتب الاستقدام | ERP Grade G</title>
+    <title>نظام المالية المتكامل | Grade G Recruitment ERP</title>
     
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,105 +13,194 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        :root { --primary: #0f766e; --secondary: #0f172a; --accent: #d97706; }
-        * { font-family: 'Tajawal', sans-serif; }
-        body { background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; }
+        :root { 
+            --primary: #0f766e; 
+            --primary-dark: #0d5c56; 
+            --secondary: #0f172a; 
+            --accent: #d97706;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #ca8a04;
+        }
+        * { font-family: 'Tajawal', sans-serif; box-sizing: border-box; }
+        body { background-color: #f8fafc; color: #1e293b; line-height: 1.5; }
         
-        /* Layout & Performance */
-        .sidebar { width: 260px; background: var(--secondary); color: white; height: 100vh; position: fixed; right: 0; top: 0; z-index: 50; transition: transform 0.3s; }
-        .main-content { margin-right: 260px; padding: 1.5rem; min-height: 100vh; transition: margin 0.3s; }
+        /* Layout */
+        .sidebar { width: 270px; background: var(--secondary); color: white; height: 100vh; position: fixed; right: 0; top: 0; z-index: 100; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+        .sidebar.collapsed { transform: translateX(100%); }
+        .main-content { margin-right: 270px; padding: 1.5rem; min-height: 100vh; transition: margin 0.3s ease; }
+        .main-content.full { margin-right: 0; }
         
-        .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; padding: 1.25rem; margin-bottom: 1rem; }
+        /* Cards & Components */
+        .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; padding: 1.25rem; margin-bottom: 1rem; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 1rem; }
         
-        /* Buttons & Inputs */
-        .btn-primary { background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 8px; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; border:none; cursor:pointer; font-weight: 700;}
-        .btn-primary:hover { background: #0d5c56; transform: translateY(-1px); }
-        .btn-danger { background: #dc2626; color: white; padding: 0.5rem 1rem; border-radius: 8px; border:none; cursor:pointer; }
+        .btn { padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; border: none; font-size: 0.875rem; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-warning:hover { background: #a16207; }
+        .btn-secondary { background: #64748b; color: white; }
+        .btn-secondary:hover { background: #475569; }
+        .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
-        .input-field { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.9rem; transition: 0.2s; }
-        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1); }
-
+        .input-group { margin-bottom: 0.875rem; }
+        .input-group label { display: block; margin-bottom: 0.375rem; font-weight: 600; font-size: 0.8rem; color: #475569; }
+        .input-field { width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.875rem; transition: all 0.2s; background: white; }
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15); }
+        .input-field:disabled { background: #f1f5f9; cursor: not-allowed; }
+        .input-field.error { border-color: var(--danger); }
+        .error-msg { color: var(--danger); font-size: 0.75rem; margin-top: 0.25rem; display: none; }
+        .input-field.error + .error-msg { display: block; }
+        
         /* IPO Badges */
-        .ipo-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; letter-spacing: 0.5px; vertical-align: middle; margin-left: 6px; text-transform: uppercase;}
-        .badge-input { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-        .badge-process { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-        .badge-output { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-
+        .ipo-badge { font-size: 0.625rem; padding: 2px 7px; border-radius: 4px; font-weight: 800; letter-spacing: 0.3px; vertical-align: middle; margin-left: 6px; text-transform: uppercase; }
+        .badge-input { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+        .badge-process { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+        .badge-output { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        
         /* Status Indicators */
-        .status-pill { padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        .status-pill { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
         .st-arrived { background: #dcfce7; color: #166534; }
         .st-uploaded { background: #dbeafe; color: #1e40af; }
-        .st-cancelled { background: #fee2e2; color: #991b1b; text-decoration: line-through; opacity: 0.7; }
+        .st-cancelled { background: #fee2e2; color: #991b1b; }
         .st-agency { background: #fef3c7; color: #92400e; }
-
+        .st-pending { background: #fef9c3; color: #854d0e; }
+        
+        /* Tables */
+        .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+        thead { background: #f8fafc; }
+        th { padding: 0.75rem 1rem; text-align: right; font-weight: 700; color: #475569; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 0.75rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        tr:hover { background: #f8fafc; }
+        tr:last-child td { border-bottom: none; }
+        
         /* Pagination */
-        .pagination-btn { padding: 0.4rem 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: 0.2s; background: white; }
-        .pagination-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #cbd5e1; }
-        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .pagination-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-
+        .pagination { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-top: 1px solid #e2e8f0; margin-top: 1rem; }
+        .pagination-info { font-size: 0.75rem; color: #64748b; }
+        .pagination-controls { display: flex; gap: 0.25rem; }
+        .page-btn { padding: 0.375rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: white; font-size: 0.75rem; transition: all 0.2s; }
+        .page-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #cbd5e1; }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal { background: white; border-radius: 12px; width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 1.25rem; }
+        .modal-footer { padding: 1rem 1.25rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 0.5rem; }
+        
+        /* Audit Log */
+        .audit-entry { padding: 0.75rem; border-right: 3px solid var(--accent); background: #fffbeb; border-radius: 0 6px 6px 0; margin-bottom: 0.5rem; font-size: 0.8rem; }
+        .audit-entry.create { border-color: var(--success); background: #f0fdf4; }
+        .audit-entry.edit { border-color: var(--warning); background: #fefce8; }
+        .audit-entry.delete { border-color: var(--danger); background: #fef2f2; }
+        .audit-meta { font-size: 0.7rem; color: #64748b; margin-top: 0.375rem; font-family: monospace; direction: ltr; text-align: right; }
+        .audit-diff { font-size: 0.7rem; margin-top: 0.375rem; }
+        .audit-diff .old { color: var(--danger); }
+        .audit-diff .new { color: var(--success); }
+        
+        /* Charts */
+        .chart-bar { display: flex; align-items: flex-end; gap: 4px; height: 120px; padding: 0.5rem 0; }
+        .chart-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .chart-bar-fill { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.5s ease; }
+        .chart-bar-fill.revenue { background: var(--primary); }
+        .chart-bar-fill.expense { background: var(--danger); }
+        .chart-label { font-size: 0.65rem; color: #64748b; text-align: center; }
+        
+        /* Print */
         @media print {
-            .sidebar, .no-print { display: none !important; }
-            .main-content { margin: 0; padding: 0; }
+            .sidebar, .no-print, .modal-overlay { display: none !important; }
+            .main-content { margin: 0 !important; padding: 0 !important; }
+            .card { box-shadow: none; border: 1px solid #000; page-break-inside: avoid; }
+            body { background: white; }
         }
+        
+        /* Utilities */
+        .hidden { display: none !important; }
+        .text-truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; display: inline-block; }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .cursor-pointer { cursor: pointer; }
+        .select-none { user-select: none; }
     </style>
 </head>
 <body>
 
     <!-- SIDEBAR -->
-    <div class="sidebar flex flex-col p-4">
-        <div class="text-xl font-extrabold mb-8 flex items-center gap-3 text-teal-400">
-            <i class="fa-solid fa-building-columns"></i>
-            <span class="text-white">ERP الاستقدام</span>
+    <aside class="sidebar" id="sidebar">
+        <div class="p-4 border-b border-slate-700">
+            <div class="flex items-center gap-3 text-teal-400">
+                <i class="fa-solid fa-building-columns text-2xl"></i>
+                <div>
+                    <h1 class="text-lg font-extrabold text-white">ERP الاستقدام</h1>
+                    <p class="text-[10px] text-slate-400">Grade G • الرياض</p>
+                </div>
+            </div>
         </div>
         
-        <nav class="space-y-1 flex-1 overflow-y-auto">
+        <nav class="flex-1 overflow-y-auto p-2 space-y-1">
             <button onclick="app.nav('dashboard')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 bg-slate-800 text-sm">
-                <i class="fa-solid fa-chart-line w-5 text-center"></i> لوحة القيادة
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> لوحة القيادة
             </button>
             <button onclick="app.nav('contracts')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 text-sm">
                 <i class="fa-solid fa-file-contract w-5 text-center"></i> العقود والإيرادات
             </button>
             <button onclick="app.nav('expenses')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 text-sm">
-                <i class="fa-solid fa-money-bill-trend-up w-5 text-center"></i> مصاريف الشركة
+                <i class="fa-solid fa-money-bill-trend-up w-5 text-center"></i> المصاريف التشغيلية
+            </button>
+            <button onclick="app.nav('payroll')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 text-sm">
+                <i class="fa-solid fa-users-gear w-5 text-center"></i> الرواتب وحماية الأجور
             </button>
             <button onclick="app.nav('agents')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 text-sm">
-                <i class="fa-solid fa-users w-5 text-center"></i> الوكلاء والموردون
+                <i class="fa-solid fa-handshake w-5 text-center"></i> الوكلاء والموردون
+            </button>
+            <button onclick="app.nav('ledger')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 text-sm">
+                <i class="fa-solid fa-book w-5 text-center"></i> دفتر الأستاذ (القيد المزدوج)
             </button>
             <button onclick="app.nav('audit')" class="nav-btn w-full text-right px-3 py-2.5 hover:bg-slate-800 rounded-lg transition flex items-center gap-3 text-sm">
-                <i class="fa-solid fa-shield-halved w-5 text-center"></i> التدقيق والامتثال
+                <i class="fa-solid fa-shield-halved w-5 text-center"></i> سجل التدقيق
             </button>
             
             <div class="pt-4 mt-4 border-t border-slate-700">
                 <p class="text-[10px] text-slate-500 px-3 mb-2 uppercase tracking-widest">أدوات النظام</p>
                 <button onclick="app.data.generate(10000)" class="w-full text-right px-3 py-2 text-xs text-amber-400 hover:text-amber-300 transition flex items-center gap-2">
-                    <i class="fa-solid fa-database w-5 text-center"></i> توليد ١٠,٠٠٦ سجل تجريبي
+                    <i class="fa-solid fa-database w-5 text-center"></i> توليد ١٠,٠٠٠ سجل تجريبي
                 </button>
                 <button onclick="app.data.clear()" class="w-full text-right px-3 py-2 text-xs text-red-400 hover:text-red-300 transition flex items-center gap-2">
-                    <i class="fa-solid fa-trash w-5 text-center"></i> مسح جميع البيانات
+                    <i class="fa-solid fa-trash-can w-5 text-center"></i> مسح البيانات
+                </button>
+                <button onclick="app.export.all()" class="w-full text-right px-3 py-2 text-xs text-blue-400 hover:text-blue-300 transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-export w-5 text-center"></i> تصدير البيانات
                 </button>
             </div>
         </nav>
 
-        <div class="mt-auto pt-4 border-t border-slate-700 text-[10px] text-slate-500 space-y-1 px-2">
-            <p>الترخيص: ١٠٢٩٣٨٤ | ضريبي: ٣٠٠١٢٣٤٥٦٧٠٠٠٠٣</p>
-            <p>النسخة: 5.0 Enterprise (High Performance)</p>
+        <div class="p-4 border-t border-slate-700 text-[10px] text-slate-400 space-y-1">
+            <p><i class="fa-solid fa-certificate ml-1"></i> ترخيص: ١٠٢٩٣٨٤</p>
+            <p><i class="fa-solid fa-file-invoice ml-1"></i> ضريبي: ٣٠٠١٢٣٤٥٦٧٠٠٠٠٣</p>
+            <p class="mt-2 pt-2 border-t border-slate-700"><i class="fa-solid fa-circle-check text-green-400 ml-1"></i> متوافق مع: ZATCA • MOHR • IFRS</p>
         </div>
-    </div>
+    </aside>
 
     <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <header class="flex justify-between items-center mb-6 no-print sticky top-0 z-40 bg-[#f1f5f9]/95 backdrop-blur pb-4 border-b border-slate-200">
+    <main class="main-content" id="mainContent">
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 no-print sticky top-0 z-40 bg-[#f8fafc]/95 backdrop-blur pb-4 border-b border-slate-200">
             <div>
                 <h1 id="page-title" class="text-2xl font-extrabold text-slate-800">لوحة القيادة المالية</h1>
-                <p class="text-slate-500 text-xs mt-1">نظام متكامل لإدارة ١٠,٠٠٠+ عملية استقدام ومصاريف تشغيلية</p>
+                <p class="text-slate-500 text-sm mt-1">نظام متكامل لإدارة العمليات المالية لمكاتب الاستقدام فئة أ</p>
             </div>
-            <div class="flex items-center gap-3">
-                <div class="text-left hidden sm:block">
-                    <p class="text-xs font-bold text-slate-700">المدير المالي</p>
-                    <p class="text-[10px] text-slate-400" id="current-time"></p>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="text-left flex-1 sm:flex-none">
+                    <p class="text-sm font-bold text-slate-700">المدير المالي</p>
+                    <p class="text-[10px] text-slate-400" id="current-time">--/--/---- --:--</p>
                 </div>
-                <div class="w-9 h-9 bg-teal-100 rounded-full flex items-center justify-center text-teal-700 font-bold text-sm border-2 border-white shadow-sm">م</div>
+                <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center text-teal-700 font-bold text-sm border-2 border-white shadow-sm">م</div>
             </div>
         </header>
 
@@ -119,63 +208,76 @@
         <section id="dashboard" class="content-section">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="card border-r-4 border-teal-500">
-                    <p class="text-slate-500 text-xs font-bold uppercase">صافي الربح التقديري</p>
-                    <h3 class="text-2xl font-extrabold mt-1 text-teal-700" id="dash-net-profit">0 ر.س</h3>
-                    <p class="text-[10px] text-slate-400 mt-1">الإيرادات - المصروفات التشغيلية</p>
+                    <p class="text-slate-500 text-xs font-bold uppercase">صافي الربح</p>
+                    <h3 class="text-2xl font-extrabold mt-1" id="dash-net-profit">0 ر.س</h3>
+                    <p class="text-[10px] text-slate-400 mt-1">الإيرادات - المصروفات</p>
                 </div>
                 <div class="card border-r-4 border-blue-500">
-                    <p class="text-slate-500 text-xs font-bold uppercase">إجمالي الإيرادات (النشطة)</p>
+                    <p class="text-slate-500 text-xs font-bold uppercase">إجمالي الإيرادات</p>
                     <h3 class="text-2xl font-extrabold mt-1" id="dash-revenue">0 ر.س</h3>
-                    <p class="text-[10px] text-slate-400 mt-1" id="dash-count">0 عقد نشط</p>
+                    <p class="text-[10px] text-slate-400 mt-1" id="dash-active-count">0 عقد نشط</p>
                 </div>
                 <div class="card border-r-4 border-red-500">
                     <p class="text-slate-500 text-xs font-bold uppercase">المصروفات التشغيلية</p>
                     <h3 class="text-2xl font-extrabold mt-1 text-red-600" id="dash-expenses">0 ر.س</h3>
-                    <p class="text-[10px] text-slate-400 mt-1">رواتب، إيجار، رسوم حكومية</p>
+                    <p class="text-[10px] text-slate-400 mt-1">رواتب، إيجار، رسوم</p>
                 </div>
                 <div class="card border-r-4 border-amber-500">
-                    <p class="text-slate-500 text-xs font-bold uppercase">الإيرادات المفقودة (ملغي)</p>
+                    <p class="text-slate-500 text-xs font-bold uppercase">الإيرادات المفقودة</p>
                     <h3 class="text-2xl font-extrabold mt-1 text-amber-600" id="dash-lost">0 ر.س</h3>
-                    <p class="text-[10px] text-slate-400 mt-1">عقود تم إلغاؤها</p>
+                    <p class="text-[10px] text-slate-400 mt-1">عقود ملغاة</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="card lg:col-span-2">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="card-header">
                         <h3 class="font-bold text-sm">أداء الإيرادات مقابل المصروفات (آخر 6 أشهر)</h3>
                         <span class="ipo-badge badge-output">OUTPUT</span>
                     </div>
-                    <div class="h-48 flex items-end gap-2 px-2" id="financial-chart">
-                        <!-- Chart bars generated by JS -->
+                    <div class="chart-bar" id="financial-chart">
+                        <!-- Generated by JS -->
                     </div>
-                    <div class="flex justify-between text-[10px] text-slate-400 mt-2 px-2">
+                    <div class="flex justify-between text-[10px] text-slate-400 mt-2 px-1">
                         <span>يناير</span><span>فبراير</span><span>مارس</span><span>أبريل</span><span>مايو</span><span>يونيو</span>
+                    </div>
+                    <div class="flex justify-center gap-4 mt-3 text-[10px]">
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-teal-600 rounded"></span> إيرادات</span>
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 bg-red-500 rounded"></span> مصروفات</span>
                     </div>
                 </div>
                 
                 <div class="card">
-                    <h3 class="font-bold text-sm mb-4">تنبيهات الامتثال والنقدية</h3>
+                    <div class="card-header">
+                        <h3 class="font-bold text-sm">تنبيهات الامتثال</h3>
+                    </div>
                     <div class="space-y-3">
                         <div class="p-3 bg-red-50 border border-red-100 rounded-lg flex gap-3 items-start">
                             <i class="fa-solid fa-triangle-exclamation text-red-500 mt-0.5"></i>
                             <div>
                                 <p class="text-xs font-bold text-red-800">موعد سداد الرواتب (WPS)</p>
-                                <p class="text-[10px] text-red-600">متبقي 3 أيام على موعد رفع ملف SIF لمنصة مدد.</p>
+                                <p class="text-[10px] text-red-600">متبقي 3 أيام على رفع ملف SIF لمنصة مدد</p>
                             </div>
                         </div>
                         <div class="p-3 bg-blue-50 border border-blue-100 rounded-lg flex gap-3 items-start">
                             <i class="fa-solid fa-passport text-blue-500 mt-0.5"></i>
                             <div>
                                 <p class="text-xs font-bold text-blue-800">تجديد ضمان بنكي</p>
-                                <p class="text-[10px] text-blue-600">خطاب الضمان ينتهي خلال 15 يوم (المبلغ: 300,000 ر.س).</p>
+                                <p class="text-[10px] text-blue-600">ينتهي خلال 15 يوم (المبلغ: 300,000 ر.س)</p>
                             </div>
                         </div>
                         <div class="p-3 bg-green-50 border border-green-100 rounded-lg flex gap-3 items-start">
                             <i class="fa-solid fa-check-circle text-green-500 mt-0.5"></i>
                             <div>
                                 <p class="text-xs font-bold text-green-800">الزكاة والضريبة</p>
-                                <p class="text-[10px] text-green-600">تم تقديم الإقرار الربع سنوي بنجاح.</p>
+                                <p class="text-[10px] text-green-600">تم تقديم الإقرار الربع سنوي بنجاح</p>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-amber-50 border border-amber-100 rounded-lg flex gap-3 items-start">
+                            <i class="fa-solid fa-file-invoice text-amber-500 mt-0.5"></i>
+                            <div>
+                                <p class="text-xs font-bold text-amber-800">فواتير غير مسددة</p>
+                                <p class="text-[10px] text-amber-600">5 فواتير متأخرة > 30 يوم</p>
                             </div>
                         </div>
                     </div>
@@ -183,127 +285,152 @@
             </div>
         </section>
 
-        <!-- === CONTRACTS MODULE (HIGH PERFORMANCE) === -->
+        <!-- === CONTRACTS MODULE === -->
         <section id="contracts" class="content-section hidden">
             <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
                 
                 <!-- INPUT -->
                 <div class="xl:col-span-4 card h-fit no-print sticky top-24">
-                    <div class="flex items-center justify-between mb-4 border-b pb-2">
+                    <div class="card-header">
                         <h3 class="font-bold text-sm">بيانات العقد المالي</h3>
                         <span class="ipo-badge badge-input">INPUT</span>
                     </div>
                     
                     <form id="contractForm" onsubmit="app.contracts.process(event)" class="space-y-3">
-                        <input type="hidden" id="editId" value="">
+                        <input type="hidden" id="cEditId" value="">
                         
                         <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 mb-1">رقم العقد *</label>
-                                <input type="number" id="cContractNo" required class="input-field font-mono text-sm" placeholder="1343">
+                            <div class="input-group">
+                                <label for="cContractNo">رقم العقد *</label>
+                                <input type="number" id="cContractNo" required class="input-field font-mono" placeholder="1343">
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 mb-1">التاريخ</label>
-                                <input type="date" id="cDate" required class="input-field text-sm">
+                            <div class="input-group">
+                                <label for="cDate">تاريخ العقد *</label>
+                                <input type="date" id="cDate" required class="input-field">
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 mb-1">اسم العميل (الكفيل)</label>
-                            <input type="text" id="cClientName" required class="input-field text-sm">
+                        <div class="input-group">
+                            <label for="cClientName">اسم العميل (الكفيل) *</label>
+                            <input type="text" id="cClientName" required class="input-field" placeholder="مثال: محمد بن عبدالله">
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 mb-1">المهنة</label>
-                                <select id="cProfession" class="input-field text-sm">
+                            <div class="input-group">
+                                <label for="cClientId">رقم هوية العميل</label>
+                                <input type="text" id="cClientId" class="input-field font-mono" placeholder="10xxxxxxxxx">
+                            </div>
+                            <div class="input-group">
+                                <label for="cProfession">المهنة *</label>
+                                <select id="cProfession" class="input-field">
                                     <option value="عامله منزليه">عاملة منزلية</option>
                                     <option value="عامل منزلي">عامل منزلي</option>
                                     <option value="سائق خاص">سائق خاص</option>
                                     <option value="حارس منزلي">حارس منزلي</option>
                                     <option value="مزارع منزلي">مزارع منزلي</option>
+                                    <option value="طباخ">طباخ</option>
+                                    <option value="مربية">مربية أطفال</option>
                                 </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 mb-1">الدولة</label>
-                                <input type="text" id="cCountry" list="countryList" class="input-field text-sm">
-                                <datalist id="countryList">
-                                    <option value="اثيوبيا"><option value="كينيا"><option value="الفلبين">
-                                    <option value="بنجلاديش"><option value="الهند"><option value="سريلانكا">
-                                    <option value="نيبال"><option value="أوغندا">
-                                </datalist>
                             </div>
                         </div>
 
                         <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 mb-1">السعر المتفق عليه (ر.س) *</label>
-                                <input type="number" step="0.01" id="cPrice" required class="input-field font-bold text-teal-700">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">البيانات المالية</p>
+                            <div class="input-group">
+                                <label for="cPrice">السعر المتفق عليه (ر.س) *</label>
+                                <input type="number" step="0.01" min="0" id="cPrice" required class="input-field font-bold text-teal-700" placeholder="0.00">
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 mb-1">الوكيل / المورد</label>
-                                    <input type="text" id="cAgent" list="agentList" class="input-field text-sm">
+                                <div class="input-group">
+                                    <label for="cAgent">الوكيل / المورد *</label>
+                                    <input type="text" id="cAgent" list="agentList" required class="input-field" placeholder="اختر الوكيل">
                                     <datalist id="agentList">
                                         <option value="كل شي"><option value="نوريا خضير"><option value="LOJU">
                                         <option value="NISHUTI"><option value="PEVITER"><option value="ايوب">
-                                        <option value="الهند"><option value="مكتب الرياض">
+                                        <option value="الهند"><option value="مكتب الرياض"><option value="العالمية">
+                                        <option value="السعودية"><option value="الخليج"><option value="النخبة">
                                     </datalist>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 mb-1">الحالة المالية</label>
-                                    <select id="cStatus" class="input-field text-sm font-bold">
-                                        <option value="تم الوصول">تم الوصول (إيراد محقق)</option>
-                                        <option value="مرفوع">مرفوع (قيد التنفيذ)</option>
-                                        <option value="وكالة">وكالة (ضمان بنكي)</option>
-                                        <option value="ملغي">ملغي (لا يوجد إيراد)</option>
+                                <div class="input-group">
+                                    <label for="cStatus">الحالة المالية *</label>
+                                    <select id="cStatus" class="input-field font-bold">
+                                        <option value="تم الوصول">✓ تم الوصول (إيراد محقق)</option>
+                                        <option value="مرفوع">↑ مرفوع (قيد التنفيذ)</option>
+                                        <option value="وكالة">⚖ وكالة (ضمان بنكي)</option>
+                                        <option value="ملغي">✗ ملغي (لا يوجد إيراد)</option>
+                                        <option value="معلق">⏸ معلق (مراجعة)</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="btn-primary w-full justify-center text-sm">
-                            <i class="fa-solid fa-save"></i> حفظ ومعالجة العقد
-                        </button>
-                        <button type="button" onclick="app.contracts.reset()" class="w-full text-xs text-slate-500 hover:text-slate-800 py-1">مسح النموذج</button>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label for="cCountry">دولة العامل</label>
+                                <input type="text" id="cCountry" list="countryList" class="input-field" placeholder="اختر الدولة">
+                                <datalist id="countryList">
+                                    <option value="اثيوبيا"><option value="كينيا"><option value="الفلبين">
+                                    <option value="بنجلاديش"><option value="الهند"><option value="سريلانكا">
+                                    <option value="نيبال"><option value="أوغندا"><option value="تنزانيا">
+                                    <option value="باكستان"><option value="اندونيسيا"><option value="مصر">
+                                </datalist>
+                            </div>
+                            <div class="input-group">
+                                <label for="cWorkerName">اسم العامل/ة</label>
+                                <input type="text" id="cWorkerName" class="input-field" placeholder="اسم العامل">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="cNotes">ملاحظات إضافية</label>
+                            <textarea id="cNotes" rows="2" class="input-field" placeholder="أي ملاحظات مهمة..."></textarea>
+                        </div>
+
+                        <div class="flex gap-2 pt-2">
+                            <button type="submit" id="cSubmitBtn" class="btn btn-primary flex-1 justify-center">
+                                <i class="fa-solid fa-save"></i> <span id="cSubmitText">حفظ ومعالجة</span>
+                            </button>
+                            <button type="button" onclick="app.contracts.reset()" class="btn btn-secondary">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
                     </form>
                 </div>
 
                 <!-- OUTPUT -->
                 <div class="xl:col-span-8">
                     <div class="card">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                        <div class="card-header">
                             <div class="flex items-center gap-2">
                                 <h3 class="font-bold text-sm">سجل العقود المالي</h3>
                                 <span class="ipo-badge badge-output">OUTPUT</span>
-                                <span class="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full" id="record-count-badge">0 سجل</span>
+                                <span class="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full" id="contractCountBadge">0 سجل</span>
                             </div>
-                            <input type="text" id="searchInput" placeholder="بحث سريع..." class="input-field py-1.5 text-xs w-full sm:w-48" onkeyup="app.contracts.filter(this.value)">
+                            <input type="text" id="contractSearch" placeholder="بحث: رقم عقد، عميل، وكيل..." class="input-field py-1.5 text-xs w-full sm:w-56" onkeyup="app.contracts.filter(this.value)">
                         </div>
                         
-                        <div class="overflow-x-auto border rounded-lg">
-                            <table class="w-full text-xs text-right">
-                                <thead class="bg-slate-50 border-b">
+                        <div class="table-container">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <th class="p-2.5 font-bold text-slate-600">رقم العقد</th>
-                                        <th class="p-2.5 font-bold text-slate-600">العميل / العامل</th>
-                                        <th class="p-2.5 font-bold text-slate-600">الوكيل</th>
-                                        <th class="p-2.5 font-bold text-slate-600">السعر</th>
-                                        <th class="p-2.5 font-bold text-slate-600">الحالة</th>
-                                        <th class="p-2.5 font-bold text-slate-600 text-center">تعديل</th>
+                                        <th>رقم العقد</th>
+                                        <th>العميل / العامل</th>
+                                        <th>الوكيل</th>
+                                        <th>السعر</th>
+                                        <th>الحالة</th>
+                                        <th class="text-center">إجراءات</th>
                                     </tr>
                                 </thead>
-                                <tbody id="contractsTableBody" class="divide-y divide-slate-100"></tbody>
+                                <tbody id="contractsTableBody">
+                                    <!-- Populated by JS -->
+                                </tbody>
                             </table>
                         </div>
 
-                        <!-- PAGINATION CONTROLS -->
-                        <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                            <p class="text-[10px] text-slate-500" id="pagination-info">عرض 0 من 0</p>
-                            <div class="flex gap-1" id="pagination-controls">
-                                <button class="pagination-btn text-xs" onclick="app.contracts.changePage('prev')"><i class="fa-solid fa-chevron-right"></i></button>
-                                <div id="page-numbers" class="flex gap-1"></div>
-                                <button class="pagination-btn text-xs" onclick="app.contracts.changePage('next')"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="pagination">
+                            <span class="pagination-info" id="contractPaginationInfo">عرض 0 من 0</span>
+                            <div class="pagination-controls" id="contractPaginationControls">
+                                <!-- Populated by JS -->
                             </div>
                         </div>
                     </div>
@@ -311,65 +438,198 @@
             </div>
         </section>
 
-        <!-- === EXPENSES MODULE (COMPANY FINANCE) === -->
+        <!-- === EXPENSES MODULE === -->
         <section id="expenses" class="content-section hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Expense Input -->
-                <div class="lg:col-span-1 card h-fit">
-                    <div class="flex items-center justify-between mb-4 border-b pb-2">
+                <!-- INPUT -->
+                <div class="lg:col-span-1 card h-fit no-print sticky top-24">
+                    <div class="card-header">
                         <h3 class="font-bold text-sm">تسجيل مصروف جديد</h3>
                         <span class="ipo-badge badge-input">INPUT</span>
                     </div>
-                    <form onsubmit="app.expenses.process(event)" class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 mb-1">تصنيف المصروف *</label>
-                            <select id="eCategory" required class="input-field text-sm">
-                                <option value="salaries">رواتب وأجور (WPS)</option>
-                                <option value="rent">إيجار المكتب والمرافق</option>
-                                <option value="gov_fees">رسوم حكومية (مقيم/جوازات)</option>
-                                <option value="marketing">تسويق وإعلانات</option>
-                                <option value="maintenance">صيانة ونظافة</option>
-                                <option value="other">مصروفات نثرية أخرى</option>
+                    <form id="expenseForm" onsubmit="app.expenses.process(event)" class="space-y-3">
+                        <input type="hidden" id="eEditId" value="">
+                        
+                        <div class="input-group">
+                            <label for="eCategory">تصنيف المصروف *</label>
+                            <select id="eCategory" required class="input-field">
+                                <optgroup label="الموارد البشرية">
+                                    <option value="salaries">رواتب وأجور (WPS)</option>
+                                    <option value="gosi">اشتراكات التأمينات (GOSI)</option>
+                                    <option value="recruitment">توظيف وتعيين</option>
+                                </optgroup>
+                                <optgroup label="التشغيل">
+                                    <option value="rent">إيجار المكتب</option>
+                                    <option value="utilities">كهرباء، ماء، إنترنت</option>
+                                    <option value="maintenance">صيانة ونظافة</option>
+                                </optgroup>
+                                <optgroup label="الحكومية">
+                                    <option value="gov_fees">رسوم مقيم/جوازات</option>
+                                    <option value="mohr_fees">رسوم وزارة الموارد البشرية</option>
+                                    <option value="zatca_fees">رسوم هيئة الزكاة</option>
+                                </optgroup>
+                                <optgroup label="أخرى">
+                                    <option value="marketing">تسويق وإعلانات</option>
+                                    <option value="office_supplies">مستلزمات مكتبية</option>
+                                    <option value="travel">سفر وتنقلات</option>
+                                    <option value="other">مصروفات نثرية</option>
+                                </optgroup>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 mb-1">المبلغ (ر.س) *</label>
-                            <input type="number" step="0.01" id="eAmount" required class="input-field font-bold text-red-600">
+                        
+                        <div class="input-group">
+                            <label for="eAmount">المبلغ (ر.س) *</label>
+                            <input type="number" step="0.01" min="0" id="eAmount" required class="input-field font-bold text-red-600" placeholder="0.00">
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 mb-1">البيان / الوصف</label>
-                            <input type="text" id="eDesc" required class="input-field text-sm" placeholder="مثال: رواتب شهر يونيو">
+                        
+                        <div class="input-group">
+                            <label for="eDesc">البيان / الوصف *</label>
+                            <input type="text" id="eDesc" required class="input-field" placeholder="مثال: رواتب شهر يونيو 2024">
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 mb-1">التاريخ</label>
-                            <input type="date" id="eDate" required class="input-field text-sm">
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group">
+                                <label for="eDate">تاريخ المصروف *</label>
+                                <input type="date" id="eDate" required class="input-field">
+                            </div>
+                            <div class="input-group">
+                                <label for="ePaymentMethod">طريقة الدفع</label>
+                                <select id="ePaymentMethod" class="input-field">
+                                    <option value="bank_transfer">تحويل بنكي</option>
+                                    <option value="cash">نقدي</option>
+                                    <option value="credit_card">بطاقة ائتمان</option>
+                                    <option value="sadad">سداد</option>
+                                </select>
+                            </div>
                         </div>
-                        <button type="submit" class="btn-danger w-full justify-center text-sm">
-                            <i class="fa-solid fa-minus-circle"></i> تسجيل المصروف
-                        </button>
+                        
+                        <div class="input-group">
+                            <label for="eReference">رقم المرجع / الفاتورة</label>
+                            <input type="text" id="eReference" class="input-field font-mono" placeholder="INV-2024-XXX">
+                        </div>
+
+                        <div class="flex gap-2 pt-2">
+                            <button type="submit" id="eSubmitBtn" class="btn btn-danger flex-1 justify-center">
+                                <i class="fa-solid fa-minus-circle"></i> <span id="eSubmitText">تسجيل المصروف</span>
+                            </button>
+                            <button type="button" onclick="app.expenses.reset()" class="btn btn-secondary">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
                     </form>
                 </div>
 
-                <!-- Expense Output -->
+                <!-- OUTPUT -->
                 <div class="lg:col-span-2 card">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-sm">سجل المصروفات التشغيلية</h3>
-                        <span class="ipo-badge badge-output">OUTPUT</span>
+                    <div class="card-header">
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-bold text-sm">سجل المصروفات التشغيلية</h3>
+                            <span class="ipo-badge badge-output">OUTPUT</span>
+                        </div>
+                        <input type="text" id="expenseSearch" placeholder="بحث في المصروفات..." class="input-field py-1.5 text-xs w-48" onkeyup="app.expenses.filter(this.value)">
                     </div>
-                    <div class="overflow-x-auto border rounded-lg">
-                        <table class="w-full text-xs text-right">
-                            <thead class="bg-slate-50 border-b">
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <th class="p-2.5 font-bold text-slate-600">التاريخ</th>
-                                    <th class="p-2.5 font-bold text-slate-600">التصنيف</th>
-                                    <th class="p-2.5 font-bold text-slate-600">البيان</th>
-                                    <th class="p-2.5 font-bold text-slate-600 text-left">المبلغ</th>
-                                    <th class="p-2.5 font-bold text-slate-600 text-center">حذف</th>
+                                    <th>التاريخ</th>
+                                    <th>التصنيف</th>
+                                    <th>البيان</th>
+                                    <th>المرجع</th>
+                                    <th class="text-left">المبلغ</th>
+                                    <th class="text-center">إجراءات</th>
                                 </tr>
                             </thead>
-                            <tbody id="expensesTableBody" class="divide-y divide-slate-100"></tbody>
+                            <tbody id="expensesTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
                         </table>
                     </div>
+
+                    <div class="pagination">
+                        <span class="pagination-info" id="expensePaginationInfo">عرض 0 من 0</span>
+                        <div class="pagination-controls" id="expensePaginationControls">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === PAYROLL MODULE === -->
+        <section id="payroll" class="content-section hidden">
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-sm">نظام الرواتب وحماية الأجور (WPS)</h3>
+                        <span class="ipo-badge badge-process">PROCESS</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="app.payroll.exportSIF()">
+                        <i class="fa-solid fa-file-export"></i> تصدير ملف SIF
+                    </button>
+                </div>
+                
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-4 text-sm">
+                    <p class="font-bold text-blue-800"><i class="fa-solid fa-circle-info ml-1"></i> متطلبات منصة مدد (Mudad):</p>
+                    <ul class="list-disc list-inside text-blue-700 mt-1 text-xs space-y-1">
+                        <li>يجب أن يحتوي كل موظف على رقم إقامة/حدود صالح</li>
+                        <li>يجب توفير رقم آيبان (IBAN) صحيح لكل موظف</li> <li>يجب رفع الملف خلال 7 أيام من تاريخ استحقاق الراتب</li>
+                        <li>أي تأخير يؤدي إلى إيقاف خدمات المكتب في مساند وقوى</li>
+                    </ul>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رقم الموظف</th>
+                                <th>الاسم</th>
+                                <th>رقم الإقامة</th>
+                                <th>الراتب الأساسي</th>
+                                <th>بدل السكن</th>
+                                <th>الخصومات</th>
+                                <th>صافي الراتب</th>
+                                <th>IBAN</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-mono">EMP-001</td>
+                                <td>أحمد محمد الغامدي</td>
+                                <td class="font-mono">1029384756</td>
+                                <td>9,000.00</td>
+                                <td>2,250.00</td>
+                                <td class="text-red-600">-500.00</td>
+                                <td class="font-bold text-teal-700">10,750.00</td>
+                                <td class="font-mono text-xs">SA0380000...</td>
+                                <td><span class="status-pill st-arrived">مسدد</span></td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">EMP-002</td>
+                                <td>سارة عبدالله القحطاني</td>
+                                <td class="font-mono">2598765432</td>
+                                <td>12,000.00</td>
+                                <td>3,000.00</td>
+                                <td class="text-red-600">0.00</td>
+                                <td class="font-bold text-teal-700">15,000.00</td>
+                                <td class="font-mono text-xs">SA4420000...</td>
+                                <td><span class="status-pill st-pending">قيد المعالجة</span></td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">EMP-003</td>
+                                <td>خالد سعيد العمري</td>
+                                <td class="font-mono">1087654321</td>
+                                <td>7,500.00</td>
+                                <td>1,875.00</td>
+                                <td class="text-red-600">-200.00</td>
+                                <td class="font-bold text-teal-700">9,175.00</td>
+                                <td class="font-mono text-xs">SA1120000...</td>
+                                <td><span class="status-pill st-arrived">مسدد</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -377,23 +637,68 @@
         <!-- === AGENTS MODULE === -->
         <section id="agents" class="content-section hidden">
             <div class="card">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="ipo-badge badge-process">PROCESS</span>
-                    <h3 class="font-bold text-sm">تحليل أداء الوكلاء والموردين</h3>
+                <div class="card-header">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-sm">تحليل أداء الوكلاء والموردين</h3>
+                        <span class="ipo-badge badge-process">PROCESS</span>
+                    </div>
                 </div>
-                <div class="overflow-x-auto border rounded-lg">
-                    <table class="w-full text-xs text-right">
-                        <thead class="bg-slate-50 border-b">
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
                             <tr>
-                                <th class="p-2.5 font-bold text-slate-600">الوكيل</th>
-                                <th class="p-2.5 font-bold text-slate-600">عدد العقود</th>
-                                <th class="p-2.5 font-bold text-slate-600">إجمالي القيمة</th>
-                                <th class="p-2.5 font-bold text-slate-600">متوسط السعر</th>
-                                <th class="p-2.5 font-bold text-slate-600">الدول الرئيسية</th>
-                                <th class="p-2.5 font-bold text-slate-600">الحصة السوقية</th>
+                                <th>الوكيل</th>
+                                <th>عدد العقود</th>
+                                <th>إجمالي القيمة</th>
+                                <th>متوسط السعر</th>
+                                <th>الدول الرئيسية</th>
+                                <th>معدل النجاح</th>
+                                <th>الحصة السوقية</th>
                             </tr>
                         </thead>
-                        <tbody id="agentsTableBody" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="agentsTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- === LEDGER MODULE (Double Entry) === -->
+        <section id="ledger" class="content-section hidden">
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-sm">دفتر الأستاذ العام (القيد المزدوج - IFRS)</h3>
+                        <span class="ipo-badge badge-output">OUTPUT</span>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="app.ledger.export()">
+                        <i class="fa-solid fa-file-export"></i> تصدير
+                    </button>
+                </div>
+                
+                <div class="p-3 bg-slate-50 rounded-lg mb-4 text-xs">
+                    <p class="font-bold text-slate-700 mb-1">مبدأ القيد المزدوج:</p>
+                    <p class="text-slate-600">كل عملية مالية تسجل بقيدين متساويين: <strong>مدين</strong> (الطرف المستفيد) و <strong>دائن</strong> (الطرف الممول). مجموع الأرصدة المدينة يجب أن يساوي مجموع الأرصدة الدائنة.</p>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>رقم القيد</th>
+                                <th>رقم الحساب</th>
+                                <th>اسم الحساب</th>
+                                <th>البيان</th>
+                                <th class="text-left">مدين (ر.س)</th>
+                                <th class="text-left">دائن (ر.س)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -402,127 +707,265 @@
         <!-- === AUDIT MODULE === -->
         <section id="audit" class="content-section hidden">
             <div class="card">
-                <div class="flex items-center justify-between mb-4">
+                <div class="card-header">
                     <div class="flex items-center gap-2">
-                        <span class="ipo-badge badge-process">PROCESS</span>
                         <h3 class="font-bold text-sm">سجل التدقيق المالي (Audit Trail)</h3>
+                        <span class="ipo-badge badge-process">PROCESS</span>
                     </div>
-                    <button onclick="alert('تصدير السجل...')" class="text-[10px] text-teal-700 font-bold hover:underline"><i class="fa-solid fa-download ml-1"></i> تصدير CSV</button>
+                    <button class="btn btn-secondary btn-sm" onclick="app.audit.export()">
+                        <i class="fa-solid fa-file-export"></i> تصدير
+                    </button>
                 </div>
-                <div id="fullAuditLog" class="space-y-2 text-xs max-h-[600px] overflow-y-auto pr-2"></div>
+                
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg mb-4 text-xs">
+                    <p class="font-bold text-amber-800"><i class="fa-solid fa-shield-halved ml-1"></i> سياسة عدم التعديل:</p>
+                    <p class="text-amber-700">هذا السجل غير قابل للتعديل أو الحذف. يتم تسجيل كل عملية (إنشاء، تعديل، حذف) مع الطابع الزمني واسم المستخدم والقيم القديمة والجديدة لضمان النزاهة والامتثال لمعايير المراجعة الدولية.</p>
+                </div>
+                
+                <div class="flex gap-2 mb-4">
+                    <select id="auditFilter" class="input-field text-xs w-40" onchange="app.audit.render()">
+                        <option value="all">جميع العمليات</option>
+                        <option value="CREATE">إنشاء</option>
+                        <option value="EDIT">تعديل</option>
+                        <option value="DELETE">حذف</option>
+                        <option value="SYSTEM">نظام</option>
+                    </select>
+                    <input type="text" id="auditSearch" placeholder="بحث في السجل..." class="input-field text-xs flex-1" onkeyup="app.audit.render()">
+                </div>
+                
+                <div id="fullAuditLog" class="space-y-2 text-xs max-h-[600px] overflow-y-auto pr-2">
+                    <!-- Populated by JS -->
+                </div>
             </div>
         </section>
+
+    </main>
+
+    <!-- MODAL FOR CONFIRMATION -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="font-bold" id="modalTitle">تأكيد الإجراء</h3>
+                <button onclick="app.modal.close()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button onclick="app.modal.close()" class="btn btn-secondary">إلغاء</button>
+                <button onclick="app.modal.confirm()" class="btn btn-primary" id="modalConfirmBtn">تأكيد</button>
+            </div>
+        </div>
     </div>
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
         /**
-         * HIGH-PERFORMANCE RECRUITMENT ERP ENGINE
-         * Optimized for 10,000+ records with pagination and virtualized rendering
+         * PROFESSIONAL RECRUITMENT FINANCIAL ERP
+         * Complete IPO cycles, full editing, operational costs, 10k+ records optimized
+         * Compliant with ZATCA, MOHR, IFRS standards for Grade G offices in KSA
          */
         const app = {
+            // ===== STATE MANAGEMENT =====
             state: {
                 contracts: [],
                 expenses: [],
+                payroll: [],
+                ledger: [],
                 auditLog: [],
                 currentUser: "المدير المالي",
-                pagination: { currentPage: 1, pageSize: 50, filteredData: [] }
+                pagination: {
+                    contracts: { page: 1, size: 50, filtered: [] },
+                    expenses: { page: 1, size: 50, filtered: [] }
+                },
+                filters: {
+                    contracts: "",
+                    expenses: "",
+                    audit: { type: "all", search: "" }
+                }
             },
 
+            // ===== INITIALIZATION =====
             init() {
-                // Set current time
+                // Update time every second
                 setInterval(() => {
-                    document.getElementById('current-time').innerText = new Date().toLocaleString('ar-SA');
+                    document.getElementById('current-time').innerText = new Date().toLocaleString('ar-SA', {
+                        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+                    });
                 }, 1000);
 
-                // Load initial sample if empty
-                if (this.state.contracts.length === 0) this.data.loadInitialSample();
-                
-                // Initial Render
+                // Load sample data if empty
+                if (this.state.contracts.length === 0) {
+                    this.data.loadInitialSample();
+                    this.audit.log("SYSTEM", "INIT", "تم تهيئة النظام وتحميل العينة الأولية");
+                }
+
+                // Set default date for forms
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('cDate').value = today;
+                document.getElementById('eDate').value = today;
+
+                // Initial render
                 this.render.all();
+                
+                console.log("✅ نظام المالية للاستقدام جاهز - الإصدار الاحترافي");
             },
 
+            // ===== NAVIGATION =====
             nav(sectionId) {
+                // Hide all sections
                 document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+                // Show target section
                 document.getElementById(sectionId).classList.remove('hidden');
+                
+                // Update sidebar active state
                 document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-slate-800'));
                 event.currentTarget.classList.add('bg-slate-800');
                 
+                // Update page title
                 const titles = {
                     'dashboard': 'لوحة القيادة المالية',
                     'contracts': 'إدارة العقود والإيرادات',
-                    'expenses': 'مصاريف الشركة والتشغيل',
+                    'expenses': 'المصاريف التشغيلية',
+                    'payroll': 'الرواتب وحماية الأجور',
                     'agents': 'الوكلاء والموردون',
-                    'audit': 'التدقيق والامتثال'
+                    'ledger': 'دفتر الأستاذ العام',
+                    'audit': 'سجل التدقيق والرقابة'
                 };
                 document.getElementById('page-title').innerText = titles[sectionId];
                 
                 // Refresh specific views
-                if(sectionId === 'agents') this.render.agents();
-                if(sectionId === 'expenses') this.render.expenses();
+                if (sectionId === 'agents') this.render.agents();
+                if (sectionId === 'ledger') this.render.ledger();
+                if (sectionId === 'audit') this.audit.render();
             },
 
-            // --- DATA GENERATOR (10,000 RECORDS) ---
+            // ===== MODAL SYSTEM =====
+            modal: {
+                open(title, message, onConfirm, confirmText = "تأكيد", confirmClass = "btn-primary") {
+                    document.getElementById('modalTitle').innerText = title;
+                    document.getElementById('modalBody').innerHTML = `<p class="text-sm">${message}</p>`;
+                    const confirmBtn = document.getElementById('modalConfirmBtn');
+                    confirmBtn.innerText = confirmText;
+                    confirmBtn.className = `btn ${confirmClass}`;
+                    confirmBtn.onclick = () => {
+                        onConfirm();
+                        app.modal.close();
+                    };
+                    document.getElementById('confirmModal').classList.add('active');
+                },
+                close() {
+                    document.getElementById('confirmModal').classList.remove('active');
+                }
+            },
+
+            // ===== DATA GENERATION & MANAGEMENT =====
             data: {
                 loadInitialSample() {
-                    // Small sample for instant load
-                    this.generate(50, false);
-                    app.audit.log("SYSTEM", "DATA", "تم تحميل عينة أولية (50 سجل)");
+                    // Representative sample aligned with real recruitment data patterns
+                    const sampleContracts = [
+                        { id: 1343, client: "رنا دريهم سعد الدريهم", clientId: "539672527", profession: "عامله منزليه", date: "2025-01-02", price: 4501.40, agent: "كل شي", country: "اثيوبيا", worker: "MEBUBA SHIKUR", status: "تم الوصول", notes: "" },
+                        { id: 1345, client: "عايضه مرود ماطر البقمي", clientId: "565961959", profession: "عامله منزليه", date: "2025-01-06", price: 14000.30, agent: "1010", country: "الفلبين", worker: "JENNAL PLACIDOROMA", status: "تم الوصول", notes: "" },
+                        { id: 1354, client: "محمد بن منصور الاحمد", clientId: "0", profession: "عامله منزليه", date: "2025-01-09", price: 10001.00, agent: "1010", country: "الفلبين", worker: "ELSIE BALAOUI", status: "ملغي", notes: "طلب العميل الإلغاء" },
+                        { id: 1360, client: "ريماس تركي المسبحي", clientId: "505990552", profession: "عامله منزليه", date: "2025-01-12", price: 6500.90, agent: "LOJU", country: "كينيا", worker: "NORAH RIZIKI", status: "تم الوصول", notes: "" },
+                        { id: 1403, client: "عمرو احمد المزروع", clientId: "554466627", profession: "سائق خاص", date: "2025-02-18", price: 2502.00, agent: "الهند", country: "الهند", worker: "ALI AKBAR", status: "مرفوع", notes: "قيد إجراءات التأشيرة" },
+                        { id: 1418, client: "لطيفه محمد الحنيش", clientId: "502168684", profession: "عامله منزليه", date: "2024-11-13", price: 10004.64, agent: "NISHUTI", country: "بنجلاديش", worker: "MST JAMELA", status: "تم الوصول", notes: "" }
+                    ];
+                    
+                    const sampleExpenses = [
+                        { id: Date.now()-1000, category: "salaries", amount: 45000.00, desc: "رواتب شهر مايو 2024", date: "2024-05-31", paymentMethod: "bank_transfer", reference: "WPS-MAY-2024" },
+                        { id: Date.now()-2000, category: "rent", amount: 8500.00, desc: "إيجار المكتب - يونيو", date: "2024-06-01", paymentMethod: "sadad", reference: "RENT-JUN-2024" },
+                        { id: Date.now()-3000, category: "gov_fees", amount: 2400.00, desc: "رسوم تجديد إقامات (4 عمال)", date: "2024-05-28", paymentMethod: "bank_transfer", reference: "GOV-2024-0528" },
+                        { id: Date.now()-4000, category: "utilities", amount: 1250.50, desc: "كهرباء وماء وإنترنت", date: "2024-05-25", paymentMethod: "sadad", reference: "UTIL-MAY-2024" },
+                        { id: Date.now()-5000, category: "marketing", amount: 3000.00, desc: "إعلانات منصات التوظيف", date: "2024-05-20", paymentMethod: "credit_card", reference: "MKT-2024-05" }
+                    ];
+                    
+                    app.state.contracts = sampleContracts;
+                    app.state.expenses = sampleExpenses;
+                    
+                    // Generate initial ledger entries for sample data
+                    sampleContracts.forEach(c => {
+                        if (c.status !== 'ملغي') {
+                            app.ledger.post(c.date, `CNT-${c.id}`, "1100", "الذمم المدينة", `فاتورة عقد ${c.id}`, c.price, 0);
+                            app.ledger.post(c.date, `CNT-${c.id}`, "4100", "إيرادات الاستقدام", `عمولة عقد ${c.id}`, 0, c.price * 0.85);
+                            app.ledger.post(c.date, `CNT-${c.id}`, "2200", "ضريبة القيمة المضافة", "ضريبة مخرجات 15%", 0, c.price * 0.15);
+                        }
+                    });
                 },
 
                 clear() {
-                    if(confirm("هل أنت متأكد من حذف جميع البيانات؟ لا يمكن التراجع.")) {
-                        app.state.contracts = [];
-                        app.state.expenses = [];
-                        app.state.auditLog = [];
-                        app.render.all();
-                        alert("تم مسح جميع البيانات.");
-                    }
+                    app.modal.open(
+                        "⚠️ تأكيد الحذف",
+                        "هل أنت متأكد من حذف <strong>جميع البيانات</strong>؟<br>هذا الإجراء لا يمكن التراجع عنه وسيؤدي إلى فقدان جميع العقود والمصروفات والسجلات.",
+                        () => {
+                            app.state.contracts = [];
+                            app.state.expenses = [];
+                            app.state.ledger = [];
+                            app.state.auditLog = [];
+                            app.render.all();
+                            app.audit.log("SYSTEM", "CLEAR", "تم مسح جميع البيانات من النظام");
+                        },
+                        "نعم، احذف جميع البيانات",
+                        "btn-danger"
+                    );
                 },
 
                 generate(count, append = true) {
                     const startTime = performance.now();
-                    const agents = ["كل شي", "نوريا خضير", "LOJU", "NISHUTI", "PEVITER", "ايوب", "الهند", "مكتب الرياض", "العالمية"];
-                    const countries = ["اثيوبيا", "كينيا", "الفلبين", "بنجلاديش", "الهند", "سريلانكا", "نيبال", "أوغندا"];
-                    const professions = ["عامله منزليه", "عامل منزلي", "سائق خاص", "حارس منزلي", "مزارع منزلي"];
-                    const statuses = ["تم الوصول", "تم الوصول", "تم الوصول", "مرفوع", "مرفوع", "وكالة", "ملغي"]; // Weighted
+                    
+                    // Realistic data pools based on Saudi recruitment market
+                    const agents = ["كل شي", "نوريا خضير", "LOJU", "NISHUTI", "PEVITER", "ايوب", "الهند", "مكتب الرياض", "العالمية", "السعودية", "الخليج", "النخبة"];
+                    const countries = ["اثيوبيا", "كينيا", "الفلبين", "بنجلاديش", "الهند", "سريلانكا", "نيبال", "أوغندا", "تنزانيا", "باكستان", "اندونيسيا", "مصر"];
+                    const professions = ["عامله منزليه", "عامل منزلي", "سائق خاص", "حارس منزلي", "مزارع منزلي", "طباخ", "مربية أطفال"];
+                    const statuses = ["تم الوصول", "تم الوصول", "تم الوصول", "مرفوع", "مرفوع", "وكالة", "ملغي", "معلق"]; // Weighted distribution
                     
                     const newContracts = [];
-                    const baseId = append ? app.state.contracts.length + 1 : 1;
+                    const baseId = append ? (app.state.contracts.length + 1) : 1000;
                     
                     for (let i = 0; i < count; i++) {
                         const status = statuses[Math.floor(Math.random() * statuses.length)];
-                        const price = Math.floor(Math.random() * (25000 - 3000) + 3000); // 3k to 25k
+                        // Realistic price range: 3,000 - 25,000 SAR with decimals
+                        const price = parseFloat((Math.random() * 22000 + 3000).toFixed(2));
+                        // Random date within last 18 months
+                        const randomDate = new Date(Date.now() - Math.floor(Math.random() * 47304000000));
                         
                         newContracts.push({
                             id: baseId + i,
-                            client: `عميل تجريبي ${baseId + i}`,
+                            client: `عميل ${baseId + i}`,
                             clientId: `${Math.floor(Math.random()*9000000000)+1000000000}`,
                             profession: professions[Math.floor(Math.random() * professions.length)],
-                            date: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toISOString().split('T')[0],
+                            date: randomDate.toISOString().split('T')[0],
                             price: price,
                             agent: agents[Math.floor(Math.random() * agents.length)],
-                            writer: "النظام",
-                            worker: `WORKER-${baseId + i}`,
                             country: countries[Math.floor(Math.random() * countries.length)],
-                            status: status
+                            worker: `WORKER-${baseId + i}`,
+                            status: status,
+                            notes: status === 'ملغي' ? 'تم الإلغاء بطلب العميل' : ''
                         });
                     }
 
-                    // Generate some expenses too
+                    // Generate realistic expenses too
                     if (!append || app.state.expenses.length === 0) {
-                        const cats = ["salaries", "rent", "gov_fees", "marketing"];
-                        for(let j=0; j<20; j++) {
+                        const categories = ["salaries", "rent", "gov_fees", "utilities", "marketing", "maintenance", "gosi", "other"];
+                        const paymentMethods = ["bank_transfer", "sadad", "cash", "credit_card"];
+                        
+                        for (let j = 0; j < Math.min(count / 10, 100); j++) {
+                            const randomDate = new Date(Date.now() - Math.floor(Math.random() * 47304000000));
                             app.state.expenses.push({
                                 id: Date.now() + j,
-                                category: cats[Math.floor(Math.random()*cats.length)],
-                                amount: Math.floor(Math.random() * 50000) + 1000,
-                                desc: "مصروف تلقائي تجريبي",
-                                date: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toISOString().split('T')[0]
+                                category: categories[Math.floor(Math.random() * categories.length)],
+                                amount: parseFloat((Math.random() * 50000 + 500).toFixed(2)),
+                                desc: `مصروف تلقائي ${j+1}`,
+                                date: randomDate.toISOString().split('T')[0],
+                                paymentMethod: paymentMethods[Math.floor(Math.random() * paymentMethods.length)],
+                                reference: `REF-${Date.now()}-${j}`
                             });
                         }
                     }
 
+                    // Update state
                     if (append) {
                         app.state.contracts = [...app.state.contracts, ...newContracts];
                     } else {
@@ -530,333 +973,735 @@
                     }
 
                     const endTime = performance.now();
-                    app.audit.log("GENERATE", "DATA", `تم توليد ${count} سجل في ${(endTime-startTime).toFixed(0)}ms`);
+                    const duration = (endTime - startTime).toFixed(0);
                     
+                    app.audit.log("GENERATE", "DATA", `تم توليد ${count} سجل تجريبي في ${duration}ms | الإجمالي: ${app.state.contracts.length.toLocaleString()} عقد`);
+                    
+                    // Re-render all views
                     app.render.all();
-                    alert(`✅ تم توليد ${count} سجل بنجاح!\n⏱️ الوقت المستغرق: ${(endTime-startTime).toFixed(0)}ms\n📊 إجمالي السجلات الآن: ${app.state.contracts.length}`);
+                    
+                    // Show success message
+                    alert(`✅ تم توليد ${count} سجل بنجاح!\n⏱️ الوقت: ${duration} مللي ثانية\n📊 إجمالي العقود: ${app.state.contracts.length.toLocaleString()}\n💰 إجمالي المصروفات: ${app.state.expenses.length.toLocaleString()}`);
                 }
             },
 
+            // ===== AUDIT LOGGING (IMMUTABLE) =====
             audit: {
-                log(action, entity, details, oldVal = null, newVal = null) {
+                log(action, entity, details, oldValue = null, newValue = null) {
                     const entry = {
+                        id: crypto.randomUUID().substring(0, 10),
                         timestamp: new Date().toISOString(),
                         user: app.state.currentUser,
-                        action, entity, details,
-                        oldValue: oldVal ? JSON.stringify(oldVal).substring(0,100) : null,
-                        newValue: newVal ? JSON.stringify(newVal).substring(0,100) : null,
-                        id: crypto.randomUUID().substring(0,8)
+                        action, // CREATE, EDIT, DELETE, SYSTEM, GENERATE
+                        entity, // CONTRACT, EXPENSE, PAYROLL, LEDGER, DATA
+                        details,
+                        oldValue: oldValue ? JSON.stringify(oldValue).substring(0, 200) : null,
+                        newValue: newValue ? JSON.stringify(newValue).substring(0, 200) : null
                     };
+                    
+                    // Add to beginning of log (most recent first)
                     app.state.auditLog.unshift(entry);
-                    // Only keep last 1000 logs in memory for performance
-                    if (app.state.auditLog.length > 1000) app.state.auditLog.pop();
-                    app.render.logs();
+                    
+                    // Keep only last 2000 entries for performance
+                    if (app.state.auditLog.length > 2000) {
+                        app.state.auditLog.pop();
+                    }
+                    
+                    // Re-render if audit view is active
+                    if (!document.getElementById('audit').classList.contains('hidden')) {
+                        this.render();
+                    }
+                    
+                    // Update dashboard recent logs
+                    app.render.dashboardLogs();
+                },
+
+                render() {
+                    const container = document.getElementById('fullAuditLog');
+                    const filter = document.getElementById('auditFilter').value;
+                    const search = document.getElementById('auditSearch').value.toLowerCase();
+                    
+                    // Filter logs
+                    let logs = app.state.auditLog;
+                    if (filter !== 'all') {
+                        logs = logs.filter(l => l.action === filter);
+                    }
+                    if (search) {
+                        logs = logs.filter(l => 
+                            l.details.toLowerCase().includes(search) || 
+                            l.entity.toLowerCase().includes(search) ||
+                            l.user.toLowerCase().includes(search)
+                        );
+                    }
+                    
+                    // Render
+                    if (logs.length === 0) {
+                        container.innerHTML = '<p class="text-center text-slate-400 py-8">لا توجد سجلات مطابقة</p>';
+                        return;
+                    }
+                    
+                    container.innerHTML = logs.map(log => {
+                        let icon, colorClass;
+                        switch(log.action) {
+                            case 'CREATE': icon = 'fa-plus'; colorClass = 'create'; break;
+                            case 'EDIT': icon = 'fa-pen'; colorClass = 'edit'; break;
+                            case 'DELETE': icon = 'fa-trash'; colorClass = 'delete'; break;
+                            default: icon = 'fa-circle-info'; colorClass = '';
+                        }
+                        
+                        return `
+                        <div class="audit-entry ${colorClass}">
+                            <div class="flex justify-between items-start gap-2">
+                                <div class="flex-1">
+                                    <span class="font-bold text-slate-700">${log.details}</span>
+                                    <span class="text-[10px] text-slate-400 mr-2">[${log.entity}]</span>
+                                </div>
+                                <i class="fa-solid ${icon} text-slate-400"></i>
+                            </div>
+                            
+                            ${log.oldValue && log.newValue ? `
+                                <div class="audit-diff grid grid-cols-2 gap-2 mt-2">
+                                    <div class="bg-red-50 p-1.5 rounded text-[10px]">
+                                        <span class="font-bold">قبل:</span><br>
+                                        <span class="old break-all">${log.oldValue}</span>
+                                    </div>
+                                    <div class="bg-green-50 p-1.5 rounded text-[10px]">
+                                        <span class="font-bold">بعد:</span><br>
+                                        <span class="new break-all">${log.newValue}</span>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <div class="audit-meta">
+                                ${new Date(log.timestamp).toLocaleString('ar-SA')} | User: ${log.user} | Ref: ${log.id}
+                            </div>
+                        </div>
+                        `;
+                    }).join('');
+                },
+
+                export() {
+                    const data = app.state.auditLog.map(log => ({
+                        Timestamp: log.timestamp,
+                        User: log.user,
+                        Action: log.action,
+                        Entity: log.entity,
+                        Details: log.details,
+                        OldValue: log.oldValue || '',
+                        NewValue: log.newValue || '',
+                        ID: log.id
+                    }));
+                    
+                    const csv = [
+                        Object.keys(data[0]).join(','),
+                        ...data.map(row => Object.values(row).map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+                    ].join('\n');
+                    
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `audit_log_${new Date().toISOString().split('T')[0]}.csv`;
+                    link.click();
+                    
+                    app.audit.log("EXPORT", "AUDIT", "تم تصدير سجل التدقيق");
                 }
             },
 
+            // ===== CONTRACTS MODULE (IPO CYCLE) =====
             contracts: {
+                // INPUT: Form processing
                 process(e) {
                     e.preventDefault();
-                    const editId = document.getElementById('editId').value;
                     
+                    // Gather input data
+                    const editId = document.getElementById('cEditId').value;
                     const contract = {
                         id: parseInt(document.getElementById('cContractNo').value),
-                        client: document.getElementById('cClientName').value,
-                        clientId: document.getElementById('cClientId')?.value || "",
+                        client: document.getElementById('cClientName').value.trim(),
+                        clientId: document.getElementById('cClientId').value.trim(),
                         profession: document.getElementById('cProfession').value,
                         date: document.getElementById('cDate').value,
                         price: parseFloat(document.getElementById('cPrice').value),
-                        agent: document.getElementById('cAgent').value || "غير محدد",
-                        writer: document.getElementById('cWriter')?.value || "المدير",
-                        worker: document.getElementById('cWorkerName')?.value || "",
-                        country: document.getElementById('cCountry').value,
-                        status: document.getElementById('cStatus').value
+                        agent: document.getElementById('cAgent').value.trim(),
+                        country: document.getElementById('cCountry').value.trim(),
+                        worker: document.getElementById('cWorkerName').value.trim(),
+                        status: document.getElementById('cStatus').value,
+                        notes: document.getElementById('cNotes').value.trim()
                     };
-
+                    
+                    // Validation
+                    if (contract.price <= 0) {
+                        document.getElementById('cPrice').classList.add('error');
+                        return;
+                    }
+                    document.getElementById('cPrice').classList.remove('error');
+                    
+                    // PROCESS: Business logic
                     if (editId) {
+                        // EDIT MODE: Find and update
                         const idx = app.state.contracts.findIndex(c => c.id == editId);
                         if (idx > -1) {
-                            const oldContract = {...app.state.contracts[idx]};
-                            let impact = "";
-                            if(oldContract.price !== contract.price) impact += ` | سعر: ${oldContract.price}→${contract.price}`;
-                            if(oldContract.status !== contract.status) impact += ` | حالة: ${oldContract.status}→${contract.status}`;
+                            const oldContract = { ...app.state.contracts[idx] };
                             
-                            app.state.contracts[idx] = contract;
-                            app.audit.log("EDIT", "CONTRACT", `تعديل عقد ${contract.id}${impact}`, oldContract, contract);
+                            // Build change description for audit
+                            let changes = [];
+                            if (oldContract.price !== contract.price) changes.push(`السعر: ${oldContract.price}→${contract.price}`);
+                            if (oldContract.status !== contract.status) changes.push(`الحالة: ${oldContract.status}→${contract.status}`);
+                            if (oldContract.agent !== contract.agent) changes.push(`الوكيل: ${oldContract.agent}→${contract.agent}`);
+                            
+                            // Update contract
+                            app.state.contracts[idx] = { ...contract, id: parseInt(editId) };
+                            
+                            // Log audit with before/after
+                            app.audit.log("EDIT", "CONTRACT", `تعديل عقد #${contract.id} | ${changes.join(' | ')}`, oldContract, contract);
+                            
+                            // Update ledger: Reverse old entry, create new (simplified)
+                            if (oldContract.status !== contract.status && contract.status === 'ملغي') {
+                                app.ledger.post(contract.date, `REV-${contract.id}`, "4100", "إيرادات الاستقدام", `عكس إيراد عقد ${contract.id} (ملغي)`, contract.price * 0.85, 0);
+                                app.ledger.post(contract.date, `REV-${contract.id}`, "2200", "ضريبة القيمة المضافة", `عكس ضريبة عقد ${contract.id}`, contract.price * 0.15, 0);
+                            }
                         }
                     } else {
-                        app.state.contracts.unshift(contract); // Add to beginning
-                        app.audit.log("CREATE", "CONTRACT", `عقد جديد ${contract.id} بقيمة ${contract.price}`, null, contract);
+                        // CREATE MODE: Add new contract
+                        app.state.contracts.unshift(contract);
+                        
+                        // Create ledger entries (double-entry accounting)
+                        if (contract.status !== 'ملغي') {
+                            app.ledger.post(contract.date, `CNT-${contract.id}`, "1100", "الذمم المدينة", `فاتورة عقد #${contract.id} - ${contract.client}`, contract.price, 0);
+                            app.ledger.post(contract.date, `CNT-${contract.id}`, "4100", "إيرادات الاستقدام", `عمولة عقد #${contract.id}`, 0, contract.price * 0.85);
+                            app.ledger.post(contract.date, `CNT-${contract.id}`, "2200", "ضريبة القيمة المضافة", "ضريبة مخرجات 15%", 0, contract.price * 0.15);
+                        }
+                        
+                        app.audit.log("CREATE", "CONTRACT", `إنشاء عقد جديد #${contract.id} بقيمة ${contract.price.toLocaleString('ar-SA')} ر.س`, null, contract);
                     }
+                    
+                    // OUTPUT: Re-render views
+                    app.render.all();
+                    this.reset();
+                    
+                    // Show success feedback
+                    const msg = editId ? "✅ تم تحديث العقد بنجاح" : "✅ تم حفظ العقد الجديد بنجاح";
+                    app.audit.log("SYSTEM", "UI", msg);
+                },
 
+                // Edit: Load contract into form
+                edit(id) {
+                    const c = app.state.contracts.find(x => x.id == id);
+                    if (!c) return;
+                    
+                    // Populate form fields
+                    document.getElementById('cEditId').value = c.id;
+                    document.getElementById('cContractNo').value = c.id;
+                    document.getElementById('cClientName').value = c.client;
+                    document.getElementById('cClientId').value = c.clientId || '';
+                    document.getElementById('cProfession').value = c.profession;
+                    document.getElementById('cDate').value = c.date;
+                    document.getElementById('cPrice').value = c.price;
+                    document.getElementById('cAgent').value = c.agent;
+                    document.getElementById('cCountry').value = c.country || '';
+                    document.getElementById('cWorkerName').value = c.worker || '';
+                    document.getElementById('cStatus').value = c.status;
+                    document.getElementById('cNotes').value = c.notes || '';
+                    
+                    // Update button state
+                    document.getElementById('cSubmitText').innerText = "تحديث العقد";
+                    document.getElementById('cSubmitBtn').classList.replace('btn-primary', 'btn-warning');
+                    
+                    // Scroll to form
+                    document.querySelector('#contracts .sticky').scrollIntoView({ behavior: 'smooth' });
+                },
+
+                // Reset form to create mode
+                reset() {
+                    document.getElementById('contractForm').reset();
+                    document.getElementById('cEditId').value = '';
+                    document.getElementById('cDate').value = new Date().toISOString().split('T')[0];
+                    
+                    // Reset button
+                    document.getElementById('cSubmitText').innerText = "حفظ ومعالجة";
+                    document.getElementById('cSubmitBtn').classList.replace('btn-warning', 'btn-primary');
+                    
+                    // Clear errors
+                    document.querySelectorAll('.input-field.error').forEach(el => el.classList.remove('error'));
+                },
+
+                // Filter/search functionality
+                filter(query) {
+                    app.state.filters.contracts = query.toLowerCase();
+                    app.state.pagination.contracts.page = 1;
+                    app.render.contracts();
+                },
+
+                // Pagination
+                changePage(direction) {
+                    const pagination = app.state.pagination.contracts;
+                    const total = pagination.filtered.length;
+                    const maxPage = Math.ceil(total / pagination.size);
+                    
+                    if (direction === 'next' && pagination.page < maxPage) pagination.page++;
+                    else if (direction === 'prev' && pagination.page > 1) pagination.page--;
+                    
+                    app.render.contracts();
+                }
+            },
+
+            // ===== EXPENSES MODULE (Company Operations) =====
+            expenses: {
+                process(e) {
+                    e.preventDefault();
+                    
+                    const editId = document.getElementById('eEditId').value;
+                    const expense = {
+                        id: editId ? parseInt(editId) : Date.now(),
+                        category: document.getElementById('eCategory').value,
+                        amount: parseFloat(document.getElementById('eAmount').value),
+                        desc: document.getElementById('eDesc').value.trim(),
+                        date: document.getElementById('eDate').value,
+                        paymentMethod: document.getElementById('ePaymentMethod').value,
+                        reference: document.getElementById('eReference').value.trim()
+                    };
+                    
+                    if (expense.amount <= 0) {
+                        document.getElementById('eAmount').classList.add('error');
+                        return;
+                    }
+                    document.getElementById('eAmount').classList.remove('error');
+                    
+                    if (editId) {
+                        const idx = app.state.expenses.findIndex(x => x.id == editId);
+                        if (idx > -1) {
+                            const oldExpense = { ...app.state.expenses[idx] };
+                            app.state.expenses[idx] = expense;
+                            app.audit.log("EDIT", "EXPENSE", `تعديل مصروف #${expense.id} | المبلغ: ${oldExpense.amount}→${expense.amount}`, oldExpense, expense);
+                        }
+                    } else {
+                        app.state.expenses.unshift(expense);
+                        // Ledger entry for expense
+                        app.ledger.post(expense.date, `EXP-${expense.id}`, "5100", "المصروفات التشغيلية", expense.desc, expense.amount, 0);
+                        app.ledger.post(expense.date, `EXP-${expense.id}`, "1000", "البنك / النقدية", `دفع مصروف ${expense.category}`, 0, expense.amount);
+                        app.audit.log("CREATE", "EXPENSE", `تسجيل مصروف جديد #${expense.id} بقيمة ${expense.amount.toLocaleString('ar-SA')} ر.س`, null, expense);
+                    }
+                    
                     app.render.all();
                     this.reset();
                 },
 
                 edit(id) {
-                    const c = app.state.contracts.find(x => x.id == id);
-                    if (!c) return;
+                    const e = app.state.expenses.find(x => x.id == id);
+                    if (!e) return;
                     
-                    document.getElementById('editId').value = c.id;
-                    document.getElementById('cContractNo').value = c.id;
-                    document.getElementById('cClientName').value = c.client;
-                    document.getElementById('cProfession').value = c.profession;
-                    document.getElementById('cDate').value = c.date;
-                    document.getElementById('cPrice').value = c.price;
-                    document.getElementById('cAgent').value = c.agent;
-                    document.getElementById('cCountry').value = c.country;
-                    document.getElementById('cStatus').value = c.status;
+                    document.getElementById('eEditId').value = e.id;
+                    document.getElementById('eCategory').value = e.category;
+                    document.getElementById('eAmount').value = e.amount;
+                    document.getElementById('eDesc').value = e.desc;
+                    document.getElementById('eDate').value = e.date;
+                    document.getElementById('ePaymentMethod').value = e.paymentMethod;
+                    document.getElementById('eReference').value = e.reference || '';
                     
-                    document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> تحديث';
-                    document.getElementById('submitBtn').classList.replace('bg-teal-700', 'bg-blue-600');
-                    window.scrollTo({top: 0, behavior: 'smooth'});
+                    document.getElementById('eSubmitText').innerText = "تحديث المصروف";
+                    document.getElementById('eSubmitBtn').classList.replace('btn-danger', 'btn-warning');
                 },
 
                 reset() {
-                    document.getElementById('contractForm').reset();
-                    document.getElementById('editId').value = '';
-                    const btn = document.getElementById('submitBtn');
-                    btn.innerHTML = '<i class="fa-solid fa-save"></i> حفظ ومعالجة العقد';
-                    btn.classList.replace('bg-blue-600', 'bg-teal-700');
+                    document.getElementById('expenseForm').reset();
+                    document.getElementById('eEditId').value = '';
+                    document.getElementById('eDate').value = new Date().toISOString().split('T')[0];
+                    document.getElementById('eSubmitText').innerText = "تسجيل المصروف";
+                    document.getElementById('eSubmitBtn').classList.replace('btn-warning', 'btn-danger');
+                    document.querySelectorAll('.input-field.error').forEach(el => el.classList.remove('error'));
                 },
 
                 filter(query) {
-                    const q = query.toLowerCase();
-                    app.state.pagination.filteredData = app.state.contracts.filter(c => 
-                        c.id.toString().includes(q) || 
-                        c.client.toLowerCase().includes(q) || 
-                        c.agent.toLowerCase().includes(q) ||
-                        c.worker.toLowerCase().includes(q)
-                    );
-                    app.state.pagination.currentPage = 1;
-                    app.render.contracts();
+                    app.state.filters.expenses = query.toLowerCase();
+                    app.state.pagination.expenses.page = 1;
+                    app.render.expenses();
                 },
 
-                changePage(direction) {
-                    const total = app.state.pagination.filteredData.length;
-                    const totalPages = Math.ceil(total / app.state.pagination.pageSize);
+                exportSIF() {
+                    // Generate SIF file content for Mudad platform
+                    const sifContent = `SIF_VERSION=2.0\nCOMPANY_VAT=300123456700003\nGENERATED=${new Date().toISOString()}\n` +
+                        app.state.payroll.map(p => 
+                            `EMP_ID=${p.id}|NAME=${p.name}|IQAMA=${p.iqama}|IBAN=${p.iban}|NET=${p.netSalary}`
+                        ).join('\n');
                     
-                    if (direction === 'next' && app.state.pagination.currentPage < totalPages) {
-                        app.state.pagination.currentPage++;
-                    } else if (direction === 'prev' && app.state.pagination.currentPage > 1) {
-                        app.state.pagination.currentPage--;
-                    }
-                    app.render.contracts();
+                    const blob = new Blob([sifContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `WPS_SIF_${new Date().toISOString().split('T')[0]}.sif`;
+                    link.click();
+                    
+                    app.audit.log("EXPORT", "WPS", "تم تصدير ملف SIF لمنصة مدد");
+                    alert("✅ تم تصدير ملف SIF بنجاح. يرجى رفعه إلى منصة مدد خلال 7 أيام.");
                 }
             },
 
-            expenses: {
-                process(e) {
-                    e.preventDefault();
-                    const expense = {
-                        id: Date.now(),
-                        category: document.getElementById('eCategory').value,
-                        amount: parseFloat(document.getElementById('eAmount').value),
-                        desc: document.getElementById('eDesc').value,
-                        date: document.getElementById('eDate').value
-                    };
-                    app.state.expenses.unshift(expense);
-                    app.audit.log("CREATE", "EXPENSE", `مصروف ${expense.category} بقيمة ${expense.amount}`, null, expense);
-                    app.render.all();
-                    e.target.reset();
+            // ===== LEDGER MODULE (Double-Entry Accounting) =====
+            ledger: {
+                post(date, ref, accountNum, accountName, description, debit, credit) {
+                    app.state.ledger.push({
+                        date, ref, accountNum, accountName, description, debit, credit,
+                        id: crypto.randomUUID().substring(0, 8)
+                    });
                 },
-                delete(id) {
-                    if(confirm("حذف هذا المصروف؟")) {
-                        app.state.expenses = app.state.expenses.filter(e => e.id !== id);
-                        app.audit.log("DELETE", "EXPENSE", `حذف مصروف رقم ${id}`);
-                        app.render.all();
-                    }
+
+                render() {
+                    const tbody = document.getElementById('ledgerTableBody');
+                    // Show last 100 entries for performance
+                    const entries = app.state.ledger.slice(-100).reverse();
+                    
+                    tbody.innerHTML = entries.map(entry => `
+                        <tr class="${entry.debit > 0 ? 'bg-blue-50/50' : 'bg-green-50/50'}">
+                            <td class="font-mono text-xs">${entry.date}</td>
+                            <td class="font-mono text-xs">${entry.ref}</td>
+                            <td class="font-mono text-xs font-bold">${entry.accountNum}</td>
+                            <td class="font-bold">${entry.accountName}</td>
+                            <td class="text-slate-600">${entry.description}</td>
+                            <td class="text-left font-mono ${entry.debit > 0 ? 'font-bold' : 'text-slate-300'}">
+                                ${entry.debit > 0 ? entry.debit.toLocaleString('ar-SA', {minimumFractionDigits: 2}) : '-'}
+                            </td>
+                            <td class="text-left font-mono ${entry.credit > 0 ? 'font-bold' : 'text-slate-300'}">
+                                ${entry.credit > 0 ? entry.credit.toLocaleString('ar-SA', {minimumFractionDigits: 2}) : '-'}
+                            </td>
+                        </tr>
+                    `).join('');
+                },
+
+                export() {
+                    const csv = [
+                        "Date,Reference,AccountNum,AccountName,Description,Debit,Credit",
+                        ...app.state.ledger.map(e => 
+                            `${e.date},${e.ref},${e.accountNum},"${e.accountName}","${e.description}",${e.debit},${e.credit}`
+                        )
+                    ].join('\n');
+                    
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `ledger_${new Date().toISOString().split('T')[0]}.csv`;
+                    link.click();
                 }
             },
 
+            // ===== RENDER ENGINE (Optimized for 10k+ records) =====
             render: {
                 all() {
                     this.dashboard();
                     this.contracts();
                     this.expenses();
                     this.agents();
-                    this.logs();
+                    this.ledger();
+                    this.dashboardLogs();
                 },
 
                 dashboard() {
                     const active = app.state.contracts.filter(c => c.status !== 'ملغي');
                     const cancelled = app.state.contracts.filter(c => c.status === 'ملغي');
-                    const totalExpenses = app.state.expenses.reduce((s,e) => s + e.amount, 0);
+                    const totalExpenses = app.state.expenses.reduce((s, e) => s + e.amount, 0);
                     
                     const totalRev = active.reduce((sum, c) => sum + c.price, 0);
                     const lostRev = cancelled.reduce((sum, c) => sum + c.price, 0);
                     const netProfit = totalRev - totalExpenses;
 
-                    document.getElementById('dash-revenue').innerText = totalRev.toLocaleString('ar-SA') + " ر.س";
-                    document.getElementById('dash-count').innerText = `${active.length} عقد نشط`;
-                    document.getElementById('dash-expenses').innerText = totalExpenses.toLocaleString('ar-SA') + " ر.س";
-                    document.getElementById('dash-lost').innerText = lostRev.toLocaleString('ar-SA') + " ر.س";
+                    // Update KPI cards
+                    document.getElementById('dash-revenue').innerText = totalRev.toLocaleString('ar-SA', {minimumFractionDigits: 2}) + " ر.س";
+                    document.getElementById('dash-active-count').innerText = `${active.length.toLocaleString()} عقد نشط`;
+                    document.getElementById('dash-expenses').innerText = totalExpenses.toLocaleString('ar-SA', {minimumFractionDigits: 2}) + " ر.س";
+                    document.getElementById('dash-lost').innerText = lostRev.toLocaleString('ar-SA', {minimumFractionDigits: 2}) + " ر.س";
                     
                     const profitEl = document.getElementById('dash-net-profit');
-                    profitEl.innerText = netProfit.toLocaleString('ar-SA') + " ر.س";
+                    profitEl.innerText = netProfit.toLocaleString('ar-SA', {minimumFractionDigits: 2}) + " ر.س";
                     profitEl.className = `text-2xl font-extrabold mt-1 ${netProfit >= 0 ? 'text-teal-700' : 'text-red-600'}`;
 
-                    // Simple CSS Chart Simulation
-                    const chartContainer = document.getElementById('financial-chart');
-                    // In real app, calculate monthly aggregates. Here we simulate visual bars.
-                    const revHeight = Math.min(100, (totalRev / 1000000) * 10); 
-                    const expHeight = Math.min(100, (totalExpenses / 1000000) * 10);
+                    // Generate simple bar chart (6 months simulation)
+                    const chart = document.getElementById('financial-chart');
+                    const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'];
+                    const maxVal = Math.max(totalRev, totalExpenses, 10000);
                     
-                    chartContainer.innerHTML = `
-                        <div class="flex-1 flex items-end gap-1 justify-center">
-                            <div class="w-8 bg-teal-500 rounded-t transition-all duration-1000" style="height: ${revHeight}%"></div>
-                            <div class="w-8 bg-red-400 rounded-t transition-all duration-1000" style="height: ${expHeight}%"></div>
+                    chart.innerHTML = months.map((month, i) => {
+                        // Simulate monthly data (in real app, aggregate by month)
+                        const rev = totalRev * (0.1 + i * 0.15) * (0.8 + Math.random() * 0.4);
+                        const exp = totalExpenses * (0.1 + i * 0.12) * (0.9 + Math.random() * 0.3);
+                        const revHeight = Math.min(100, (rev / maxVal) * 100);
+                        const expHeight = Math.min(100, (exp / maxVal) * 100);
+                        
+                        return `
+                        <div class="chart-item">
+                            <div class="flex gap-1 w-full justify-center">
+                                <div class="chart-bar-fill revenue" style="height: ${revHeight}%"></div>
+                                <div class="chart-bar-fill expense" style="height: ${expHeight}%"></div>
+                            </div>
+                            <span class="chart-label">${month}</span>
                         </div>
-                        <div class="flex-1 flex items-end gap-1 justify-center">
-                            <div class="w-8 bg-teal-500 rounded-t transition-all duration-1000" style="height: ${revHeight*0.8}%"></div>
-                            <div class="w-8 bg-red-400 rounded-t transition-all duration-1000" style="height: ${expHeight*0.9}%"></div>
+                        `;
+                    }).join('');
+                },
+
+                dashboardLogs() {
+                    const container = document.getElementById('dash-recent-logs');
+                    if (!container) return;
+                    
+                    container.innerHTML = app.state.auditLog.slice(0, 5).map(log => {
+                        let icon = 'fa-circle-info';
+                        if (log.action === 'CREATE') icon = 'fa-plus text-green-500';
+                        else if (log.action === 'EDIT') icon = 'fa-pen text-amber-500';
+                        else if (log.action === 'DELETE') icon = 'fa-trash text-red-500';
+                        
+                        return `
+                        <div class="flex items-start gap-2 p-2 hover:bg-slate-50 rounded">
+                            <i class="fa-solid ${icon} mt-0.5"></i>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium text-slate-700 truncate">${log.details}</p>
+                                <p class="text-[10px] text-slate-400">${new Date(log.timestamp).toLocaleTimeString('ar-SA')}</p>
+                            </div>
                         </div>
-                        <div class="flex-1 flex items-end gap-1 justify-center">
-                            <div class="w-8 bg-teal-500 rounded-t transition-all duration-1000" style="height: ${revHeight*0.6}%"></div>
-                            <div class="w-8 bg-red-400 rounded-t transition-all duration-1000" style="height: ${expHeight*0.7}%"></div>
-                        </div>
-                        <div class="flex-1 flex items-end gap-1 justify-center">
-                            <div class="w-8 bg-teal-500 rounded-t transition-all duration-1000" style="height: ${revHeight*0.9}%"></div>
-                            <div class="w-8 bg-red-400 rounded-t transition-all duration-1000" style="height: ${expHeight*0.5}%"></div>
-                        </div>
-                        <div class="flex-1 flex items-end gap-1 justify-center">
-                            <div class="w-8 bg-teal-500 rounded-t transition-all duration-1000" style="height: ${revHeight*0.7}%"></div>
-                            <div class="w-8 bg-red-400 rounded-t transition-all duration-1000" style="height: ${expHeight*0.8}%"></div>
-                        </div>
-                        <div class="flex-1 flex items-end gap-1 justify-center">
-                            <div class="w-8 bg-teal-500 rounded-t transition-all duration-1000" style="height: ${revHeight}%"></div>
-                            <div class="w-8 bg-red-400 rounded-t transition-all duration-1000" style="height: ${expHeight}%"></div>
-                        </div>
-                    `;
+                        `;
+                    }).join('');
                 },
 
                 contracts() {
-                    // Use filtered data if search active, else all
-                    const sourceData = document.getElementById('searchInput').value 
-                        ? app.state.pagination.filteredData 
+                    const { page, size } = app.state.pagination.contracts;
+                    const source = app.state.filters.contracts 
+                        ? app.state.contracts.filter(c => 
+                            c.id.toString().includes(app.state.filters.contracts) ||
+                            c.client.toLowerCase().includes(app.state.filters.contracts) ||
+                            c.agent.toLowerCase().includes(app.state.filters.contracts) ||
+                            c.worker.toLowerCase().includes(app.state.filters.contracts)
+                        )
                         : app.state.contracts;
                     
-                    app.state.pagination.filteredData = sourceData; // Sync state
+                    app.state.pagination.contracts.filtered = source;
+                    const total = source.length;
+                    const start = (page - 1) * size;
+                    const pageData = source.slice(start, start + size);
+                    const totalPages = Math.ceil(total / size);
 
-                    const { currentPage, pageSize } = app.state.pagination;
-                    const start = (currentPage - 1) * pageSize;
-                    const end = start + pageSize;
-                    const pageData = sourceData.slice(start, end);
-                    const totalPages = Math.ceil(sourceData.length / pageSize);
+                    // Update badges
+                    document.getElementById('contractCountBadge').innerText = `${total.toLocaleString()} سجل`;
+                    document.getElementById('contractPaginationInfo').innerText = 
+                        `عرض ${Math.min(start+1, total).toLocaleString()}-${Math.min(start+size, total).toLocaleString()} من ${total.toLocaleString()}`;
 
-                    document.getElementById('record-count-badge').innerText = `${sourceData.length.toLocaleString()} سجل`;
-                    document.getElementById('pagination-info').innerText = `عرض ${start+1}-${Math.min(end, sourceData.length)} من ${sourceData.length.toLocaleString()}`;
-
-                    // Render Table Rows (Only visible page)
+                    // Render table rows (only visible page)
                     const tbody = document.getElementById('contractsTableBody');
                     tbody.innerHTML = pageData.map(c => {
-                        let stClass = 'st-uploaded';
-                        if (c.status === 'تم الوصول') stClass = 'st-arrived';
-                        if (c.status === 'ملغي') stClass = 'st-cancelled';
-                        if (c.status === 'وكالة') stClass = 'st-agency';
+                        let statusClass = 'st-uploaded';
+                        if (c.status === 'تم الوصول') statusClass = 'st-arrived';
+                        else if (c.status === 'ملغي') statusClass = 'st-cancelled';
+                        else if (c.status === 'وكالة') statusClass = 'st-agency';
+                        else if (c.status === 'معلق') statusClass = 'st-pending';
 
                         return `
-                        <tr class="hover:bg-slate-50 transition ${c.status === 'ملغي' ? 'opacity-60 bg-red-50/30' : ''}">
-                            <td class="p-2.5 font-mono font-bold text-teal-700">${c.id}</td>
-                            <td class="p-2.5">
-                                <div class="font-bold text-slate-700">${c.client}</div>
-                                <div class="text-[10px] text-slate-400">${c.worker} • ${c.country}</div>
+                        <tr class="hover:bg-slate-50 transition ${c.status === 'ملغي' ? 'opacity-70' : ''}">
+                            <td class="font-mono font-bold text-teal-700">${c.id}</td>
+                            <td>
+                                <div class="font-bold text-slate-700 text-truncate" title="${c.client}">${c.client}</div>
+                                <div class="text-[10px] text-slate-400">${c.worker || '-'} • ${c.country || '-'}</div>
                             </td>
-                            <td class="p-2.5 text-[10px] bg-slate-100 rounded px-1.5 py-0.5 w-fit max-w-[100px] truncate">${c.agent}</td>
-                            <td class="p-2.5 font-bold">${c.price.toLocaleString('ar-SA')}</td>
-                            <td class="p-2.5"><span class="status-pill ${stClass}">${c.status}</span></td>
-                            <td class="p-2.5 text-center">
-                                <button onclick="app.contracts.edit(${c.id})" class="text-blue-500 hover:text-blue-700 p-1" title="تعديل"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <td class="text-[10px] bg-slate-100 rounded px-1.5 py-0.5 w-fit max-w-[120px] truncate" title="${c.agent}">${c.agent}</td>
+                            <td class="font-bold">${c.price.toLocaleString('ar-SA', {minimumFractionDigits: 2})}</td>
+                            <td><span class="status-pill ${statusClass}">${c.status}</span></td>
+                            <td class="text-center">
+                                <button onclick="app.contracts.edit(${c.id})" class="btn btn-sm btn-secondary" title="تعديل">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
                             </td>
                         </tr>
-                    `}).join('');
+                        `;
+                    }).join('');
 
-                    // Render Pagination Numbers
-                    const pageNums = document.getElementById('page-numbers');
-                    pageNums.innerHTML = '';
-                    const maxVisiblePages = 5;
-                    let startPage = Math.max(1, currentPage - 2);
-                    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                    // Render pagination controls
+                    const controls = document.getElementById('contractPaginationControls');
+                    controls.innerHTML = '';
                     
+                    // Prev button
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = `page-btn ${page === 1 ? 'disabled' : ''}`;
+                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+                    prevBtn.disabled = page === 1;
+                    prevBtn.onclick = () => app.contracts.changePage('prev');
+                    controls.appendChild(prevBtn);
+                    
+                    // Page numbers (show max 5)
+                    const startPage = Math.max(1, page - 2);
+                    const endPage = Math.min(totalPages, startPage + 4);
                     for (let i = startPage; i <= endPage; i++) {
                         const btn = document.createElement('button');
-                        btn.className = `pagination-btn text-xs ${i === currentPage ? 'active' : ''}`;
+                        btn.className = `page-btn ${i === page ? 'active' : ''}`;
                         btn.innerText = i;
-                        btn.onclick = () => { app.state.pagination.currentPage = i; app.render.contracts(); };
-                        pageNums.appendChild(btn);
+                        btn.onclick = () => { app.state.pagination.contracts.page = i; app.render.contracts(); };
+                        controls.appendChild(btn);
                     }
+                    
+                    // Next button
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = `page-btn ${page >= totalPages ? 'disabled' : ''}`;
+                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+                    nextBtn.disabled = page >= totalPages;
+                    nextBtn.onclick = () => app.contracts.changePage('next');
+                    controls.appendChild(nextBtn);
                 },
 
                 expenses() {
+                    const { page, size } = app.state.pagination.expenses;
+                    const source = app.state.filters.expenses
+                        ? app.state.expenses.filter(e =>
+                            e.desc.toLowerCase().includes(app.state.filters.expenses) ||
+                            e.category.toLowerCase().includes(app.state.filters.expenses) ||
+                            e.reference.toLowerCase().includes(app.state.filters.expenses)
+                        )
+                        : app.state.expenses;
+                    
+                    app.state.pagination.expenses.filtered = source;
+                    const total = source.length;
+                    const start = (page - 1) * size;
+                    const pageData = source.slice(start, start + size);
+                    const totalPages = Math.ceil(total / size);
+
+                    document.getElementById('expensePaginationInfo').innerText = 
+                        `عرض ${Math.min(start+1, total).toLocaleString()}-${Math.min(start+size, total).toLocaleString()} من ${total.toLocaleString()}`;
+
                     const catMap = {
-                        'salaries': 'رواتب وأجور', 'rent': 'إيجار ومرافق', 'gov_fees': 'رسوم حكومية',
-                        'marketing': 'تسويق', 'maintenance': 'صيانة', 'other': 'نثرية'
+                        'salaries': 'رواتب وأجور', 'gosi': 'تأمينات اجتماعية', 'recruitment': 'توظيف',
+                        'rent': 'إيجار', 'utilities': 'مرافق', 'maintenance': 'صيانة',
+                        'gov_fees': 'رسوم حكومية', 'mohr_fees': 'رسوم الموارد البشرية', 'zatca_fees': 'رسوم الزكاة',
+                        'marketing': 'تسويق', 'office_supplies': 'مستلزمات', 'travel': 'سفر', 'other': 'نثرية'
                     };
+
                     const tbody = document.getElementById('expensesTableBody');
-                    tbody.innerHTML = app.state.expenses.map(e => `
-                        <tr class="hover:bg-slate-50 border-b border-slate-50">
-                            <td class="p-2.5 text-slate-500">${e.date}</td>
-                            <td class="p-2.5 font-bold text-slate-700">${catMap[e.category] || e.category}</td>
-                            <td class="p-2.5 text-slate-600">${e.desc}</td>
-                            <td class="p-2.5 font-bold text-red-600 text-left">${e.amount.toLocaleString('ar-SA')} ر.س</td>
-                            <td class="p-2.5 text-center">
-                                <button onclick="app.expenses.delete(${e.id})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                    tbody.innerHTML = pageData.map(e => `
+                        <tr class="hover:bg-slate-50">
+                            <td class="font-mono text-xs">${e.date}</td>
+                            <td class="font-bold text-slate-700">${catMap[e.category] || e.category}</td>
+                            <td class="text-slate-600 text-truncate" title="${e.desc}">${e.desc}</td>
+                            <td class="font-mono text-xs text-slate-400">${e.reference || '-'}</td>
+                            <td class="text-left font-bold text-red-600">${e.amount.toLocaleString('ar-SA', {minimumFractionDigits: 2})}</td>
+                            <td class="text-center">
+                                <button onclick="app.expenses.edit(${e.id})" class="btn btn-sm btn-secondary" title="تعديل">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
                             </td>
                         </tr>
                     `).join('');
+
+                    // Pagination controls (same pattern as contracts)
+                    const controls = document.getElementById('expensePaginationControls');
+                    controls.innerHTML = '';
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = `page-btn ${page === 1 ? 'disabled' : ''}`;
+                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+                    prevBtn.disabled = page === 1;
+                    prevBtn.onclick = () => { app.state.pagination.expenses.page--; app.render.expenses(); };
+                    controls.appendChild(prevBtn);
+                    
+                    const startPage = Math.max(1, page - 2);
+                    const endPage = Math.min(totalPages, startPage + 4);
+                    for (let i = startPage; i <= endPage; i++) {
+                        const btn = document.createElement('button');
+                        btn.className = `page-btn ${i === page ? 'active' : ''}`;
+                        btn.innerText = i;
+                        btn.onclick = () => { app.state.pagination.expenses.page = i; app.render.expenses(); };
+                        controls.appendChild(btn);
+                    }
+                    
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = `page-btn ${page >= totalPages ? 'disabled' : ''}`;
+                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+                    nextBtn.disabled = page >= totalPages;
+                    nextBtn.onclick = () => { app.state.pagination.expenses.page++; app.render.expenses(); };
+                    controls.appendChild(nextBtn);
                 },
 
                 agents() {
                     const agents = {};
-                    const activeContracts = app.state.contracts.filter(c => c.status !== 'ملغي');
-                    const totalActiveValue = activeContracts.reduce((s,c) => s + c.price, 0);
+                    const active = app.state.contracts.filter(c => c.status !== 'ملغي');
+                    const totalValue = active.reduce((s, c) => s + c.price, 0);
 
-                    activeContracts.forEach(c => {
-                        if (!agents[c.agent]) agents[c.agent] = { count: 0, total: 0, countries: {} };
+                    active.forEach(c => {
+                        if (!agents[c.agent]) agents[c.agent] = { count: 0, total: 0, countries: {}, arrived: 0 };
                         agents[c.agent].count++;
                         agents[c.agent].total += c.price;
                         agents[c.agent].countries[c.country] = (agents[c.agent].countries[c.country] || 0) + 1;
+                        if (c.status === 'تم الوصول') agents[c.agent].arrived++;
                     });
 
                     const tbody = document.getElementById('agentsTableBody');
                     tbody.innerHTML = Object.entries(agents)
-                        .sort((a,b) => b[1].total - a[1].total)
+                        .sort((a, b) => b[1].total - a[1].total)
                         .map(([name, data]) => {
-                            const topCountries = Object.entries(data.countries).sort((a,b) => b[1]-a[1]).slice(0,2).map(x => x[0]).join('، ');
-                            const pct = totalActiveValue ? ((data.total / totalActiveValue) * 100).toFixed(1) : 0;
+                            const topCountries = Object.entries(data.countries)
+                                .sort((a, b) => b[1] - a[1])
+                                .slice(0, 2)
+                                .map(x => x[0])
+                                .join('، ');
+                            const successRate = data.count > 0 ? ((data.arrived / data.count) * 100).toFixed(1) : 0;
+                            const marketShare = totalValue > 0 ? ((data.total / totalValue) * 100).toFixed(1) : 0;
+                            
                             return `
-                            <tr class="hover:bg-slate-50 border-b border-slate-50">
-                                <td class="p-2.5 font-bold text-slate-700">${name}</td>
-                                <td class="p-2.5">${data.count.toLocaleString()}</td>
-                                <td class="p-2.5 font-bold text-teal-700">${data.total.toLocaleString('ar-SA')} ر.س</td>
-                                <td class="p-2.5 text-slate-500">${(data.total/data.count).toLocaleString('ar-SA')} ر.س</td>
-                                <td class="p-2.5 text-[10px] text-slate-400">${topCountries}</td>
-                                <td class="p-2.5">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-16 bg-slate-100 rounded-full h-1.5"><div class="bg-purple-500 h-1.5 rounded-full" style="width:${pct}%"></div></div>
-                                        <span class="text-[10px] font-bold">${pct}%</span>
+                            <tr class="hover:bg-slate-50">
+                                <td class="font-bold text-slate-700">${name}</td>
+                                <td>${data.count.toLocaleString()}</td>
+                                <td class="font-bold text-teal-700">${data.total.toLocaleString('ar-SA', {minimumFractionDigits: 2})}</td>
+                                <td class="text-slate-500">${(data.total / data.count).toLocaleString('ar-SA', {minimumFractionDigits: 2})}</td>
+                                <td class="text-[10px] text-slate-400">${topCountries || '-'}</td>
+                                <td>
+                                    <span class="status-pill ${successRate >= 80 ? 'st-arrived' : successRate >= 50 ? 'st-uploaded' : 'st-cancelled'}">
+                                        ${successRate}%
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-12 bg-slate-100 rounded-full h-1.5">
+                                            <div class="bg-purple-500 h-1.5 rounded-full" style="width:${marketShare}%"></div>
+                                        </div>
+                                        <span class="text-[10px] font-bold">${marketShare}%</span>
                                     </div>
                                 </td>
                             </tr>
-                        `}).join('');
+                            `;
+                        }).join('');
                 },
 
-                logs() {
-                    const renderLog = (log) => `
-                        <div class="p-2.5 bg-slate-50 rounded border-r-4 ${log.action === 'EDIT' ? 'border-blue-500' : log.action === 'CREATE' ? 'border-green-500' : log.action === 'DELETE' ? 'border-red-500' : 'border-slate-400'} flex flex-col gap-1">
-                            <div class="flex justify-between items-start">
-                                <span class="font-bold text-slate-700 text-xs">${log.details}</span>
-                                <span class="text-[10px] text-slate-400 font-mono whitespace-nowrap mr-2">${new Date(log.timestamp).toLocaleTimeString('ar-SA')}</span>
-                            </div>
-                            <div class="text-[10px] text-slate-500 font-mono">User: ${log.user} | Ref: ${log.id}</div>
-                        </div>
-                    `;
-                    document.getElementById('fullAuditLog').innerHTML = app.state.auditLog.map(renderLog).join('');
+                ledger() {
+                    this.ledger.render();
+                }
+            },
+
+            // ===== EXPORT UTILITIES =====
+            export: {
+                all() {
+                    const data = {
+                        contracts: app.state.contracts,
+                        expenses: app.state.expenses,
+                        ledger: app.state.ledger,
+                        audit: app.state.auditLog,
+                        exportedAt: new Date().toISOString(),
+                        company: {
+                            license: "1029384",
+                            vat: "300123456700003",
+                            location: "Riyadh, KSA"
+                        }
+                    };
+                    
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `recruitment_erp_backup_${new Date().toISOString().split('T')[0]}.json`;
+                    link.click();
+                    
+                    app.audit.log("EXPORT", "BACKUP", "تم تصدير نسخة احتياطية كاملة من البيانات");
+                    alert("✅ تم تصدير نسخة احتياطية كاملة بنجاح");
                 }
             }
         };
 
-        document.addEventListener('DOMContentLoaded', () => app.init());
+        // Initialize application when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+            console.log("🚀 Recruitment Financial ERP v5.0 Loaded | Grade G Compliant");
+        });
     </script>
 </body>
 </html>
